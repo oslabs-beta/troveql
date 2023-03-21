@@ -1,0 +1,19 @@
+{
+  "package-name": "troveql",
+  "version": "0.1.0",
+  "description": "caching solution for graphQL",
+  "main": "./dist/basic-cache.js",
+  "scripts": {
+    "build": "tsc --watch"
+  },
+  "git repository": "https://github.com/oslabs-beta/troveql",
+  "author": "Erika Jung, Sam Henderson, Tricia Yeh, & Alex Klein",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^18.15.5",
+    "typescript": "^5.0.2"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.1"
+  }
+}

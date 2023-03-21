@@ -1,5 +1,5 @@
 // Import the Cache class
-import Cache from "./basic-cache";
+const Cache = require('')
 
 // Create a new instance of the Cache class
 const cache = new Cache();
