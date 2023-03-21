@@ -41,7 +41,7 @@ class Cache {
   //TODO:
   //--create method that iterates through the cache and deletes anything less than the persistance
   //--create method to set the persistance
-  //--somehow figure out how to increment through the cache ever ? seconds and evict anything that is > than the persistance.
+  //--somehow figure out how to increment through the cache every ? seconds and evict anything that is > than the persistance.
 }
 
-module.exports = Cache;
+export { Cache };
