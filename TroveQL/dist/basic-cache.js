@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Cache = void 0;
 class Cache {
     constructor() {
         /* PRIVATE methods & data*/
@@ -8,8 +9,8 @@ class Cache {
         this.persistance = 0;
         //TODO:
         //--create method that iterates through the cache and deletes anything less than the persistance
-        //--create method to update the persistance
-        //--somehow figure out how to increment through the cache ever ? seconds and evict anything that is > than the persistance.
+        //--create method to set the persistance
+        //--somehow figure out how to increment through the cache every ? seconds and evict anything that is > than the persistance.
     }
     getPersistance() {
         if (this.persistance === 0) {
@@ -41,4 +42,4 @@ class Cache {
         this.cache.delete(key);
     }
 }
-exports.default = Cache;
+exports.Cache = Cache;
