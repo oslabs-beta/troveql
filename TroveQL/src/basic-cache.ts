@@ -1,7 +1,8 @@
 class Cache {
   /* PRIVATE methods & data*/
   private cache = new Map<string, { value: string; expireAt: number }>();
-  //set by default to 0 >> clear cache will only run if val is greater that 0
+
+  //Persistance is not being used, ignore this and all references to this for now.
   private persistance = 0;
 
   private getPersistance(): number {
@@ -10,7 +11,6 @@ class Cache {
     }
     return this.persistance;
   }
-
   /* PUBLIC methods & data*/
 
   //set:
