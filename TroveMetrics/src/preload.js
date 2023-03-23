@@ -2,6 +2,7 @@
 // https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
 
 const { contextBridge, ipcRenderer } = require('electron')
+const electronReload = require('electron-reload')
 
 const channels = {
   frontend: { 
