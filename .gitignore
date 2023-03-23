@@ -1,2 +1,6 @@
-node_modules/
-package-lock.json
+TroveMetrics/node_modules/
+TroveMetrics/package-lock.json
+TroveMetrics/use/
+
+TroveQL/node_modules/
+TroveQL/package-lock.json
