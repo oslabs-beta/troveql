@@ -1,10 +1,9 @@
 const { ipcRenderer } = require('electron');
 const troveController = {};
 
-troveController.post = (req, res) => {
+troveController.post = (req, res, next) => {
   const { cacheData } = req.body;
-  console.log('CacheData in inTroveController.post" ', cacheData);
-
+  //send data to the main electron app
   ipcRenderer.send('server-data', cacheData);
 
   return next();
