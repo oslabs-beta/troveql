@@ -1,7 +1,9 @@
+
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 // const server = require('../server/server');
 // const { createServer } = require('../server/server');
+
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -25,6 +27,7 @@ const createWindow = () => {
   frontend.loadFile(path.join(__dirname, 'index.html'));
 
   // Open the DevTools.
+
   frontend.webContents.openDevTools();
 
   //createServer();
@@ -55,6 +58,7 @@ ipcMain.on('data:update', (event, data) => {
   console.log(data);
   frontend.webContents.send('data:update', data);
 });
+
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
