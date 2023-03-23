@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain} = require("electron");
+const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
 const server = require("../server/server");
 
@@ -23,15 +23,18 @@ const createWindow = () => {
   
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
+
+  // IPC Handlers
+
+    ipcMain.handle('ping', () => 'pong')
+
+    ipcMain.on('data:update', (event, data) => {
+      console.log(data)
+      mainWindow.webContents.send('data:update', data)
+    })
+
 };
 
-// IPC Handlers
-ipcMain.handle('send-new-cache-data', handleNewCacheData)
-
-function handleNewCacheData(event, args) {
-  console.log(args)
-  window.webContents.send('receive-new-cache-data', args)
-}
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
