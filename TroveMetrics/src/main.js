@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
 const server = require("../server/server");
 
@@ -16,13 +16,25 @@ const createWindow = () => {
       preload: path.join(__dirname, "preload.js"),
     },
   });
-
+  
+  
   // and load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, "index.html"));
-
+  
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
+
+  // IPC Handlers
+
+    ipcMain.handle('ping', () => 'pong')
+
+    ipcMain.on('data:update', (event, data) => {
+      console.log(data)
+      mainWindow.webContents.send('data:update', data)
+    })
+
 };
+
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
