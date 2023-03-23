@@ -1,18 +1,33 @@
+const { app, BrowserWindow } = require('electron');
 const express = require('express');
-const app = express();
-const path = require('path');
+const expressApp = express();
 const troveController = require('./controller');
 
 const port = 3333;
 
-app.use(express.json());
+expressApp.use(express.json());
 
-//server static files
+//*Creating Invisible window for Server */
+let server;
 
-//main route that will send data to main and use ipc main
-app.post('/api', troveController.post, (req, res) => {
-  res.status(200).send('cool it works!');
+const createServerWindow = () => {
+  server = new BrowserWindow({
+    show: false,
+    webPreferences: {
+      nodeIntegration: false,
+    },
+  });
+  server.on('closed', () => {
+    server = null;
+  });
+};
+
+app.on('ready', () => {
+  expressApp.post('/api', troveController.post, (req, res) => {
+    res.status(200).send('worked');
+  });
+  expressApp.listen(port, () => {
+    console.log(`listening on port: ${port}`);
+    createServerWindow();
+  });
 });
-
-// route for each metric that we are measuring
-app.listen(port, () => console.log(`listening on port: ${port}`));

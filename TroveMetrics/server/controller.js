@@ -3,9 +3,9 @@ const troveController = {};
 
 troveController.post = (req, res, next) => {
   const { cacheData } = req.body;
-  //send data to the main electron app
-  ipcRenderer.send('server-data', cacheData);
-
+  // Send data to the main process
+  ipcRenderer.send('cache-data', cacheData);
   return next();
 };
+
 module.exports = troveController;
