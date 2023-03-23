@@ -1,4 +1,9 @@
 class Cache {
+  name: string;
+  constructor() {
+    this.name = 'hello';
+  }
+
   /* PRIVATE methods & data*/
   private cache = new Map<string, { value: string; expireAt: number }>();
 

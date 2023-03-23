@@ -5,7 +5,7 @@ class Cache {
     constructor() {
         /* PRIVATE methods & data*/
         this.cache = new Map();
-        //set by default to 0 >> clear cache will only run if val is greater that 0
+        //Persistance is not being used, ignore this and all references to this for now.
         this.persistance = 0;
         //TODO:
         //--create method that iterates through the cache and deletes anything less than the persistance
