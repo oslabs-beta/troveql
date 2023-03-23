@@ -1,16 +1,12 @@
 class Cache {
-  name: string;
-  constructor() {
-    this.name = 'hello';
+  constructor (public persistance: number) {
+    this.persistance = persistance;
   }
 
-  /* PRIVATE methods & data*/
-  private cache = new Map<string, { value: string; expireAt: number }>();
+  /* PRIVATE methods & data*/ //updated to public so that they can be accessed outside of the class
+  public cache = new Map<string, { value: string; expireAt: number }>();
 
-  //Persistance is not being used, ignore this and all references to this for now.
-  private persistance = 0;
-
-  private getPersistance(): number {
+  public getPersistance = (): number => {
     if (this.persistance === 0) {
       return Number.MAX_SAFE_INTEGER;
     }
@@ -19,7 +15,7 @@ class Cache {
   /* PUBLIC methods & data*/
 
   //set:
-  public set(key: string, value: string): void {
+  public set = (key: string, value: string): void => {
     if (key === undefined || value === undefined) return;
     const valPersistance = this.getPersistance();
 
@@ -28,7 +24,7 @@ class Cache {
   }
 
   //get
-  public get(key: string): string | undefined {
+  public get = (key: string): string | undefined => {
     if (key === undefined) return undefined;
 
     if (this.cache.has(key)) {
@@ -39,7 +35,7 @@ class Cache {
   }
 
   //delete
-  public delete(key: string): void {
+  public delete = (key: string): void => {
     this.cache.delete(key);
   }
 
