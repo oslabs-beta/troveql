@@ -1,33 +1,15 @@
-const { app, BrowserWindow } = require('electron');
+// const { app, BrowserWindow } = require('electron');
 const express = require('express');
-const expressApp = express();
+const app = express();
 const troveController = require('./controller');
 
 const port = 3333;
+app.use(express.json());
 
-expressApp.use(express.json());
+app.post('/api', troveController.post, (req, res) => {
+  res.status(200).send('worked :D');
+});
 
-//*Creating Invisible window for Server */
-let server;
-
-const createServerWindow = () => {
-  server = new BrowserWindow({
-    show: false,
-    webPreferences: {
-      nodeIntegration: false,
-    },
-  });
-  server.on('closed', () => {
-    server = null;
-  });
-};
-
-app.on('ready', () => {
-  expressApp.post('/api', troveController.post, (req, res) => {
-    res.status(200).send('worked');
-  });
-  expressApp.listen(port, () => {
-    console.log(`listening on port: ${port}`);
-    createServerWindow();
-  });
+app.listen(port, () => {
+  console.log(`listening on port: ${port}`);
 });

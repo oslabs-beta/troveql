@@ -1,15 +1,9 @@
+// NEED TO IMPLEMENT A BUNDLER TO ALLOW MODULES
 
+const pingTest = async () => {
+  const response = await window.ipcRenderer.ping();
+  console.log(response); // should print out 'pong'
+};
+pingTest();
 
-
-const testFunc = async () => {
-  const response = await window.channel.sendNewCacheData({text: 'hello'})
-  console.log('sendNewCacheData', response) // prints out 'pong'
-}
-
-testFunc()
-
-window.channel.receiveNewCacheData(handleNewCacheData)
-
-function handleNewCacheData(event, data) {
-  console.log(data)
-}
+window.ipcRenderer.receive('data:update', (data) => console.log(data));
