@@ -10,44 +10,46 @@ if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
-let frontend;
+let renderer;
 
 const createWindow = () => {
   // Create the browser window.
-  const frontend = new BrowserWindow({
+  renderer = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
+      preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
+      //preload: path.join(__dirname, 'preload.js'),
       //nodeIntegration: true,
     },
   });
 
   // and load the index.html of the app.
-  frontend.loadFile(path.join(__dirname, './frontend/index.html'));
+  //renderer.loadFile(path.join(__dirname, './renderer/index.html'));
+  renderer.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
   // Open the DevTools.
 
-  frontend.webContents.openDevTools();
+  renderer.webContents.openDevTools();
 
   //createServer();
 
-  const server = new BrowserWindow({
-    width: 800,
-    height: 600,
-    webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false,
-      //preload: path.join(__dirname, 'preload.js'),
-    },
-  });
+  // const server = new BrowserWindow({
+  //   width: 800,
+  //   height: 600,
+  //   webPreferences: {
+  //     nodeIntegration: true,
+  //     contextIsolation: false,
+  //     //preload: path.join(__dirname, 'preload.js'),
+  //   },
+  // });
 
   // and load the index.html of the app.
-  server.loadFile(path.join(__dirname, './server/serverIndex.html'));
+  //server.loadFile(path.join(__dirname, './server/serverIndex.html'));
   //server.loadURL(path.join(`file://${__dirname}`, '../server/serverIndex.html'))
 
   // Open the DevTools.
-  server.webContents.openDevTools();
+  //server.webContents.openDevTools();
 };
 
 // IPC Handlers
@@ -56,7 +58,7 @@ ipcMain.handle('ping', () => 'pong');
 
 ipcMain.on('data:update', (event, data) => {
   console.log(data);
-  frontend.webContents.send('data:update', data);
+  renderer.webContents.send('data:update', data);
 });
 
 
