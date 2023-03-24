@@ -1,6 +1,6 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
-const { createServer } = require('./server/server');
+//const { createServer } = require('./server/server');
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   app.quit();
@@ -23,25 +23,21 @@ const createWindow = () => {
   // and load the index.html of the app.
   //renderer.loadFile(path.join(__dirname, './renderer/index.html'));
   renderer.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
-
   // Open the DevTools.
 
   renderer.webContents.openDevTools();
 
   //create the server
   createServer();
+  
+  renderer.webContents.on('did-finish-load', () => {
+    module.exports = { renderer };
+  })
+  
 };
 
 // IPC Handlers
 ipcMain.handle('ping', () => 'pong');
-
-ipcMain.on('data:update', (event, data) => {
-  console.log(data);
-  renderer.webContents.send('data:update', data);
-  renderer.webContents.executeJavaScript(
-    `document.getElementById('data').innerHTML = '${data.text}';`
-  );
-});
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -71,3 +67,34 @@ app.on('activate', () => {
     createWindow();
   }
 });
+
+//THIS IS ALL BULLSHIT
+
+const troveController = {};
+
+troveController.post = function(req, res, next) {
+  const { cacheData } = req.body;
+  //console.log('cacheData in troveController.post()', cacheData);
+  // Send data to the main process
+  renderer.webContents.send('data:update', { text: 'hello' });
+  return next();
+};
+
+const express = require('express');
+const app2 = express();
+//const troveController = require('./controller');
+
+
+const createServer = function() {
+  const port = 3333;
+  app2.use(express.json());
+
+  app2.post('/api', troveController.post, (req, res) => {
+    res.status(200).send('worked :D');
+  });
+
+  app2.listen(port, () => {
+    console.log(`listening on port: ${port}`);
+  });
+};
+
