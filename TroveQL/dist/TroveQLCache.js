@@ -7,15 +7,17 @@ class TroveQLCache {
     constructor(persist, graphAPI) {
         this.graphAPI = graphAPI;
         this.queryCache = (req, res, next) => {
+            console.log('req.body: ', req.body);
             console.log('>>>Cache in the bank: ', this.cache.cache);
             // will need to figure out how to use this for subqueries / mutations...
             const parsedQuery = this.parseQuery(req.body.query);
             if (parsedQuery.operation === 'query') {
                 const money = this.cache.get(req.body.query);
+                let cacheHit = 0;
                 if (money) {
                     console.log('>>>$$$ cache money $$$');
+                    cacheHit = 1;
                     res.locals.value = money;
-                    return next();
                 }
                 else {
                     fetch(this.graphAPI, {
@@ -32,14 +34,28 @@ class TroveQLCache {
                         .then((data) => {
                         this.cache.set(req.body.query, data);
                         res.locals.value = data;
-                        return next();
                     });
                 }
+                fetch('http://localhost:3333/api', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        cacheHit
+                    }),
+                })
+                    .then(r => r.json())
+                    .then((data) => {
+                    console.log(data);
+                })
+                    .catch(err => console.log(err));
+                return next();
             }
-            else {
-                // for mutations...
-                // return next();
-            }
+            // else {
+            //   // for mutations...
+            //   // return next();
+            // }
         };
         this.parseQuery = (query) => {
             const parsedQuery = (0, graphql_1.parse)(query);
