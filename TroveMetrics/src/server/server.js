@@ -3,7 +3,8 @@ const express = require('express');
 const app = express();
 const troveController = require('./controller');
 
-const createServer = () => {
+
+const createServer = function() {
   const port = 3333;
   app.use(express.json());
 
@@ -15,5 +16,6 @@ const createServer = () => {
     console.log(`listening on port: ${port}`);
   });
 };
+
 
 module.exports = { createServer };
