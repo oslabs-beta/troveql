@@ -3,7 +3,7 @@
   "productName": "TroveMetrics",
   "version": "0.0.1",
   "description": "TroveMetrics is TKTK",
-  "main": "src/main.js",
+  "main": "./.webpack/main",
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
@@ -22,7 +22,12 @@
     "@electron-forge/maker-rpm": "^6.0.5",
     "@electron-forge/maker-squirrel": "^6.0.5",
     "@electron-forge/maker-zip": "^6.0.5",
+    "@electron-forge/plugin-webpack": "^6.0.5",
+    "@vercel/webpack-asset-relocator-loader": "^1.7.3",
+    "css-loader": "^6.7.3",
     "electron": "23.1.4",
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "node-loader": "^2.0.0",
+    "style-loader": "^3.3.2"
   }
 }

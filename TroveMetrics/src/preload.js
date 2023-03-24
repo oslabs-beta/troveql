@@ -3,6 +3,7 @@
 
 const { contextBridge, ipcRenderer } = require('electron')
 
+
 const channels = {
   frontend: { 
     'send': [], // From frontend to main.
@@ -16,8 +17,13 @@ const channels = {
   }
 }
 
+//expose the require method to node elements
+//THIS MAY NOT BE BEST PRACTICE FOR SECURITY REASONS
+contextBridge.exposeInMainWorld("require", require);
 
+// Expost IPC communication methods to the other windows
 contextBridge.exposeInMainWorld('ipcRenderer', {
+
   ping: () => ipcRenderer.invoke('ping'), // test ping, should ALWAYS work
   
   // From frontend/server to main.
