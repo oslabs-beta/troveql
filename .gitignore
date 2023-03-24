@@ -6,3 +6,4 @@ TroveQL/node_modules/
 TroveQL/package-lock.json
 
 node_modules
+.webpack

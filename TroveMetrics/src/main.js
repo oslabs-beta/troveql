@@ -6,22 +6,27 @@ if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
-let frontend;
+let renderer;
 
 const createWindow = () => {
   // Create the browser window.
-  const frontend = new BrowserWindow({
+  renderer = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
+      preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
+      //preload: path.join(__dirname, 'preload.js'),
+      //nodeIntegration: true,
     },
   });
 
   // and load the index.html of the app.
-  frontend.loadFile(path.join(__dirname, './frontend/index.html'));
-  // Open the DevTools
-  frontend.webContents.openDevTools();
+  //renderer.loadFile(path.join(__dirname, './renderer/index.html'));
+  renderer.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
+
+  // Open the DevTools.
+
+  renderer.webContents.openDevTools();
 
   //create the server
   createServer();
@@ -32,8 +37,8 @@ ipcMain.handle('ping', () => 'pong');
 
 ipcMain.on('data:update', (event, data) => {
   console.log(data);
-  frontend.webContents.send('data:update', data);
-  frontend.webContents.executeJavaScript(
+  renderer.webContents.send('data:update', data);
+  renderer.webContents.executeJavaScript(
     `document.getElementById('data').innerHTML = '${data.text}';`
   );
 });

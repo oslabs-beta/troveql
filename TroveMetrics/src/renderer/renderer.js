@@ -1,5 +1,8 @@
 // NEED TO IMPLEMENT A BUNDLER TO ALLOW MODULES
+import func from './test.js'
+import styles from './index.css'
 
+func();
 const pingTest = async () => {
 
   const response = await window.ipcRenderer.ping();
