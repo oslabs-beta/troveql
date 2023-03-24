@@ -19,12 +19,12 @@ const createWindow = () => {
     height: 600,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
-      nodeIntegration: true,
+      //nodeIntegration: true,
     },
   });
 
   // and load the index.html of the app.
-  frontend.loadFile(path.join(__dirname, 'index.html'));
+  frontend.loadFile(path.join(__dirname, './frontend/index.html'));
 
   // Open the DevTools.
 
@@ -43,7 +43,7 @@ const createWindow = () => {
   });
 
   // and load the index.html of the app.
-  server.loadFile(path.join(__dirname, '../server/serverIndex.html'));
+  server.loadFile(path.join(__dirname, './server/serverIndex.html'));
   //server.loadURL(path.join(`file://${__dirname}`, '../server/serverIndex.html'))
 
   // Open the DevTools.
