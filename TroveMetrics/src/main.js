@@ -1,10 +1,6 @@
-
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
-// const server = require('../server/server');
-// const { createServer } = require('../server/server');
-
-
+const { createServer } = require('./server/server');
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   app.quit();
@@ -32,35 +28,20 @@ const createWindow = () => {
 
   renderer.webContents.openDevTools();
 
-  //createServer();
-
-  // const server = new BrowserWindow({
-  //   width: 800,
-  //   height: 600,
-  //   webPreferences: {
-  //     nodeIntegration: true,
-  //     contextIsolation: false,
-  //     //preload: path.join(__dirname, 'preload.js'),
-  //   },
-  // });
-
-  // and load the index.html of the app.
-  //server.loadFile(path.join(__dirname, './server/serverIndex.html'));
-  //server.loadURL(path.join(`file://${__dirname}`, '../server/serverIndex.html'))
-
-  // Open the DevTools.
-  //server.webContents.openDevTools();
+  //create the server
+  createServer();
 };
 
 // IPC Handlers
-
 ipcMain.handle('ping', () => 'pong');
 
 ipcMain.on('data:update', (event, data) => {
   console.log(data);
   renderer.webContents.send('data:update', data);
+  renderer.webContents.executeJavaScript(
+    `document.getElementById('data').innerHTML = '${data.text}';`
+  );
 });
-
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
