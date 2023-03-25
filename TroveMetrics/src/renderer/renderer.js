@@ -11,4 +11,3 @@ const pingTest = async () => {
 pingTest();
 
 window.ipcRenderer.receive('data:update', (data) => console.log(data));
-
