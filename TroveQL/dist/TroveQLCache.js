@@ -36,20 +36,20 @@ class TroveQLCache {
                         res.locals.value = data;
                     });
                 }
-                fetch('http://localhost:3333/api', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        cacheHit
-                    }),
-                })
-                    .then(r => r.json())
-                    .then((data) => {
-                    console.log(data);
-                })
-                    .catch(err => console.log(err));
+                // fetch('http://localhost:3333/api', {
+                //   method: 'POST',
+                //   headers: {
+                //     'Content-Type': 'application/json'
+                //   },
+                //   body: JSON.stringify({ 
+                //     cacheHit
+                //   }),
+                // })
+                // .then(r => r.json())
+                // .then((data) => {
+                //   console.log(data);
+                // })
+                // .catch(err => console.log(err));
                 return next();
             }
             // else {
@@ -58,9 +58,9 @@ class TroveQLCache {
             // }
         };
         this.parseQuery = (query) => {
-            const parsedQuery = (0, graphql_1.parse)(query);
+            const parsedQuery = (0, graphql_1.parse)(query); //not sure how to Type this fat object
             const operation = parsedQuery.definitions[0].operation;
-            const argsArray = parsedQuery.definitions[0].selectionSet.selections[0].arguments;
+            const argsArray = parsedQuery.definitions[0].selectionSet.selections[0].arguments; //not sure how to Type this array of objects
             const args = {};
             for (let i = 0; i < argsArray.length; i++) {
                 args[argsArray[i].name.value] = argsArray[i].value.value;
