@@ -1,4 +1,5 @@
-module.exports = {
+module.exports = 
+{
   packagerConfig: {},
   rebuildConfig: {},
   makers: [
@@ -32,7 +33,7 @@ module.exports = {
               js: './src/renderer/renderer.js',
               name: 'main_window',
               preload: {
-                js: './src/preload.js',
+                js: './src/preload.ts',
               },
             },
           ],
