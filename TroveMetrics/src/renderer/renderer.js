@@ -1,6 +1,6 @@
 // NEED TO IMPLEMENT A BUNDLER TO ALLOW MODULES
 import func from './test.js'
-import styles from './index.css'
+import './App.jsx';
 
 func();
 const pingTest = async () => {
