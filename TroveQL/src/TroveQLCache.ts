@@ -1,5 +1,15 @@
 import { Cache } from './basic-cache';
 import { parse } from 'graphql';
+import { Request, Response, NextFunction, RequestHandler } from 'express';
+
+type Arg = {
+  [ key : string ] : string
+};
+
+type RequestInfo = {
+  operation: string,
+  args: Arg
+};
 
 class TroveQLCache {
   cache: Cache;
@@ -8,15 +18,15 @@ class TroveQLCache {
     this.graphAPI = graphAPI;
   }
 
-  queryCache = (req: { body: { query: string } }, res: { locals: { value?: any } }, next: any): any => {
+  queryCache: RequestHandler = (req: Request , res: Response, next: NextFunction): void => {
     console.log('req.body: ', req.body);
     console.log('>>>Cache in the bank: ', this.cache.cache);
     // will need to figure out how to use this for subqueries / mutations...
-    const parsedQuery = this.parseQuery(req.body.query);
+    const parsedQuery: RequestInfo = this.parseQuery(req.body.query);
 
     if (parsedQuery.operation === 'query') {
       const money = this.cache.get(req.body.query);
-      let cacheHit = 0;
+      let cacheHit: number = 0;
       if (money) {
         console.log('>>>$$$ cache money $$$');
         cacheHit = 1;
@@ -38,20 +48,20 @@ class TroveQLCache {
           res.locals.value = data;
         })
       }
-      fetch('http://localhost:3333/api', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ 
-          cacheHit
-        }),
-      })
-      .then(r => r.json())
-      .then((data) => {
-        console.log(data);
-      })
-      .catch(err => console.log(err));
+      // fetch('http://localhost:3333/api', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json'
+      //   },
+      //   body: JSON.stringify({ 
+      //     cacheHit
+      //   }),
+      // })
+      // .then(r => r.json())
+      // .then((data) => {
+      //   console.log(data);
+      // })
+      // .catch(err => console.log(err));
       return next();
     } 
     
@@ -61,12 +71,11 @@ class TroveQLCache {
     // }
   }
 
-  parseQuery = (query: any): any => {
-    const parsedQuery = parse(query);
-    const operation = parsedQuery.definitions[0].operation;
+  parseQuery = (query: string): RequestInfo => {
+    const parsedQuery = parse(query); //not sure how to Type this fat object
+    const operation: string = parsedQuery.definitions[0].operation;
 
-    const argsArray = parsedQuery.definitions[0].selectionSet.selections[0].arguments;
-    type Arg = {[key: string] : string};
+    const argsArray = parsedQuery.definitions[0].selectionSet.selections[0].arguments; //not sure how to Type this array of objects
     const args : Arg = {};
     for (let i = 0; i < argsArray.length; i++) {
       args[argsArray[i].name.value] = argsArray[i].value.value;
