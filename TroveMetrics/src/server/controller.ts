@@ -23,14 +23,7 @@ const troveController: controller = {
       // Translate Hit / Miss into data format ready for Chart.js
       let hitOrMiss: string = 'MISS';
       if (req.body.cacheHit) hitOrMiss = 'HIT';
-      parsedData.cache.every((obj: chartParam) => {
-        if (obj.type === hitOrMiss) {
-          obj.value += 1;
-          return false;
-        }
-        return true;
-      })
-      parsedData.query = req.body.query
+      parsedData.cache[hitOrMiss] += 1;
 
       // Send file data back to server to pass on to Renderer
       res.locals.data = parsedData
