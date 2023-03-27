@@ -1,12 +1,13 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
-import path from 'path';
-//const { createServer } = require('./server/server');
 import { createServer } from './server/server'
+import fs from 'fs/promises';
+import path from 'path';
+import { TroveQLPath, defaultData } from './server/variables';
+
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   app.quit();
 }
-
 
 const createWindow = (): void => {
   // Create the browser window.
@@ -27,7 +28,21 @@ const createWindow = (): void => {
   //create the server
   createServer(renderer);
   
-};
+  // Check if the metrics file exists; create it if it does not exist
+  fs.access(path.join(TroveQLPath, 'metrics.json'))
+    .catch(() => {
+      fs.mkdir(TroveQLPath, { recursive: true })
+      .then(()=> fs.writeFile(path.join(TroveQLPath, 'metrics.json'), JSON.stringify(defaultData)))
+    }).catch(error => console.log(error))
+
+  // read metrics file and send to the renderer
+  fs.readFile(path.join(TroveQLPath, 'metrics.json'), "utf-8")
+    .then(data => JSON.parse(data))
+    .then(parsedData => renderer.webContents.send('data:update', parsedData))
+    .catch (error => {
+      console.log(error)
+    })
+}
 
 // IPC Handlers
 ipcMain.handle('ping', () => 'pong');
