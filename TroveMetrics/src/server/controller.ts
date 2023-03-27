@@ -24,7 +24,7 @@ const troveController: controller = {
       let hitOrMiss: string = 'MISS';
       if (req.body.cacheHit) hitOrMiss = 'HIT';
       parsedData.cache[hitOrMiss] += 1;
-      
+
       // Send file data back to server to pass on to Renderer
       res.locals.data = parsedData
       fs.writeFile(path.join(TroveQLPath, 'metrics.json'), JSON.stringify(parsedData))
