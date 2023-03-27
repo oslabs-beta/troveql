@@ -5,3 +5,28 @@ body {
   max-width: 38rem;
   padding: 2rem;
 }
+
+h1 {
+  text-align: center;
+}
+
+#dashboard {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+  align-items: center;
+  background-color: beige;
+  padding: 10px;
+}
+
+#chart-container {
+  background-color: white;
+}
+
+#query-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+}
