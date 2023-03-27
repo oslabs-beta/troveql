@@ -1,7 +1,7 @@
 import { userInfo } from 'os';
 import path from 'path'
 
-export const TroveQLPath: string = path.join(userInfo().homedir, '/TroveQL')
+export const TroveQLPath: string = path.join(userInfo().homedir, '/TroveQL/metrics data')
 
 export const defaultData = {
   cache: [
@@ -12,9 +12,9 @@ export const defaultData = {
 }
 
 export type Error = {
-  log: string,
-  status: number,
-  message: { 
-    err: string
+  log?: string,
+  status?: number,
+  message?: { 
+    err?: string
   },
 }

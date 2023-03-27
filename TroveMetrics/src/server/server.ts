@@ -1,5 +1,5 @@
 import { BrowserWindow } from 'electron'
-import express, { NextFunction, Request, Response } from 'express';
+import express, { NextFunction, Request, Response, Errback } from 'express';
 import { troveController } from './controller';
 import { Error } from './variables';
 
@@ -19,7 +19,7 @@ const createServer = function(renderer: BrowserWindow) {
   });
 
   app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-    const defaultErr = {
+    const defaultErr: Error = {
       log: 'Express error handler caught unknown middleware error',
       status: 400,
       message: { err: 'An error occured'},

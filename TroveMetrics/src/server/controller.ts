@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction, RequestHandler} from 'express';
 import fs from 'fs/promises';
-import { TroveQLPath, Error } from './variables';
+import { TroveQLPath } from './variables';
 import path from 'path';
 
 type controller = {
@@ -30,8 +30,12 @@ const troveController: controller = {
         }
         return true;
       })
+      parsedData.query = req.body.query
+
       // Send file data back to server to pass on to Renderer
       res.locals.data = parsedData
+
+      //Write file to local machine
       fs.writeFile(path.join(TroveQLPath, 'metrics.json'), JSON.stringify(parsedData))
         .catch(error => console.log(error))
       return next();
