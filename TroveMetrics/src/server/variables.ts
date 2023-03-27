@@ -4,10 +4,10 @@ import path from 'path'
 export const TroveQLPath: string = path.join(userInfo().homedir, '/TroveQL')
 
 export const defaultData = {
-  cache: [
-    { type: 'HIT', value: 0 }, 
-    { type: 'MISS', value: 0 }, 
-  ],
+  cache: {
+    HIT: 0, 
+    MISS: 0 
+  }, 
   query: '',
 }
 
