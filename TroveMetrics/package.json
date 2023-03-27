@@ -36,6 +36,7 @@
     "css-loader": "^6.7.3",
     "electron": "23.1.4",
     "express": "^4.18.2",
+    "fs": "^0.0.1-security",
     "node-loader": "^2.0.0",
     "style-loader": "^3.3.2",
     "ts-loader": "^9.4.2"
