@@ -13,10 +13,11 @@ h1 {
 #dashboard {
   display: flex;
   flex-flow: row wrap;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
   background-color: beige;
   padding: 10px;
+  gap: 20px;
 }
 
 #chart-container {
