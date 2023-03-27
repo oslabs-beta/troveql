@@ -1,15 +1,16 @@
 import * as React from 'react';
 import { Bar } from "react-chartjs-2";
-import { Data } from '../../server/database/data';
+import { Data } from '../../server/database/test';
 
-function CacheChart() {
+function CacheChart({ data }) {
   // return <p>CacheChart</p>
-  const [cacheData, setCacheData] = React.useState({
-    labels: Data.cache.map((data) => data.type),
+
+  const chartData = {
+    labels: Object.keys(data),
     datasets: [
       {
         label: 'Cache Usage',
-        data: Data.cache.map((data) => data.value),
+        data: Object.values(data),
         backgroundColor: [
           '#23C552', //green for HIT
           '#F84F31' //red for MISS
@@ -17,13 +18,13 @@ function CacheChart() {
         //can add more style properties here like borderColor, borderWidth, etc.
       }
     ]
-  })
+  }
 
   return (
     <div id="chart-container">
       <h3 style={{ textAlign: "center" }}>CacheChart</h3>
       <Bar
-        data={cacheData}
+        data={chartData}
         options={{
           plugins: {
             title: {

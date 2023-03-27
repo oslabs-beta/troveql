@@ -6,10 +6,20 @@ import QueryDisplay from './QueryDisplay.jsx';
 Chart.register(CategoryScale);
 
 function Dashboard () {
+  const [cacheData, setCacheData] = React.useState({
+    cache: {
+      'HIT': 0,
+      'MISS': 0
+    },
+    query: ''
+  })
+
+  window.ipcRenderer.receive('data:update', (data) => setCacheData(data));
+
   return (
     <div id='dashboard'>
-      <CacheChart/>
-      <QueryDisplay/>
+      <CacheChart data={cacheData.cache}/>
+      <QueryDisplay data={cacheData.query}/>
     </div>
   )
 }
