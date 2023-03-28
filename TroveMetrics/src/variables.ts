@@ -9,6 +9,7 @@ export const defaultData = {
     MISS: 0 
   }, 
   query: '',
+  variables: {}
 }
 
 export type Error = {

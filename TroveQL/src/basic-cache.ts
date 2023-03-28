@@ -1,10 +1,12 @@
+import { RequestBody } from './types';
+
 class Cache {
   constructor (public persistance: number) {
     this.persistance = persistance;
   }
 
   /* PRIVATE methods & data*/ //updated to public so that they can be accessed outside of the class
-  public cache = new Map<string, { value: string; expireAt: number }>();
+  public cache = new Map<RequestBody, { value: string; expireAt: number }>();
 
   public getPersistance = (): number => {
     if (this.persistance === 0) {
@@ -15,7 +17,7 @@ class Cache {
   /* PUBLIC methods & data*/
 
   //set:
-  public set = (key: string, value: string): void => {
+  public set = (key: RequestBody, value: string): void => {
     if (key === undefined || value === undefined) return;
     const valPersistance = this.getPersistance();
 
@@ -24,7 +26,7 @@ class Cache {
   }
 
   //get
-  public get = (key: string): string | undefined => {
+  public get = (key: RequestBody): string | undefined => {
     if (key === undefined) return undefined;
 
     if (this.cache.has(key)) {
@@ -35,7 +37,7 @@ class Cache {
   }
 
   //delete
-  public delete = (key: string): void => {
+  public delete = (key: RequestBody): void => {
     this.cache.delete(key);
   }
 

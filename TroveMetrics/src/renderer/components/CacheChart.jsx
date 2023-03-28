@@ -10,7 +10,7 @@ function CacheChart({ data }) {
     labels: Object.keys(data),
     datasets: [
       {
-        label: 'Cache Usage',
+        label: 'Count',
         data: Object.values(data),
         backgroundColor: [
           variables.orange, //green for HIT

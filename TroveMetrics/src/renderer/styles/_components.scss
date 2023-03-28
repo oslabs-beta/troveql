@@ -16,14 +16,14 @@
   align-items: start;
   background-color: white;
   width: 18rem;
-  height: 18rem;
+  height: 20rem;
   padding: 1rem;
   box-shadow: .2rem .2rem .4rem gray;
   border-radius: .2rem;
   gap: .8rem;
 }
 
-#query-display {
+.query-display {
   background-color: $light-gray;
   width: 100%;
   height: 100%;
