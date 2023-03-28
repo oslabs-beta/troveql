@@ -1,15 +1,10 @@
 import { Request, Response, NextFunction, RequestHandler} from 'express';
 import fs from 'fs/promises';
-import { TroveQLPath, Error } from './variables';
+import { TroveQLPath } from '../variables';
 import path from 'path';
 
 type controller = {
   post: RequestHandler
-}
-
-type chartParam = {
-  type: string,
-  value: number
 }
 
 const troveController: controller = {
@@ -24,9 +19,12 @@ const troveController: controller = {
       let hitOrMiss: string = 'MISS';
       if (req.body.cacheHit) hitOrMiss = 'HIT';
       parsedData.cache[hitOrMiss] += 1;
+      parsedData.query = req.body.query;
 
       // Send file data back to server to pass on to Renderer
       res.locals.data = parsedData
+
+      //Write file to local machine
       fs.writeFile(path.join(TroveQLPath, 'metrics.json'), JSON.stringify(parsedData))
         .catch(error => console.log(error))
       return next();

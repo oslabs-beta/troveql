@@ -2,7 +2,7 @@ import { app, BrowserWindow, ipcMain } from 'electron';
 import { createServer } from './server/server'
 import fs from 'fs/promises';
 import path from 'path';
-import { TroveQLPath, defaultData } from './server/variables';
+import { TroveQLPath, defaultData } from './variables';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -61,9 +61,8 @@ app.on('ready', () => {
 // HOWEVER, In our case, closing window wouldn't close server, which is BAD, so close everything
 app.on('window-all-closed', () => {
   // if (process.platform !== 'darwin') {
-  //   app.quit();
+    app.quit();
   // }
-  app.quit();
 });
 
 app.on('activate', () => {
