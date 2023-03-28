@@ -11,7 +11,8 @@ function Dashboard () {
       'HIT': 0,
       'MISS': 0
     },
-    query: ''
+    query: '',
+    variables: {}
   })
 
   window.ipcRenderer.receive('data:update', (data) => setCacheData(data));
@@ -19,7 +20,7 @@ function Dashboard () {
   return (
     <div id='dashboard'>
       <CacheChart data={cacheData.cache}/>
-      <QueryDisplay data={cacheData.query}/>
+      <QueryDisplay query={cacheData.query} variables={cacheData.variables}/>
     </div>
   )
 }

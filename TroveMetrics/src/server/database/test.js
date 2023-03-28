@@ -3,12 +3,6 @@ export const Data = {
     HIT: 0,
     MISS: 0
   },
-  query: `query {
-    movies {
-        id
-        title
-        genre
-        year
-    }
-  }`
+  query: '',
+  variables: {}
 }
