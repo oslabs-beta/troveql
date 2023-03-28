@@ -5,12 +5,11 @@ function QueryDisplay({ data }) {
   // return <p>QueryDisplay</p>
 
   return (
-    <div id="query-container">
-      <h3 style={{ textAlign: "center" }}>QueryDisplay</h3>
-      <p>Most Recent Query:</p>
-      <p>
+    <div className="small-container">
+      <h3>Last Query</h3>
+      <div id="query-display">
         {data}
-      </p>
+      </div>
     </div>
   )
 }
