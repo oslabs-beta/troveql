@@ -28,21 +28,29 @@ const createWindow = (): void => {
   //create the server
   createServer(renderer);
   
-  // Check if the metrics file exists; create it if it does not exist
-  fs.access(path.join(TroveQLPath, 'metrics.json'))
-    .catch(() => {
-      fs.mkdir(TroveQLPath, { recursive: true })
-      .then(()=> fs.writeFile(path.join(TroveQLPath, 'metrics.json'), JSON.stringify(defaultData)))
-    }).catch(error => console.log(error))
-
-  // read metrics file and send to the renderer
-  fs.readFile(path.join(TroveQLPath, 'metrics.json'), "utf-8")
-    .then(data => JSON.parse(data))
-    .then(parsedData => renderer.webContents.send('data:update', parsedData))
-    .catch (error => {
-      console.log(error)
-    })
+  // Send initial message when window is ready
+  renderer.once('ready-to-show', () => {
+    fs.access(path.join(TroveQLPath, 'metrics.json'))
+      // read metrics file and send to the renderer
+      .then(() => {
+        fs.readFile(path.join(TroveQLPath, 'metrics.json'), "utf-8")
+          .then(data => JSON.parse(data))
+          .then(parsedData => renderer.webContents.send('data:update', parsedData))
+          .catch (error => {
+            console.log(error)
+          })
+      })
+      // if file doesn't exist yet, make it
+      .catch(() => {
+        fs.mkdir(TroveQLPath, { recursive: true })
+        .then(()=> fs.writeFile(path.join(TroveQLPath, 'metrics.json'), JSON.stringify(defaultData)))
+        .then(()=> renderer.webContents.send('data:update', defaultData))
+      }).catch(error => console.log(error))
+  
+  })
 }
+
+
 
 // IPC Handlers
 ipcMain.handle('ping', () => 'pong');
