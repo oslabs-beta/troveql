@@ -7,17 +7,19 @@ class TroveQLCache {
     constructor(persist, graphAPI) {
         this.graphAPI = graphAPI;
         this.queryCache = (req, res, next) => {
-            console.log('req.body: ', req.body);
-            console.log('>>>Cache in the bank: ', this.cache.cache);
+            // console.log('>>>Cache in the bank: ', this.cache.cache);
             // will need to figure out how to use this for subqueries / mutations...
-            const parsedQuery = this.parseQuery(req.body.query);
-            if (parsedQuery.operation === 'query') {
-                const money = this.cache.get(req.body.query);
-                let cacheHit = 0;
+            const query = req.body.query;
+            const operation = this.parseQuery(query);
+            const variables = req.body.variables;
+            if (operation === 'query') {
+                const money = this.cache.get(req.body);
+                let cacheHit = false;
                 if (money) {
                     console.log('>>>$$$ cache money $$$');
-                    cacheHit = 1;
+                    cacheHit = true;
                     res.locals.value = money;
+                    return next();
                 }
                 else {
                     fetch(this.graphAPI, {
@@ -26,14 +28,16 @@ class TroveQLCache {
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({
-                            query: req.body.query,
-                            // variables: parsedQuery.args //this doesn't seem to be necessary...
+                            query,
+                            variables
                         }),
                     })
                         .then(r => r.json())
                         .then((data) => {
-                        this.cache.set(req.body.query, data);
+                        console.log('data from /graphql api: ', data);
+                        this.cache.set(req.body, data);
                         res.locals.value = data;
+                        return next();
                     });
                 }
                 // fetch('http://localhost:3333/api', {
@@ -42,7 +46,8 @@ class TroveQLCache {
                 //     'Content-Type': 'application/json'
                 //   },
                 //   body: JSON.stringify({ 
-                //     cacheHit
+                //     cacheHit,
+                //     query: query
                 //   }),
                 // })
                 // .then(r => r.json())
@@ -50,7 +55,6 @@ class TroveQLCache {
                 //   console.log(data);
                 // })
                 // .catch(err => console.log(err));
-                return next();
             }
             // else {
             //   // for mutations...
@@ -58,14 +62,9 @@ class TroveQLCache {
             // }
         };
         this.parseQuery = (query) => {
-            const parsedQuery = (0, graphql_1.parse)(query); //not sure how to Type this fat object
-            const operation = parsedQuery.definitions[0].operation;
-            const argsArray = parsedQuery.definitions[0].selectionSet.selections[0].arguments; //not sure how to Type this array of objects
-            const args = {};
-            for (let i = 0; i < argsArray.length; i++) {
-                args[argsArray[i].name.value] = argsArray[i].value.value;
-            }
-            return { operation, args };
+            const parsedQuery = (0, graphql_1.parse)(query);
+            const operation = parsedQuery["definitions"][0].operation;
+            return operation;
         };
         this.cache = new basic_cache_1.Cache(persist);
         this.graphAPI = graphAPI;
