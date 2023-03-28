@@ -7,17 +7,20 @@ class TroveQLCache {
     constructor(persist, graphAPI) {
         this.graphAPI = graphAPI;
         this.queryCache = (req, res, next) => {
-            console.log('req.body: ', req.body);
-            console.log('>>>Cache in the bank: ', this.cache.cache);
+            // console.log('>>>Cache in the bank: ', this.cache.cache);
             // will need to figure out how to use this for subqueries / mutations...
-            const parsedQuery = this.parseQuery(req.body.query);
-            if (parsedQuery.operation === 'query') {
-                const money = this.cache.get(req.body.query);
-                let cacheHit = 0;
+            const reqBody = req.body;
+            const query = req.body.query;
+            const operation = this.parseQuery(query);
+            const variables = req.body.variables;
+            if (operation === 'query') {
+                const money = this.cache.get(reqBody); //cache get method needs to be updated to receive an object instead of a string
+                let cacheHit = false;
                 if (money) {
                     console.log('>>>$$$ cache money $$$');
-                    cacheHit = 1;
+                    cacheHit = true;
                     res.locals.value = money;
+                    return next();
                 }
                 else {
                     fetch(this.graphAPI, {
@@ -26,31 +29,34 @@ class TroveQLCache {
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({
-                            query: req.body.query,
-                            // variables: parsedQuery.args //this doesn't seem to be necessary...
+                            query,
+                            variables
                         }),
                     })
                         .then(r => r.json())
                         .then((data) => {
-                        this.cache.set(req.body.query, data);
+                        console.log('data from /graphql api: ', data);
+                        this.cache.set(reqBody, data); //set method needs to receive an object & I would've thought data is an object but I think it's a string...
                         res.locals.value = data;
+                        return next();
                     });
                 }
-                // fetch('http://localhost:3333/api', {
-                //   method: 'POST',
-                //   headers: {
-                //     'Content-Type': 'application/json'
-                //   },
-                //   body: JSON.stringify({ 
-                //     cacheHit
-                //   }),
-                // })
-                // .then(r => r.json())
-                // .then((data) => {
-                //   console.log(data);
-                // })
-                // .catch(err => console.log(err));
-                return next();
+                fetch('http://localhost:3333/api', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        cacheHit,
+                        query,
+                        variables
+                    }),
+                })
+                    .then(r => r.json())
+                    .then((data) => {
+                    console.log(data);
+                })
+                    .catch(err => console.log(err));
             }
             // else {
             //   // for mutations...
@@ -58,14 +64,9 @@ class TroveQLCache {
             // }
         };
         this.parseQuery = (query) => {
-            const parsedQuery = (0, graphql_1.parse)(query); //not sure how to Type this fat object
-            const operation = parsedQuery.definitions[0].operation;
-            const argsArray = parsedQuery.definitions[0].selectionSet.selections[0].arguments; //not sure how to Type this array of objects
-            const args = {};
-            for (let i = 0; i < argsArray.length; i++) {
-                args[argsArray[i].name.value] = argsArray[i].value.value;
-            }
-            return { operation, args };
+            const parsedQuery = (0, graphql_1.parse)(query);
+            const operation = parsedQuery["definitions"][0].operation;
+            return operation;
         };
         this.cache = new basic_cache_1.Cache(persist);
         this.graphAPI = graphAPI;
