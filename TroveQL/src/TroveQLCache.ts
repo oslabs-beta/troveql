@@ -3,12 +3,16 @@ import { parse } from 'graphql';
 
 class TroveQLCache {
   cache: Cache;
-  constructor (persist: number, public graphAPI: string) {
+  constructor(persist: number, public graphAPI: string) {
     this.cache = new Cache(persist);
     this.graphAPI = graphAPI;
   }
 
-  queryCache = (req: { body: { query: string } }, res: { locals: { value?: any } }, next: any): any => {
+  queryCache = (
+    req: { body: { query: string } },
+    res: { locals: { value?: any } },
+    next: any
+  ): any => {
     console.log('req.body: ', req.body);
     console.log('>>>Cache in the bank: ', this.cache.cache);
     // will need to figure out how to use this for subqueries / mutations...
@@ -25,55 +29,70 @@ class TroveQLCache {
         fetch(this.graphAPI, {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ 
+          body: JSON.stringify({
             query: req.body.query,
             // variables: parsedQuery.args //this doesn't seem to be necessary...
           }),
         })
-        .then(r => r.json())
-        .then((data) => {
-          this.cache.set(req.body.query, data);
-          res.locals.value = data;
-        })
+          .then((r) => r.json())
+          .then((data) => {
+            this.cache.set(req.body.query, data);
+            res.locals.value = data;
+          });
       }
       fetch('http://localhost:3333/api', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ 
-          cacheHit
+        body: JSON.stringify({
+          cacheHit,
         }),
       })
-      .then(r => r.json())
-      .then((data) => {
-        console.log(data);
-      })
-      .catch(err => console.log(err));
+        .then((r) => r.json())
+        .then((data) => {
+          console.log(data);
+        })
+        .catch((err) => console.log(err));
       return next();
-    } 
-    
+    }
+
     // else {
     //   // for mutations...
     //   // return next();
     // }
-  }
+  };
 
-  parseQuery = (query: any): any => {
+  parseQuery = (query: any): Operation => {
     const parsedQuery = parse(query);
-    const operation = parsedQuery.definitions[0].operation;
+    const definition = parsedQuery.definitions[0];
 
-    const argsArray = parsedQuery.definitions[0].selectionSet.selections[0].arguments;
-    type Arg = {[key: string] : string};
-    const args : Arg = {};
+    const operation = definition.operation;
+    const argsArray = definition.selectionSet.selections[0].arguments;
+    const args: { [key: string]: string } = {};
     for (let i = 0; i < argsArray.length; i++) {
       args[argsArray[i].name.value] = argsArray[i].value.value;
     }
 
     return { operation, args };
-  }
+  };
+
+  // parseQuery = (query: any): any => {
+  //   const parsedQuery = parse(query);
+  //   const operation = parsedQuery.definitions[0].operation;
+
+  //   const argsArray =
+  //     parsedQuery.definitions[0].selectionSet.selections[0].arguments;
+  //   type Arg = { [key: string]: string };
+  //   const args: Arg = {};
+  //   for (let i = 0; i < argsArray.length; i++) {
+  //     args[argsArray[i].name.value] = argsArray[i].value.value;
+  //   }
+
+  //   return { operation, args };
+  // };
 }
 
 export { TroveQLCache };

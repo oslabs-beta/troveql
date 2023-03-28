@@ -23,14 +23,14 @@ class TroveQLCache {
                     fetch(this.graphAPI, {
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/json'
+                            'Content-Type': 'application/json',
                         },
                         body: JSON.stringify({
                             query: req.body.query,
                             // variables: parsedQuery.args //this doesn't seem to be necessary...
                         }),
                     })
-                        .then(r => r.json())
+                        .then((r) => r.json())
                         .then((data) => {
                         this.cache.set(req.body.query, data);
                         res.locals.value = data;
@@ -39,17 +39,17 @@ class TroveQLCache {
                 fetch('http://localhost:3333/api', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        cacheHit
+                        cacheHit,
                     }),
                 })
-                    .then(r => r.json())
+                    .then((r) => r.json())
                     .then((data) => {
                     console.log(data);
                 })
-                    .catch(err => console.log(err));
+                    .catch((err) => console.log(err));
                 return next();
             }
             // else {
@@ -59,8 +59,9 @@ class TroveQLCache {
         };
         this.parseQuery = (query) => {
             const parsedQuery = (0, graphql_1.parse)(query);
-            const operation = parsedQuery.definitions[0].operation;
-            const argsArray = parsedQuery.definitions[0].selectionSet.selections[0].arguments;
+            const definition = parsedQuery.definitions[0];
+            const operation = definition.operation;
+            const argsArray = definition.selectionSet.selections[0].arguments;
             const args = {};
             for (let i = 0; i < argsArray.length; i++) {
                 args[argsArray[i].name.value] = argsArray[i].value.value;
