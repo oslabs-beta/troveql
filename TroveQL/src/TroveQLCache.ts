@@ -2,15 +2,7 @@ import { Cache } from './basic-cache';
 import { parse } from 'graphql';
 import { Request, Response, NextFunction, RequestHandler } from 'express';
 import { DocumentNode } from 'graphql';
-
-type Variables = {
-  [ key : string ] : string
-};
-
-type RequestBody = {
-  query: string,
-  variables: Variables
-}
+import { Variables, RequestBody } from './types';
 
 class TroveQLCache {
   cache: Cache;
@@ -28,7 +20,7 @@ class TroveQLCache {
     const variables: Variables = req.body.variables;
 
     if (operation === 'query') {
-      const money: string = this.cache.get(reqBody); //cache get method needs to be updated to receive an object instead of a string
+      const money: string | undefined = this.cache.get(reqBody); //cache get method needs to be updated to receive an object instead of a string
       let cacheHit: boolean = false;
       if (money) {
         console.log('>>>$$$ cache money $$$');
