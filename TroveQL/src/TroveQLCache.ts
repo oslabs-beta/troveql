@@ -6,7 +6,7 @@ import { Variables, RequestBody } from './types';
 
 class TroveQLCache {
   cache: Cache;
-  constructor (persist: number, public graphAPI: string) {
+  constructor(persist: number, public graphAPI: string) {
     this.cache = new Cache(persist);
     this.graphAPI = graphAPI;
   }
@@ -33,7 +33,7 @@ class TroveQLCache {
         fetch(this.graphAPI, {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
           },
           body: cacheKey,
         })
@@ -48,11 +48,30 @@ class TroveQLCache {
           return next();
         })
       }
-    // } else {
+
+      fetch('http://localhost:3333/api', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          cacheHit,
+          query,
+          variables
+        }),
+      })
+      .then(r => r.json())
+      .then((data) => {
+        console.log(data);
+      })
+      .catch(err => console.log(err));
+    } 
+    // else {
     //   // for mutations...
     //   // return next();
-    }
-  }
+    // }
+  };
+
 
   sendData = (cacheHit: boolean, query: string, variables: Variables): void => {
     fetch('http://localhost:3333/api', {
