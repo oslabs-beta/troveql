@@ -23,9 +23,11 @@ class Cache {
         };
         //get
         this.get = (key) => {
+            console.log('>>> this is the key in the get method: ', key);
             if (key === undefined)
                 return undefined;
             if (this.cache.has(key)) {
+                console.log('>>> the key has been found!');
                 const item = this.cache.get(key);
                 return item.value;
             }
