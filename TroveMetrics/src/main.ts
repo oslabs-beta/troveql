@@ -9,14 +9,19 @@ if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
+// Security
+app.enableSandbox(); // Limits renderer access; this is also the default setting
+
+
 const createWindow = (): void => {
   // Create the browser window.
   let renderer = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 100,
+    height: 800,
     webPreferences: {
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
-
+      nodeIntegration: false,
+      contextIsolation: true,
     },
   });
 
@@ -35,7 +40,7 @@ const createWindow = (): void => {
       .then(() => {
         fs.readFile(path.join(TroveQLPath, 'metrics.json'), "utf-8")
           .then(data => JSON.parse(data))
-          .then(parsedData => renderer.webContents.send('data:update', parsedData))
+          .then(parsedData => renderer.webContents.send('data:initialize', parsedData))
           .catch (error => {
             console.log(error)
           })
@@ -44,7 +49,7 @@ const createWindow = (): void => {
       .catch(() => {
         fs.mkdir(TroveQLPath, { recursive: true })
         .then(()=> fs.writeFile(path.join(TroveQLPath, 'metrics.json'), JSON.stringify(defaultData)))
-        .then(()=> renderer.webContents.send('data:update', defaultData))
+        .then(()=> renderer.webContents.send('data:initialize', defaultData))
       }).catch(error => console.log(error))
   
   })

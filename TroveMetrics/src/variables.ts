@@ -1,16 +1,13 @@
 import { userInfo } from 'os';
 import path from 'path'
 
-export const TroveQLPath: string = path.join(userInfo().homedir, '/TroveQL/')
-
-export const defaultData = {
-  cache: {
-    HIT: 0, 
-    MISS: 0 
-  }, 
-  query: '',
-  variables: {}
+export type queryData = {
+  cacheHit: boolean,
+  query: string,
+  variables: {},
 }
+
+type localData
 
 export type Error = {
   log?: string,
@@ -18,4 +15,14 @@ export type Error = {
   message?: { 
     err?: string
   },
+}
+
+export const TroveQLPath: string = path.join(userInfo().homedir, '/TroveQL/')
+
+export const defaultData = {
+  cache: {
+    HIT: 0, 
+    MISS: 0 
+  }, 
+  queries: queryData[]
 }

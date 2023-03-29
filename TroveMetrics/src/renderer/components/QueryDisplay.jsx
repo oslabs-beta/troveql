@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Data } from '../../server/database/test';
 
 function QueryDisplay({ query, variables }) {
   // return <p>QueryDisplay</p>

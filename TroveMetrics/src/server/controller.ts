@@ -19,7 +19,7 @@ const troveController: controller = {
       let hitOrMiss: string = 'MISS';
       if (req.body.cacheHit) hitOrMiss = 'HIT';
       parsedData.cache[hitOrMiss] += 1;
-      parsedData.query = req.body.query;
+      parsedData.queries[parsedData.queries.length - 1] = req.body.query;
       parsedData.variables = req.body.variables;
 
       // Send file data back to server to pass on to Renderer

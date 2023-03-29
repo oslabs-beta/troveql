@@ -23,6 +23,11 @@
   gap: .8rem;
 }
 
+.wide-container {
+  @extend .small-container;
+  width: 37.5rem;
+}
+
 .query-display {
   background-color: $light-gray;
   width: 100%;

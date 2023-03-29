@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Chart, CategoryScale } from 'chart.js/auto' //to pick specific chart features for bundle optimization (instead of using /auto): https://www.chartjs.org/docs/latest/getting-started/integration.html
 import CacheChart from './CacheChart.jsx';
 import QueryDisplay from './QueryDisplay.jsx';
+import TimeChart from './TimeChart.jsx';
 
 Chart.register(CategoryScale);
 
@@ -15,12 +16,13 @@ function Dashboard () {
     variables: {}
   })
 
-  window.ipcRenderer.receive('data:update', (data) => setCacheData(data));
+  window.ipcRenderer.receive('data:initialize', (data) => setCacheData(data));
 
   return (
     <div id='dashboard'>
       <CacheChart data={cacheData.cache}/>
       <QueryDisplay query={cacheData.query} variables={cacheData.variables}/>
+      <TimeChart data={cacheData.cache}/>
     </div>
   )
 }
