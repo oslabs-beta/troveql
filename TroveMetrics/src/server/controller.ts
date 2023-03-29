@@ -21,8 +21,7 @@ const troveController: controller = {
       if (req.body.cacheHit) hitOrMiss = 'HIT';
       parsedData.cache[hitOrMiss] += 1;
       parsedData.queries.push(req.body)
-
-      console.log('PARSED DATA', parsedData)
+      
       // Send file data back to server to pass on to Renderer
       res.locals.data = parsedData
 
