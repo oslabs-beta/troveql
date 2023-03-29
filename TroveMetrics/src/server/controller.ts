@@ -10,7 +10,6 @@ type controller = {
 const troveController: controller = {
 
   post: function(req: Request, res: Response, next: NextFunction) {
-
     // Pull from local data, add new data, and write back
     fs.readFile(path.join(TroveQLPath, 'metrics.json'), "utf-8")
     .then(data => JSON.parse(data))
