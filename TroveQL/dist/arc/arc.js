@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TroveCache = void 0;
-const CacheItem_1 = require("./CacheItem");
+const cacheItem_1 = require("./cacheItem");
 class TroveCache {
     constructor(size) {
         this.get = (query) => {
@@ -35,7 +35,7 @@ class TroveCache {
             }
         };
         this.set = (res) => {
-            const node = new CacheItem_1.CacheItem(res.result);
+            const node = new cacheItem_1.CacheItem(res.result);
             switch (true) {
                 case res.miss === 'b1':
                     console.log('In Set Case II');

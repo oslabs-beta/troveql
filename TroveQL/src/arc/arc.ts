@@ -1,4 +1,4 @@
-import { CacheItem } from './CacheItem';
+import { CacheItem } from './cacheItem';
 import {
   RequestBody,
   ItemType,
@@ -67,6 +67,7 @@ export class TroveCache {
         console.log('In Set Case II');
         this.adaptation(true);
         this.replace(false);
+
         this.t2.set(res.query, node);
         break;
 

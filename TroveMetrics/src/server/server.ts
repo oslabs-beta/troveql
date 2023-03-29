@@ -1,6 +1,7 @@
 import { BrowserWindow } from 'electron'
-import express, { Request, Response } from 'express';
+import express, { NextFunction, Request, Response, Errback } from 'express';
 import { troveController } from './controller';
+import { Error } from '../variables';
 
 const app = express();
 
@@ -13,9 +14,23 @@ const createServer = function(renderer: BrowserWindow) {
     res.status(200).send('worked :D');
   });
 
+  
+  app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+    const defaultErr: Error = {
+      log: 'Express error handler caught unknown middleware error',
+      status: 400,
+      message: { err: 'An error occured'},
+    };
+    const errorObj = Object.assign({}, defaultErr, err);
+    console.log(errorObj.log);
+    
+    return res.sendStatus(errorObj.status).json(errorObj.message);
+  });
+  
   app.listen(port, () => {
     console.log(`listening on port: ${port}`);
   });
+
 };
 
 

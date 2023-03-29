@@ -22,4 +22,4 @@ type fetchResponse = {
   miss: string;
 };
 
-export { RequestBody, ItemType, CacheType, getResponse };
+export { RequestBody, ItemType, CacheType, getResponse, fetchResponse };

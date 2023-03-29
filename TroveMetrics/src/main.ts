@@ -1,12 +1,13 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
-import path from 'path';
-//const { createServer } = require('./server/server');
 import { createServer } from './server/server'
+import fs from 'fs/promises';
+import path from 'path';
+import { TroveQLPath, defaultData } from './variables';
+
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   app.quit();
 }
-
 
 const createWindow = (): void => {
   // Create the browser window.
@@ -27,7 +28,29 @@ const createWindow = (): void => {
   //create the server
   createServer(renderer);
   
-};
+  // Send initial message when window is ready
+  renderer.once('ready-to-show', () => {
+    fs.access(path.join(TroveQLPath, 'metrics.json'))
+      // read metrics file and send to the renderer
+      .then(() => {
+        fs.readFile(path.join(TroveQLPath, 'metrics.json'), "utf-8")
+          .then(data => JSON.parse(data))
+          .then(parsedData => renderer.webContents.send('data:update', parsedData))
+          .catch (error => {
+            console.log(error)
+          })
+      })
+      // if file doesn't exist yet, make it
+      .catch(() => {
+        fs.mkdir(TroveQLPath, { recursive: true })
+        .then(()=> fs.writeFile(path.join(TroveQLPath, 'metrics.json'), JSON.stringify(defaultData)))
+        .then(()=> renderer.webContents.send('data:update', defaultData))
+      }).catch(error => console.log(error))
+  
+  })
+}
+
+
 
 // IPC Handlers
 ipcMain.handle('ping', () => 'pong');
@@ -46,9 +69,8 @@ app.on('ready', () => {
 // HOWEVER, In our case, closing window wouldn't close server, which is BAD, so close everything
 app.on('window-all-closed', () => {
   // if (process.platform !== 'darwin') {
-  //   app.quit();
+    app.quit();
   // }
-  app.quit();
 });
 
 app.on('activate', () => {

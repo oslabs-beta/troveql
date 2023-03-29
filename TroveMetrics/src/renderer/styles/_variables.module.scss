@@ -1,0 +1,9 @@
+$background: rgb(220, 220, 220);
+$orange: rgb(254	169	79);
+$light-gray: rgb(243, 243, 243);
+
+:export {
+  orange: $orange;
+  background: $background;
+  lightGray: $light-gray
+}
