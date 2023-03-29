@@ -11,9 +11,15 @@ type ItemType = {
 };
 type CacheType = Map<string, ItemType | boolean>;
 
-type ResponseType = {
+type getResponse = {
   result: string;
   miss: string | boolean;
 };
 
-export { RequestBody, ItemType, CacheType, SetType };
+type fetchResponse = {
+  query: string;
+  result: string;
+  miss: string;
+};
+
+export { RequestBody, ItemType, CacheType, getResponse };

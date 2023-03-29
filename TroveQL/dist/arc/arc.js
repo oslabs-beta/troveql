@@ -4,46 +4,90 @@ exports.TroveCache = void 0;
 const CacheItem_1 = require("./CacheItem");
 class TroveCache {
     constructor(size) {
-        // RETRIEVE ITEMS FROM THE CACHE
         this.get = (query) => {
-            const cache = this.getCache(query);
-            if (cache === undefined) {
-                this.resizeCache('miss');
-                return undefined;
-            }
-            if (cache === this.t1 || cache === this.t2) {
-                const result = cache.get(query);
-                //get item from T1 & promote it to T2
-                const isT1 = cache === this.t1;
-                if (isT1) {
-                    this.t1.delete(query);
-                }
-                else {
-                    this.t2.delete(query);
-                }
-                //TODO: change to LFU evict when logic is build
-                if (this.t2.size >= this.t2Size) {
-                    this.evictLRU(this.t2);
-                }
-                result.hits++;
-                this.t2.set(query, result);
-                return result.value;
-            }
-            else if (cache === this.b1 || cache === this.b2) {
-                this.resizeCache(cache);
-                return false;
+            switch (true) {
+                case this.t1.has(query) || this.t2.has(query):
+                    console.log('In Get Case I');
+                    const cache = this.t1.has(query) ? this.t1 : this.t2;
+                    const result = cache.get(query); //this may be an issue
+                    cache.delete(query);
+                    this.t2.set(query, result);
+                    return {
+                        result: result.value,
+                        miss: false,
+                    };
+                    break;
+                case this.b1.has(query):
+                    console.log('In Get Case II');
+                    return { result: '', miss: 'b1' };
+                    break;
+                case this.b2.has(query):
+                    console.log('In Get Case III');
+                    return { result: '', miss: 'b2' };
+                    break;
+                case !this.t1.has(query) &&
+                    this.t2.has(query) &&
+                    this.b1.has(query) &&
+                    this.b2.has(query):
+                    console.log('In Get Case III');
+                    return { result: '', miss: 'miss' };
+                    break;
             }
         };
-        //ADD NEW ITEMS TO THE CACHE
-        this.set = (query, result) => {
-            const newItem = new CacheItem_1.CacheItem(result);
-            if (this.t1.size >= this.t1Size) {
-                this.evictLRU(this.t1);
+        this.set = (res) => {
+            const node = new CacheItem_1.CacheItem(res.result);
+            switch (true) {
+                case res.miss === 'b1':
+                    console.log('In Set Case II');
+                    this.adaptation(true);
+                    this.replace(false);
+                    this.t2.set(res.query, node);
+                    break;
+                case res.miss === 'b2':
+                    console.log('In Set Case III');
+                    this.adaptation(false);
+                    this.replace(true);
+                    this.t2.set(res.query, node);
+                    break;
+                case res.miss === 'miss':
+                    console.log('In Set Case III');
+                    const l1 = this.t1.size + this.t2.size;
+                    switch (true) {
+                        case l1 === this.capacity:
+                            if (this.t1.size < this.capacity) {
+                                this.evictLRU(this.b1);
+                                this.replace(false); //check this
+                            }
+                            else {
+                                this.evictLRU(this.t1);
+                            }
+                            break;
+                        case l1 < this.capacity:
+                            const totalSize = this.t1.size + this.b1.size + this.t2.size + this.b2.size;
+                            if (totalSize >= this.capacity) {
+                                if (totalSize === this.capacity * 2) {
+                                    this.evictLRU(this.b2);
+                                }
+                                this.replace(false); //check this
+                            }
+                            break;
+                    }
+                    //add data
+                    this.t1.set(res.query, node);
+                    break;
             }
-            this.t1.set(query, newItem);
         };
-        //DELETE ALL ITEMS FROM ALL GHOSTS AND CACHES
-        this.deleteAll = () => {
+        this.adaptation = (isB1) => {
+            if (isB1) {
+                const n = this.b1.size >= this.b2.size ? 1 : this.b2.size / this.b1.size;
+                this.p = this.p + n;
+            }
+            else {
+                const n = this.b2.size >= this.b1.size ? 1 : this.b1.size / this.b2.size;
+                this.p = this.p - n;
+            }
+        };
+        this.removeAll = () => {
             const caches = [this.t1, this.t2, this.b1, this.b2];
             caches.forEach((cache) => cache.clear());
         };
@@ -53,58 +97,24 @@ class TroveCache {
         this.t2 = new Map();
         this.b1 = new Map();
         this.b2 = new Map();
-        //we need to remove this
-        this.t1Size = Math.floor(this.capacity * this.p);
-        this.t2Size = this.capacity - this.t1Size;
-        this.ghostSize = this.t1Size;
-    }
-    //HELPER METHODS
-    getCache(query) {
-        const caches = [this.t1, this.t2, this.b1, this.b2];
-        for (let cache of caches) {
-            if (cache.has(query))
-                return cache;
-        }
-        return undefined;
     }
     evictLRU(cache) {
         const firstKey = cache.keys().next().value;
-        let targetCache;
-        if (cache === this.t1 || cache === this.t2) {
-            targetCache = cache === this.t1 ? this.b1 : this.b2;
-        }
-        if (targetCache && targetCache.size >= this.ghostSize) {
-            this.evictLRU(targetCache);
-        }
+        // will the following line pass by ref? Do we need to make a shallow copy?
+        const evicted = [firstKey, cache.get(firstKey)];
         cache.delete(firstKey);
+        return evicted;
     }
-    //TODO: Write logic for LFU cache eviction
-    evictLFU(cache) { }
-    resizeCache(cache) {
-        const growCacheSize = cache === this.b1 || cache === 'miss' ? this.t1Size : this.t2Size;
-        const targetCache = cache === this.b1 || cache === 'miss' ? this.t1 : this.t2;
-        const shrinkCacheSize = targetCache === this.t1 ? this.t2Size : this.t1Size;
-        this.updatePValue(growCacheSize, shrinkCacheSize);
-        while (targetCache.size > growCacheSize) {
-            this.evictLRU(targetCache);
+    replace(foundInB2) {
+        if (this.t1.size > 0 &&
+            (this.t1.size > this.p || (foundInB2 && this.t1.size === this.p))) {
+            let [key, cacheItem] = this.evictLRU(this.t1);
+            this.b1.set(key, cacheItem);
         }
-    }
-    //update pValue Helper function for resizeCache()
-    updatePValue(growCacheSize, shrinkCacheSize) {
-        //rethink this to increment pValue by a percentage
-        if (shrinkCacheSize <= 1) {
-            throw new Error('Cache sizes cannot be zero or negative');
-            return;
+        else {
+            let [key, cacheItem] = this.evictLRU(this.t2);
+            this.b2.set(key, cacheItem);
         }
-        //this needs to be refactored
-        shrinkCacheSize--;
-        growCacheSize++;
-        const [min, max] = [
-            Math.min(growCacheSize, shrinkCacheSize),
-            Math.max(growCacheSize, shrinkCacheSize),
-        ];
-        console.log(max, min);
-        this.p = max / min;
     }
 }
 exports.TroveCache = TroveCache;
