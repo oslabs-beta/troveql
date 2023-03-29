@@ -56,10 +56,22 @@ class TroveQLCache {
         })
       }
     } else if (operation === 'mutation') {
-      this.cache.removeAll();
-      //will need to send data to TM
-      this.sendData();
-      return next();
+      console.log('>>>in the mutation if statement of the TroveQL middleware');
+      fetch(this.graphAPI, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: cacheKey,
+      })
+      .then(r => r.json())
+      .then((data) => {
+        res.locals.value = data;
+        
+        this.cache.removeAll();
+        this.sendData();
+        return next();
+      })
     }
   };
 
