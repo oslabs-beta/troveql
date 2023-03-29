@@ -12,11 +12,14 @@ function Dashboard () {
       'HIT': 0,
       'MISS': 0
     },
-    query: '',
-    variables: {}
+    queries: []
   })
 
-  window.ipcRenderer.receive('data:initialize', (data) => setCacheData(data));
+  window.ipcRenderer.receive('data:udpate', (data) => {
+    console.log(data)
+    setCacheData(data)})
+
+    ;
 
   return (
     <div id='dashboard'>

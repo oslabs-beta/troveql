@@ -15,13 +15,14 @@ const troveController: controller = {
     fs.readFile(path.join(TroveQLPath, 'metrics.json'), "utf-8")
     .then(data => JSON.parse(data))
     .then(parsedData => {
+
       // Translate Hit / Miss into data format ready for Chart.js
       let hitOrMiss: string = 'MISS';
       if (req.body.cacheHit) hitOrMiss = 'HIT';
       parsedData.cache[hitOrMiss] += 1;
-      parsedData.queries[parsedData.queries.length - 1] = req.body.query;
-      parsedData.variables = req.body.variables;
+      parsedData.queries.push(req.body)
 
+      console.log('PARSED DATA', parsedData)
       // Send file data back to server to pass on to Renderer
       res.locals.data = parsedData
 

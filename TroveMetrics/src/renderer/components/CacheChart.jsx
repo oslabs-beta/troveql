@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Pie } from "react-chartjs-2";
-import { Data } from '../../server/database/test';
 import variables from '../styles/_variables.module.scss'
 
 function CacheChart({ data }) {

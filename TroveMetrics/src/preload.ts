@@ -18,7 +18,7 @@ type channelList = {
 const channels: channelList = {
   frontend: { 
     send: [], // From frontend to main.
-    receive: ['data:update', 'data:intialize'], // From main to frontend.
+    receive: ['data:update'], // From main to frontend.
     sendReceive: [], // From frontend to main and back again.
   },
   server: { 
