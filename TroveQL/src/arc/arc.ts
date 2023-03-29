@@ -67,7 +67,6 @@ export class TroveCache {
         console.log('In Set Case II');
         this.adaptation(true);
         this.replace(false);
-
         this.t2.set(res.query, node);
         break;
 
@@ -75,7 +74,6 @@ export class TroveCache {
         console.log('In Set Case III');
         this.adaptation(false);
         this.replace(true);
-
         this.t2.set(res.query, node);
         break;
 
@@ -104,9 +102,7 @@ export class TroveCache {
             }
             break;
         }
-        //add data
         this.t1.set(res.query, node);
-
         break;
     }
   };

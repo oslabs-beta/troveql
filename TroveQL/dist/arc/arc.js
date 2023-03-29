@@ -72,7 +72,6 @@ class TroveCache {
                             }
                             break;
                     }
-                    //add data
                     this.t1.set(res.query, node);
                     break;
             }
