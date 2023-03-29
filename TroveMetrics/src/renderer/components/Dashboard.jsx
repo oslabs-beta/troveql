@@ -15,17 +15,13 @@ function Dashboard () {
     queries: []
   })
 
-  window.ipcRenderer.receive('data:udpate', (data) => {
-    console.log(data)
-    setCacheData(data)})
-
-    ;
+  window.ipcRenderer.receive('data:update', (data) => setCacheData(data))
 
   return (
     <div id='dashboard'>
       <CacheChart data={cacheData.cache}/>
-      <QueryDisplay query={cacheData.query} variables={cacheData.variables}/>
-      <TimeChart data={cacheData.cache}/>
+      <QueryDisplay queries={cacheData.queries}/>
+      <TimeChart cacheData={cacheData}/>
     </div>
   )
 }

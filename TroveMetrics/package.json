@@ -14,10 +14,8 @@
   "keywords": [],
   "license": "MIT",
   "dependencies": {
-    "chart.js": "^4.2.1",
     "electron-squirrel-startup": "^1.0.0",
     "react": "^18.2.0",
-    "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
@@ -33,11 +31,13 @@
     "@types/react-dom": "^18.0.11",
     "@vercel/webpack-asset-relocator-loader": "^1.7.3",
     "babel-loader": "^9.1.2",
+    "chart.js": "^4.2.1",
     "css-loader": "^6.7.3",
     "electron": "23.1.4",
     "express": "^4.18.2",
     "fs": "^0.0.1-security",
     "node-loader": "^2.0.0",
+    "react-chartjs-2": "^5.2.0",
     "sass": "^1.60.0",
     "sass-loader": "^13.2.2",
     "style-loader": "^3.3.2",

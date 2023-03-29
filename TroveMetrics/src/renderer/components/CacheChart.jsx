@@ -3,7 +3,6 @@ import { Pie } from "react-chartjs-2";
 import variables from '../styles/_variables.module.scss'
 
 function CacheChart({ data }) {
-  // return <p>CacheChart</p>
 
   const chartData = {
     labels: Object.keys(data),
@@ -12,8 +11,8 @@ function CacheChart({ data }) {
         label: 'Count',
         data: Object.values(data),
         backgroundColor: [
-          variables.orange, //green for HIT
-          variables.lightGray //red for MISS
+          variables.orange, 
+          variables.lightGray 
         ],
         //can add more style properties here like borderColor, borderWidth, etc.
       }
@@ -22,7 +21,7 @@ function CacheChart({ data }) {
 
   return (
     <div className="small-container">
-      <h3>CacheChart</h3>
+      <h3>Latest Hit Rate</h3>
       <Pie
         data={chartData}
         options={{

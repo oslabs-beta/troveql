@@ -2,9 +2,10 @@ import { userInfo } from 'os';
 import path from 'path'
 
 export type queryData = {
-  cacheHit: boolean,
+  cacheHit?: boolean,
   query: string,
   variables: {},
+  lookupTime?: number
 }
 
 export type localData = {
