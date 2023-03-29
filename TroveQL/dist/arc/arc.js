@@ -5,37 +5,36 @@ const cacheItem_1 = require("./cacheItem");
 class TroveCache {
     constructor(size) {
         this.get = (query) => {
+            console.log('---arc get method query input: ', query);
             switch (true) {
                 case this.t1.has(query) || this.t2.has(query):
                     console.log('In Get Case I');
                     const cache = this.t1.has(query) ? this.t1 : this.t2;
                     const result = cache.get(query); //this may be an issue
+                    console.log('result in Case I - Get', result);
                     cache.delete(query);
                     this.t2.set(query, result);
                     return {
                         result: result.value,
                         miss: false,
                     };
-                    break;
                 case this.b1.has(query):
                     console.log('In Get Case II');
                     return { result: '', miss: 'b1' };
-                    break;
                 case this.b2.has(query):
                     console.log('In Get Case III');
                     return { result: '', miss: 'b2' };
-                    break;
                 case !this.t1.has(query) &&
-                    this.t2.has(query) &&
-                    this.b1.has(query) &&
-                    this.b2.has(query):
-                    console.log('In Get Case III');
+                    !this.t2.has(query) &&
+                    !this.b1.has(query) &&
+                    !this.b2.has(query):
+                    console.log('In Get Case IV');
                     return { result: '', miss: 'miss' };
-                    break;
             }
         };
         this.set = (res) => {
             const node = new cacheItem_1.CacheItem(res.result);
+            console.log('newNode in set', node);
             switch (true) {
                 case res.miss === 'b1':
                     console.log('In Set Case II');
@@ -50,8 +49,8 @@ class TroveCache {
                     this.t2.set(res.query, node);
                     break;
                 case res.miss === 'miss':
-                    console.log('In Set Case III');
-                    const l1 = this.t1.size + this.t2.size;
+                    console.log('In Set Case IV');
+                    const l1 = this.t1.size + this.b1.size;
                     switch (true) {
                         case l1 === this.capacity:
                             if (this.t1.size < this.capacity) {
@@ -89,6 +88,14 @@ class TroveCache {
         this.removeAll = () => {
             const caches = [this.t1, this.t2, this.b1, this.b2];
             caches.forEach((cache) => cache.clear());
+        };
+        //forTesting
+        this.returnAll = () => {
+            const caches = [this.t1, this.t2, this.b1, this.b2];
+            const cacheNames = ['t1', 't2', 'b1', 'b2'];
+            for (let i = 0; i < caches.length; i++) {
+                console.log(cacheNames[i], caches[i]);
+            }
         };
         this.capacity = size;
         this.p = 0.5;

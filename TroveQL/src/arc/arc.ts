@@ -26,11 +26,13 @@ export class TroveCache {
   }
 
   public get = (query: string): getResponse => {
+    console.log('---arc get method query input: ', query);
     switch (true) {
       case this.t1.has(query) || this.t2.has(query):
         console.log('In Get Case I');
         const cache = this.t1.has(query) ? this.t1 : this.t2;
         const result = cache.get(query) as ItemType; //this may be an issue
+        console.log('result in Case I - Get', result);
         cache.delete(query);
         this.t2.set(query, result);
 
@@ -51,7 +53,7 @@ export class TroveCache {
         !this.t2.has(query) &&
         !this.b1.has(query) &&
         !this.b2.has(query):
-        console.log('In Get Case III');
+        console.log('In Get Case IV');
         return { result: '', miss: 'miss' };
     }
   };
@@ -76,7 +78,8 @@ export class TroveCache {
         break;
 
       case res.miss === 'miss':
-        console.log('In Set Case III');
+        console.log('In Set Case IV');
+
         const l1: number = this.t1.size + this.b1.size;
 
         switch (true) {

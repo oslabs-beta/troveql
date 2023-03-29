@@ -15,11 +15,17 @@ const troveController: controller = {
     .then(data => JSON.parse(data))
     .then(parsedData => {
       // Translate Hit / Miss into data format ready for Chart.js
-      let hitOrMiss: string = 'MISS';
-      if (req.body.cacheHit) hitOrMiss = 'HIT';
-      parsedData.cache[hitOrMiss] += 1;
-      parsedData.query = req.body.query;
-      parsedData.variables = req.body.variables;
+      if (req.body.cacheHit === undefined) {
+        parsedData.cache['HIT'] = 0;
+        parsedData.cache['MISS'] = 0;
+        parsedData.query = '';
+        parsedData.variables = {};
+      } else {
+        let hitOrMiss: string = req.body.cacheHit ? 'HIT' : 'MISS';
+        parsedData.cache[hitOrMiss] += 1;
+        parsedData.query = req.body.query;
+        parsedData.variables = req.body.variables ? req.body.variables : {};
+      }
 
       // Send file data back to server to pass on to Renderer
       res.locals.data = parsedData
