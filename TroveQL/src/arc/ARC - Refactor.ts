@@ -27,7 +27,7 @@ class TroveCache {
         const result = cache.get(query) as ItemType; //this may be an issue
         cache.delete(query);
         this.t2.set(query, result);
-        
+
         return {
           result: result.value,
           miss: false,
@@ -44,7 +44,10 @@ class TroveCache {
         return { result: false, miss: 'b2' };
         break;
 
-      case this.b2.has(query):
+      case !this.t1.has(query) &&
+        this.t2.has(query) &&
+        this.b1.has(query) &&
+        this.b2.has(query):
         console.log('In Get Case III');
         return { result: false, miss: 'miss' };
         break;
@@ -52,16 +55,47 @@ class TroveCache {
   };
 
   set = (res: ResponseType) => {
+    const node = new CacheItem(res.val);
+
     switch (true) {
       case res.miss === 'b1':
         console.log('In Set Case II');
+        this.adaptation(true);
+        this.replace(false);
+        //add data to cache
         break;
 
       case res.miss === 'b2':
         console.log('In Set Case III');
+        this.adaptation(false);
+        this.replace(true);
+        //add data to cache
         break;
       case res.miss === 'miss':
         console.log('In Set Case III');
+        const l1: number = this.t1.size + this.t2.size;
+
+        switch (true) {
+          case l1 === this.capacity:
+            if (this.t1.size < this.capacity) {
+              //remove RRU
+              //Replace
+            } else {
+              //remove LRU from this.t1
+            }
+            break;
+          case l1 < this.capacity:
+            const totalSize =
+              this.t1.size + this.b1.size + this.t2.size + this.b2.size;
+            if (totalSize >= this.capacity) {
+              if (totalSize === this.capacity * 2) {
+                //remove LRU in B2
+              }
+              this.replace(false);
+            }
+            break;
+        }
+
         break;
     }
   };
