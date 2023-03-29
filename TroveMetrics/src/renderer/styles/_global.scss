@@ -1,0 +1,14 @@
+//@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&display=swap');
+//Working on importing a new font
+
+body {
+  font-family: 'IBM Plex Mono', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+    Arial, sans-serif;
+  margin: none;
+  max-width: 38rem;
+  background-color: $background;
+}
+
+h1 {
+  text-align: center;
+}
