@@ -1,4 +1,5 @@
 import { CacheItem } from './cacheItem';
+
 import {
   RequestBody,
   ItemType,
@@ -37,31 +38,27 @@ export class TroveCache {
           result: result.value,
           miss: false,
         };
-        break;
 
       case this.b1.has(query):
         console.log('In Get Case II');
         return { result: '', miss: 'b1' };
-        break;
 
       case this.b2.has(query):
         console.log('In Get Case III');
         return { result: '', miss: 'b2' };
-        break;
 
       case !this.t1.has(query) &&
-        this.t2.has(query) &&
-        this.b1.has(query) &&
-        this.b2.has(query):
+        !this.t2.has(query) &&
+        !this.b1.has(query) &&
+        !this.b2.has(query):
         console.log('In Get Case III');
         return { result: '', miss: 'miss' };
-        break;
     }
   };
 
   public set = (res: fetchResponse) => {
     const node = new CacheItem(res.result);
-
+    console.log('newNode in set', node);
     switch (true) {
       case res.miss === 'b1':
         console.log('In Set Case II');
@@ -80,7 +77,7 @@ export class TroveCache {
 
       case res.miss === 'miss':
         console.log('In Set Case III');
-        const l1: number = this.t1.size + this.t2.size;
+        const l1: number = this.t1.size + this.b1.size;
 
         switch (true) {
           case l1 === this.capacity:
@@ -144,5 +141,14 @@ export class TroveCache {
   public removeAll = (): void => {
     const caches: CacheType[] = [this.t1, this.t2, this.b1, this.b2];
     caches.forEach((cache) => cache.clear());
+  };
+
+  //forTesting
+  public returnAll = (): void => {
+    const caches: CacheType[] = [this.t1, this.t2, this.b1, this.b2];
+    const cacheNames: string[] = ['t1', 't2', 'b1', 'b2'];
+    for (let i = 0; i < caches.length; i++) {
+      console.log(cacheNames[i], caches[i]);
+    }
   };
 }
