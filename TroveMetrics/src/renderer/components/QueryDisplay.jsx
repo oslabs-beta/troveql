@@ -2,12 +2,12 @@ import * as React from 'react';
 
 function QueryDisplay({ queries }) {
   let vars = [];
-  let query = null;
+  let query 
 
-  // At first load no queries exist, so check for that
+  // At initial load with no data, no queries to load, so check for query
   if (queries.length > 0) {
-    let variables  = queries[queries.length - 1].variables;
-    query = queries[queries.length - 1].query;
+    let variables = queries[queries.length - 1].variables;
+    query = queries[queries.length - 1].query
 
     for (const key in variables) {
       vars.push(
