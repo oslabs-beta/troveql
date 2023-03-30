@@ -26,19 +26,19 @@ function Dashboard() {
 
     // Create listener for pushes from server
     window.ipcRenderer.receive('data:update', (data) => {
-      console.log(data)
       setCacheData(data);
-      console.log('UPDATE FROM DEMO', data)
     });
   }, []);
 
+  
   // Put any components that rely on the intial data pull here
   if (ready) {
+    console.log('DASHBOARD LOG OF LAST QUERY', cacheData.queries.slice(-1)[0].cacheSize)
     charts = [
       <CacheChart key="1" data={cacheData.cache} />,
       <QueryDisplay key="2" queries={cacheData.queries} />,
       <TimeChart key="3" cacheData={cacheData} />,
-      <RACChart key="4" cacheData={cacheData.cacheSize} />,
+      <RACChart key="4" data={cacheData.queries.slice(-1)[0].cacheSize} />,
     ];
   }
 

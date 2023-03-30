@@ -58,7 +58,7 @@ function TimeChart({ cacheData }) {
         <h3>Cache Hits</h3>
         <button onClick={handleTimeReset}>RESET TIME</button>
       </div>
-      <div className="time-chart-cont">
+      <div className="chart-cont">
         <Line
           data={chartData}
           options={{

@@ -4,7 +4,7 @@ import variables from '../styles/_variables.module.scss'
 
 function RACChart({ data }) {
 
-  console.log('data', data);
+  console.log('last query entry cachesize', data);
   let graph = null;
 
   if (data) {
@@ -24,22 +24,33 @@ function RACChart({ data }) {
     ]
   }
   graph = (
-    <Bar
-      data={chartData}
-      options={{
-        plugins: {
-          title: {
-            display: false,
-            text: "Cache Usage"
-          },
-          legend: {
-            display: true,
-            position: 'bottom',
-            align: 'left',
+    <div className="chart-cont">
+      <Bar
+        data={chartData}
+        options={{
+          maintainAspectRatio: false,
+          responsive: true,
+          plugins: {
+            title: {
+              display: false,
+              text: "Cache Usage"
+            },
+            legend: {
+              display: true,
+              position: 'bottom',
+              align: 'left',
+            },
+            scales: {
+              y: [{
+                ticks: {
+                  stepSize: 1,
+                }
+              }]
+            }
           }
-        }
-      }}
-    />
+        }}
+      />
+    </div>
   )
 }
 
