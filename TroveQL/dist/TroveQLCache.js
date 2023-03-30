@@ -1,74 +1,100 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TroveQLCache = void 0;
-const basic_cache_1 = require("./basic-cache");
+const arc_1 = require("./arc/arc");
 const graphql_1 = require("graphql");
 class TroveQLCache {
-    constructor(persist, graphAPI) {
+    constructor(size, graphAPI) {
         this.graphAPI = graphAPI;
         this.queryCache = (req, res, next) => {
-            // console.log('>>>Cache in the bank: ', this.cache.cache);
+            console.log('>>>Cache in the bank (see below)');
+            this.cache.returnAll();
             // will need to figure out how to use this for subqueries / mutations...
-            const reqBody = req.body;
+            const cacheKey = this.stringify(req.body);
             const query = req.body.query;
             const operation = this.parseQuery(query);
             const variables = req.body.variables;
             if (operation === 'query') {
-                const money = this.cache.get(reqBody); //cache get method needs to be updated to receive an object instead of a string
+                const money = this.cache.get(cacheKey); //cache get method needs to be updated to receive an object instead of a string
+                console.log('>>>show me the money: ', money);
                 let cacheHit = false;
-                if (money) {
+                if (!money.miss) {
                     console.log('>>>$$$ cache money $$$');
                     cacheHit = true;
-                    res.locals.value = money;
+                    res.locals.value = money.result;
+                    this.sendData(cacheHit, query, variables);
                     return next();
                 }
                 else {
                     fetch(this.graphAPI, {
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/json'
+                            'Content-Type': 'application/json',
                         },
-                        body: JSON.stringify({
-                            query,
-                            variables
-                        }),
+                        body: cacheKey,
                     })
                         .then(r => r.json())
                         .then((data) => {
-                        console.log('data from /graphql api: ', data);
-                        this.cache.set(reqBody, data); //set method needs to receive an object & I would've thought data is an object but I think it's a string...
+                        console.log('>>>data from /graphql api: ', data);
+                        console.log('>>>about to set the cache key: ', cacheKey);
+                        console.log('>>>about to set the cache value: ', data);
+                        const cacheValue = {
+                            query: cacheKey,
+                            result: data,
+                            miss: money.miss
+                        };
+                        this.cache.set(cacheValue); //set method needs to receive an object & I would've thought data is an object but I think it's a string...
                         res.locals.value = data;
+                        this.sendData(cacheHit, query, variables);
                         return next();
                     });
                 }
-                fetch('http://localhost:3333/api', {
+            }
+            else if (operation === 'mutation') {
+                console.log('>>>in the mutation if statement of the TroveQL middleware');
+                fetch(this.graphAPI, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({
-                        cacheHit,
-                        query,
-                        variables
-                    }),
+                    body: cacheKey,
                 })
                     .then(r => r.json())
                     .then((data) => {
-                    console.log(data);
-                })
-                    .catch(err => console.log(err));
+                    res.locals.value = data;
+                    this.cache.removeAll();
+                    this.sendData();
+                    return next();
+                });
             }
-            // else {
-            //   // for mutations...
-            //   // return next();
-            // }
+        };
+        this.sendData = (cacheHit, query, variables) => {
+            fetch('http://localhost:3333/api', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    cacheHit,
+                    query,
+                    variables
+                }),
+            })
+                .then(r => r.json())
+                .then((data) => {
+                console.log(data);
+            })
+                .catch(err => console.log(err));
         };
         this.parseQuery = (query) => {
             const parsedQuery = (0, graphql_1.parse)(query);
             const operation = parsedQuery["definitions"][0].operation;
             return operation;
         };
-        this.cache = new basic_cache_1.Cache(persist);
+        this.stringify = (object) => {
+            return JSON.stringify(object);
+        };
+        this.cache = new arc_1.TroveCache(size);
         this.graphAPI = graphAPI;
     }
 }
