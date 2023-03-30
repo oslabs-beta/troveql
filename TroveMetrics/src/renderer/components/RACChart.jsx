@@ -3,8 +3,6 @@ import { Bar } from "react-chartjs-2";
 import variables from '../styles/_variables.module.scss'
 
 function RACChart({ data }) {
-
-  console.log('last query entry cachesize', data);
   let graph = null;
 
   if (data) {
@@ -17,7 +15,9 @@ function RACChart({ data }) {
         data: Object.values(data),
         backgroundColor: [
           variables.orange, 
-          variables.lightGray 
+          variables.orange,
+          variables.lightGray,
+          variables.lightGray,
         ],
         //can add more style properties here like borderColor, borderWidth, etc.
       }
@@ -30,23 +30,27 @@ function RACChart({ data }) {
         options={{
           maintainAspectRatio: false,
           responsive: true,
+          scales: {
+            y: {
+              ticks: {
+                stepSize: 1,
+              },
+              title: {
+                display: true,
+                text: 'Count(s)'
+              }
+            }
+          },
           plugins: {
             title: {
               display: false,
               text: "Cache Usage"
             },
             legend: {
-              display: true,
+              display: false,
               position: 'bottom',
               align: 'left',
             },
-            scales: {
-              y: [{
-                ticks: {
-                  stepSize: 1,
-                }
-              }]
-            }
           }
         }}
       />
