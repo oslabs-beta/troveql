@@ -8,19 +8,17 @@ import Header from './Header/Header.jsx';
 Chart.register(CategoryScale);
 
 function Dashboard() {
-  // This tracks when renderer has received local data
-  const [ready, setReady] = React.useState();
   // Main state for cache data
   const [cacheData, setCacheData] = React.useState();
-
-  let charts = null;
+  const [charts, setCharts] = React.useState([]);
+  const [status, setStatus] = React.useState();
 
   // Use effect on mount so that only one listener gets created
   React.useEffect(() => {
     // Ask for the data from local storage
     window.ipcRenderer.invoke('data:get').then((data) => {
       setCacheData(data);
-      setReady(true);
+      setStatus('ready');
     });
 
     // Create listener for pushes from server
@@ -30,17 +28,32 @@ function Dashboard() {
   }, []);
 
   // Put any components that rely on the intial data pull here
-  if (ready) {
-    charts = [
-      <CacheChart key="1" data={cacheData.cache} />,
-      <QueryDisplay key="2" queries={cacheData.queries} />,
-      <TimeChart key="3" cacheData={cacheData} />,
-    ];
-  }
+  React.useEffect(() => {
+    if (status === 'ready') {
+      setCharts([
+        <CacheChart key="1" data={cacheData.cache} />,
+        <QueryDisplay key="2" queries={cacheData.queries} />,
+        <TimeChart key="3" cacheData={cacheData} status={status} />,
+      ]);
+    } else if (status === 'clear') {
+      (async function fetchCacheData() {
+        console.log('clearing metrics in dashboard');
+
+        await window.ipcRenderer.invoke('data:clear').then((data) => {
+          setCacheData(data);
+          setCharts([
+            <CacheChart key="1" data={cacheData.cache} />,
+            <QueryDisplay key="2" queries={cacheData.queries} />,
+            <TimeChart key="3" cacheData={cacheData} status={status} />,
+          ]);
+        });
+      })();
+    }
+  }, [status]);
 
   return (
     <div id="window">
-      <Header />
+      <Header setStatus={setStatus} />
       <div id="dashboard">{charts}</div>
     </div>
   );
