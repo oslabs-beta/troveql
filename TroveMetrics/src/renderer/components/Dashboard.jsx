@@ -14,11 +14,18 @@ function Dashboard () {
 
   let charts = null
 
-  // Use effect so that only one listener gets created
+  // Use effect on mount so that only one listener gets created
   React.useEffect(() => {
+    // Ask for the data from local storage
+    window.ipcRenderer.invoke('data:get') 
+      .then((data) => {
+        setCacheData(data);
+        setReady(true);
+    })
+
+    // Create listener for pushes from server
     window.ipcRenderer.receive('data:update', (data) => {
       setCacheData(data);
-      setReady(true);
     })
   }, [])
 
@@ -33,7 +40,7 @@ function Dashboard () {
 
   return (
     <div id='dashboard'>
-
+      
       {charts}
     </div>
   )

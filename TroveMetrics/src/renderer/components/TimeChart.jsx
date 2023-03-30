@@ -4,12 +4,12 @@ import variables from '../styles/_variables.module.scss'
 
 
 function TimeChart({ cacheData }) {
-  const [timeChartData, setTimeChartData] = React.useState({
-    //xValues: [new Date().toLocaleTimeString()],
+  const startingData = {
     hitData: [{x: 0, y: cacheData.cache.HIT}],
     missData: [{x: 0, y: cacheData.cache.MISS}],
     startingTime: new Date()
-  })
+  }
+  const [timeChartData, setTimeChartData] = React.useState(startingData)
 
   React.useEffect(() => {
     const timeChange = (new Date() - timeChartData.startingTime)/1000;
@@ -28,65 +28,78 @@ function TimeChart({ cacheData }) {
         label: 'Hits',
         data: timeChartData.hitData,//JANKY SOLUTION
         fill: true,
+        tension: 0.1,
         backgroundColor: [
           variables.orange, 
         ],
+        pointRadius: 6,
       },
       {
         label: 'Misses',
         data: timeChartData.missData, //JANKY SOLUTION
         fill: true,
+        tension: 0.1,
         backgroundColor: [
           variables.lightGray 
         ],
+        pointRadius: 6,
       }
     ]
   }
 
+  function handleTimeReset(e) {
+
+    setTimeChartData(startingData)
+  }
+
   return (
     <div className="wide-container">
-      <h3>Cache Hits</h3>
-      <Line
-        data={chartData}
-
-
-        options={{
-          responsive: true,
-          plugins: {
-            tooltip: {
-              mode: 'index'
-            },
-            legend: {
-              display: false,
-              position: 'bottom',
-              align: 'left',
-            }
-          },
-          interaction: {
-            mode: 'nearest',
-            axis: 'x',
-            intersect: false
-          },
-          scales: {
-            x: {
-              title: {
-                display: true,
-                text: 'Time'
+      <div className="chart-header">
+        <h3>Cache Hits</h3>
+        <button onClick={handleTimeReset}>RESET TIME</button>
+      </div>
+      <div className="time-chart-cont">
+        <Line
+          data={chartData}
+          options={{
+            maintainAspectRatio: false,
+            responsive: true,
+            plugins: {
+              tooltip: {
+                mode: 'index'
               },
-              type: 'linear'
+              legend: {
+                display: false,
+                position: 'bottom',
+                align: 'left',
+              }
             },
-            y: {
-              stacked: true,
-              title: {
-                display: true,
-                text: 'Total Queries'
+            interaction: {
+              mode: 'nearest',
+              axis: 'x',
+              intersect: false
+            },
+            scales: {
+              x: {
+                title: {
+                  display: true,
+                  text: 'Time'
+                },
+                type: 'linear',
+                beginAtZero: true
               },
-              beginAtZero: true
+              y: {
+                stacked: true,
+                title: {
+                  display: true,
+                  text: 'Total Queries'
+                },
+                beginAtZero: true
+              }
             }
-          }
-        }}
-
-      />
+          }}
+        />
+      </div>
     </div>
   );
 }

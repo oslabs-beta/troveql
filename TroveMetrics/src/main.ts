@@ -33,32 +33,29 @@ const createWindow = (): void => {
   //create the server
   createServer(renderer);
   
-  // Send initial message when window is ready
-  renderer.once('ready-to-show', () => {
-    fs.access(path.join(TroveQLPath, 'metrics.json'))
-      // read metrics file and send to the renderer
-      .then(() => {
-        fs.readFile(path.join(TroveQLPath, 'metrics.json'), "utf-8")
-          .then(data => JSON.parse(data))
-          .then(parsedData => renderer.webContents.send('data:update', parsedData))
-          .catch (error => {
-            console.log(error)
-          })
-      })
-      // if file doesn't exist yet, make it
-      .catch(() => {
-        fs.mkdir(TroveQLPath, { recursive: true })
-        .then(()=> fs.writeFile(path.join(TroveQLPath, 'metrics.json'), JSON.stringify(defaultData)))
-        .then(()=> renderer.webContents.send('data:update', defaultData))
-      }).catch(error => console.log(error))
-  
-  })
 }
-
-
 
 // IPC Handlers
 ipcMain.handle('ping', () => 'pong');
+
+ipcMain.handle('data:get', async () => {
+  const filePath = path.join(TroveQLPath, 'metrics.json');
+
+  try {
+    // Attempt to access file, and return either the file or default data
+    await fs.access(filePath);
+    const data = await fs.readFile(filePath, 'utf-8');
+    return JSON.parse(data);
+
+  } catch (error) {
+    console.log('metrics.json not found, creating a new file');
+
+    await fs.mkdir(TroveQLPath, { recursive: true });
+    await fs.writeFile(filePath, JSON.stringify(defaultData));
+
+    return defaultData;
+  }
+});
 
 // When electron is ready to do stuff; Some APIs can only be used after this event occurs.
 app.on('ready', () => {
