@@ -9,14 +9,19 @@ if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
+// Security
+app.enableSandbox(); // Limits renderer access; this is also the default setting
+
+
 const createWindow = (): void => {
   // Create the browser window.
   let renderer = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1000,
+    height: 800,
     webPreferences: {
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
-
+      nodeIntegration: false,
+      contextIsolation: true,
     },
   });
 
