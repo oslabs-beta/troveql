@@ -95,6 +95,7 @@ class TroveQLCache {
         cacheHit,
         query,
         variables,
+        cacheSize
       }),
     })
       .then((r) => r.json())
