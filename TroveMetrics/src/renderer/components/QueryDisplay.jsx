@@ -5,7 +5,7 @@ function QueryDisplay({ queries }) {
   let query;
 
   // At initial load with no data, no queries to load, so check for query
-  if (query && queries.length > 0) {
+  if (queries && queries.length > 0) {
     let variables = queries[queries.length - 1].variables;
     query = queries[queries.length - 1].query;
 

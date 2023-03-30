@@ -1,9 +1,19 @@
+@font-face {
+  font-family: 'IBMPlexMono';
+  src: url('../assets/IBMPlexMono-Regular.ttf')
+}
+
 $background: rgb(220, 220, 220);
 $orange: rgb(254	169	79);
 $light-gray: rgb(243, 243, 243);
+$font-dark: rgb(74, 74, 74);
+$global-font: 'IBM Plex Mono', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+Arial, sans-serif;
 
 :export {
   orange: $orange;
   background: $background;
-  lightGray: $light-gray
+  lightGray: $light-gray;
+  fontDark: $font-dark;
+  globalFont: $global-font
 }

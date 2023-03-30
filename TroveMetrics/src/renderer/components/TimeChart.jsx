@@ -83,7 +83,7 @@ function TimeChart({ cacheData }) {
               x: {
                 title: {
                   display: true,
-                  text: 'Time'
+                  text: 'Time (s)'
                 },
                 type: 'linear',
                 beginAtZero: true

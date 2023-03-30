@@ -26,6 +26,7 @@ function Dashboard() {
 
     // Create listener for pushes from server
     window.ipcRenderer.receive('data:update', (data) => {
+      console.log(data)
       setCacheData(data);
       console.log('UPDATE FROM DEMO', data)
     });
