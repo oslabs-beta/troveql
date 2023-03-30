@@ -1,3 +1,5 @@
+import { type } from 'os';
+
 type Variables = {
   [key: string]: string;
 };
@@ -22,4 +24,18 @@ type fetchResponse = {
   miss: string;
 };
 
-export { RequestBody, ItemType, CacheType, getResponse, fetchResponse };
+type CacheSizeType = {
+  t1: number;
+  t2: number;
+  b1: number;
+  b2: number;
+};
+
+export {
+  RequestBody,
+  ItemType,
+  CacheType,
+  getResponse,
+  fetchResponse,
+  CacheSizeType,
+};

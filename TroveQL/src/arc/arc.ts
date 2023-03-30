@@ -6,6 +6,7 @@ import {
   CacheType,
   getResponse,
   fetchResponse,
+  CacheSizeType,
 } from './arcTypes';
 
 export class TroveCache {
@@ -144,6 +145,15 @@ export class TroveCache {
   public removeAll = (): void => {
     const caches: CacheType[] = [this.t1, this.t2, this.b1, this.b2];
     caches.forEach((cache) => cache.clear());
+  };
+
+  public cacheSize = (): CacheSizeType => {
+    return {
+      t1: this.t1.size,
+      t2: this.t2.size,
+      b1: this.b1.size,
+      b2: this.b2.size,
+    };
   };
 
   //forTesting
