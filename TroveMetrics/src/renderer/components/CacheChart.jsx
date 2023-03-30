@@ -4,6 +4,7 @@ import variables from '../styles/_variables.module.scss'
 
 function CacheChart({ data }) {
 
+  console.log(data)
   const chartData = {
     labels: Object.keys(data),
     datasets: [

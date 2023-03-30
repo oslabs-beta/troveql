@@ -3,6 +3,7 @@ import { Chart, CategoryScale } from 'chart.js/auto'; //to pick specific chart f
 import CacheChart from './CacheChart.jsx';
 import QueryDisplay from './QueryDisplay.jsx';
 import TimeChart from './TimeChart.jsx';
+import RACChart from './RACChart.jsx';
 import Header from './Header/Header.jsx';
 
 Chart.register(CategoryScale);
@@ -26,6 +27,7 @@ function Dashboard() {
     // Create listener for pushes from server
     window.ipcRenderer.receive('data:update', (data) => {
       setCacheData(data);
+      console.log('UPDATE FROM DEMO', data)
     });
   }, []);
 
@@ -35,6 +37,7 @@ function Dashboard() {
       <CacheChart key="1" data={cacheData.cache} />,
       <QueryDisplay key="2" queries={cacheData.queries} />,
       <TimeChart key="3" cacheData={cacheData} />,
+      <RACChart key="4" cacheData={cacheData.cacheSize} />,
     ];
   }
 
