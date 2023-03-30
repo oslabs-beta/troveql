@@ -1,7 +1,6 @@
 import { TroveCache } from './arc/arc';
-import { parse } from 'graphql';
+import { parse, DocumentNode } from 'graphql';
 import { Request, Response, NextFunction, RequestHandler } from 'express';
-import { DocumentNode } from 'graphql';
 import { Variables, RequestBody } from './types';
 import { getResponse, fetchResponse, CacheSizeType } from './arc/arcTypes';
 
@@ -17,14 +16,17 @@ class TroveQLCache {
     res: Response,
     next: NextFunction
   ): void => {
-    console.log('>>>Cache in the bank (see below)');
-    this.cache.returnAll();
-    // will need to figure out how to use this for subqueries / mutations...
+    if (req.body.clearCache) {
+      this.cache.removeAll();
+      res.locals.value = 'Reply to TroveMetrics: Cache is now empty.';
+      return next();
+    }
+    
     const cacheKey: string = this.stringify(req.body);
     const query: string = req.body.query;
     const operation: string = this.parseQuery(query);
     const variables: Variables = req.body.variables;
-    const cacheSize = this.cache.cacheSize();
+    const cacheSize: CacheSizeType = this.cache.cacheSize();
 
     if (operation === 'query') {
       const money: getResponse = this.cache.get(cacheKey); //cache get method needs to be updated to receive an object instead of a string
@@ -35,6 +37,9 @@ class TroveQLCache {
         cacheHit = true;
         res.locals.value = money.result;
         this.sendData(cacheHit, query, variables, cacheSize);
+
+        console.log('>>>Updated cache in the bank:');
+        this.cache.returnAll();
         return next();
       } else {
         fetch(this.graphAPI, {
@@ -57,6 +62,9 @@ class TroveQLCache {
             this.cache.set(cacheValue); //set method needs to receive an object & I would've thought data is an object but I think it's a string...
             res.locals.value = data;
             this.sendData(cacheHit, query, variables, cacheSize);
+
+            console.log('>>>Updated cache in the bank:');
+            this.cache.returnAll();
             return next();
           });
       }
@@ -75,6 +83,9 @@ class TroveQLCache {
         
         this.cache.removeAll();
         this.sendData();
+
+        console.log('>>>Updated cache in the bank:');
+        this.cache.returnAll();
         return next();
       })
     }
