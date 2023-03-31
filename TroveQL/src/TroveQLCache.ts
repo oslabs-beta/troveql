@@ -117,3 +117,5 @@ class TroveQLCache {
 }
 
 export { TroveQLCache };
+
+// test npmignore
