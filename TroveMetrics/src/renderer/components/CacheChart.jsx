@@ -3,13 +3,17 @@ import { Pie } from "react-chartjs-2";
 import variables from '../styles/_variables.module.scss'
 
 function CacheChart({ data }) {
+  let dataSet;
+
+  // If no data, display 0, 0 and avoid a crash
+  data ? dataSet = Object.values(data) : dataSet = [0, 0]
 
   const chartData = {
-    labels: Object.keys(data),
+    labels: ['HIT', 'MISS'],
     datasets: [
       {
         label: 'Count',
-        data: Object.values(data),
+        data: dataSet,
         backgroundColor: [
           variables.orange, 
           variables.lightGray 
