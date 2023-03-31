@@ -6,13 +6,16 @@ function TimeChart({ cacheData, status }) {
   const startingData = {
     hitData: [{ x: 0, y: cacheData.cache.HIT }],
     missData: [{ x: 0, y: cacheData.cache.MISS }],
-    startingTime: new Date(),
+    startingTime: null,
   };
   const [timeChartData, setTimeChartData] = React.useState(startingData);
 
   React.useEffect(() => {
-    const timeChange = (new Date() - timeChartData.startingTime) / 1000;
     const newState = { ...timeChartData };
+    if (!timeChartData.startingTime) {
+      newState.startingTime = new Date();
+    }
+    const timeChange = (new Date() - newState.startingTime) / 1000;
 
     newState.hitData.push({ x: timeChange, y: cacheData.cache.HIT });
     newState.missData.push({ x: timeChange, y: cacheData.cache.MISS });

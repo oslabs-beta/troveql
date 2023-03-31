@@ -29,16 +29,9 @@ function Dashboard() {
 
   // Put any components that rely on the intial data pull here
   React.useEffect(() => {
-    if (status === 'ready') {
-      setCharts([
-        <CacheChart key="1" data={cacheData.cache} />,
-        <QueryDisplay key="2" queries={cacheData.queries} />,
-        <TimeChart key="3" cacheData={cacheData} status={status} />,
-      ]);
-    } else if (status === 'clear') {
+    if (status === 'clear') {
       (async function fetchCacheData() {
         console.log('clearing metrics in dashboard');
-
         await window.ipcRenderer.invoke('data:clear').then((data) => {
           setCacheData(data);
           setCharts([
@@ -47,9 +40,24 @@ function Dashboard() {
             <TimeChart key="3" cacheData={cacheData} status={status} />,
           ]);
         });
+        setStatus('ready');
       })();
     }
-  }, [status]);
+
+    if (status === 'ready') {
+      setCharts([
+        <CacheChart key="1" data={cacheData.cache} />,
+        <QueryDisplay key="2" queries={cacheData.queries} />,
+        <TimeChart key="3" cacheData={cacheData} status={status} />,
+      ]);
+    }
+  }, [status, cacheData]);
+
+  React.useEffect(() => {
+    if (cacheData && status === 'clear') {
+      setStatus('ready');
+    }
+  }, [cacheData, status]);
 
   return (
     <div id="window">
