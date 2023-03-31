@@ -1,27 +1,14 @@
-import { type } from 'os';
-
-type Variables = {
-  [key: string]: string;
-};
-type RequestBody = {
-  query: string;
-  variables: Variables;
-};
 type ItemType = {
   value: string;
   hits: number;
 };
+
 type CacheType = Map<string, ItemType | boolean>;
 
-type getResponse = {
+type ResponseType = {
+  query?: string;
   result: string;
   miss: string | boolean;
-};
-
-type fetchResponse = {
-  query: string;
-  result: string;
-  miss: string;
 };
 
 type CacheSizeType = {
@@ -32,10 +19,8 @@ type CacheSizeType = {
 };
 
 export {
-  RequestBody,
   ItemType,
   CacheType,
-  getResponse,
-  fetchResponse,
+  ResponseType,
   CacheSizeType,
 };

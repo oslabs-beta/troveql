@@ -1,9 +1,12 @@
 import * as React from 'react';
 
-function ClearButtons() {
+function ClearButtons({ setStatus }) {
   const onClearMetrics = () => {
-    console.log('clearing metrics');
+    console.log('clearing metrics in clearButtons');
+    setStatus('clear');
   };
+
+  //import these correctly later :<
   const cacheIcon = (
     <svg
       xmlns="http://www.w3.org/2000/svg"

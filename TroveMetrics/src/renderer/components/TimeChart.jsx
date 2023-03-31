@@ -1,56 +1,76 @@
 import * as React from 'react';
-import { Line } from "react-chartjs-2";
-import variables from '../styles/_variables.module.scss'
+import { Line } from 'react-chartjs-2';
+import variables from '../styles/_variables.module.scss';
 
+function TimeChart({ cacheData, status }) {
+  let startingData = null;
 
-function TimeChart({ cacheData }) {
-  const startingData = {
-    hitData: [{x: 0, y: cacheData.cache.HIT}],
-    missData: [{x: 0, y: cacheData.cache.MISS}],
-    startingTime: new Date()
+  const clearData = {
+    hitData: [{x: 0, y: 0}],
+    missData: [{x: 0, y: 0}],
+    startingTime: null,
   }
-  const [timeChartData, setTimeChartData] = React.useState(startingData)
+
+  // If no data, display 0, 0 and avoid a crash
+  if (cacheData.cache) {
+    startingData = {
+      hitData: [{ x: 0, y: cacheData.cache.HIT }],
+      missData: [{ x: 0, y: cacheData.cache.MISS }],
+      startingTime: null,
+    };
+  } else {
+    startingData = clearData
+  }
+
+  const [timeChartData, setTimeChartData] = React.useState(startingData);
 
   React.useEffect(() => {
-    const timeChange = (new Date() - timeChartData.startingTime)/1000;
-    const newState = {...timeChartData};
+    const newState = { ...timeChartData };
+    if (!timeChartData.startingTime) {
+      newState.startingTime = new Date();
+    }
+    const timeChange = (new Date() - newState.startingTime) / 1000;
 
-    newState.hitData.push({x: timeChange, y: cacheData.cache.HIT});
-    newState.missData.push({x: timeChange, y: cacheData.cache.MISS});
+    newState.hitData.push({ x: timeChange, y: cacheData.cache.HIT });
+    newState.missData.push({ x: timeChange, y: cacheData.cache.MISS });
 
-    setTimeChartData(newState)
-  }, [cacheData])
+    setTimeChartData(newState);
+  }, [cacheData]);
 
-    const chartData = {
+  const chartData = {
     label: 'test',
     datasets: [
       {
         label: 'Hits',
-        data: timeChartData.hitData,//JANKY SOLUTION
+        data: timeChartData.hitData, 
         fill: true,
         tension: 0.1,
-        backgroundColor: [
-          variables.orange, 
-        ],
+        backgroundColor: [variables.orange],
         pointRadius: 6,
       },
       {
         label: 'Misses',
-        data: timeChartData.missData, //JANKY SOLUTION
+        data: timeChartData.missData, 
         fill: true,
         tension: 0.1,
-        backgroundColor: [
-          variables.lightGray 
-        ],
+        backgroundColor: [variables.lightGray],
         pointRadius: 6,
-      }
-    ]
-  }
+      },
+    ],
+  };
 
   function handleTimeReset(e) {
-
-    setTimeChartData(startingData)
+    setTimeChartData(startingData);
   }
+
+  React.useEffect(() => {
+    console.log('in TimeChart', status);
+    if (status === 'clear') {
+      console.log('clearing metrics in TimeChart');
+
+      setTimeChartData(clearData);
+    }
+  }, [status]);
 
   return (
     <div className="wide-container">
@@ -58,7 +78,7 @@ function TimeChart({ cacheData }) {
         <h3>Cache Hits</h3>
         <button onClick={handleTimeReset}>RESET TIME</button>
       </div>
-      <div className="time-chart-cont">
+      <div className="chart-cont">
         <Line
           data={chartData}
           options={{
@@ -66,37 +86,39 @@ function TimeChart({ cacheData }) {
             responsive: true,
             plugins: {
               tooltip: {
-                mode: 'index'
+                mode: 'index',
               },
               legend: {
                 display: false,
                 position: 'bottom',
                 align: 'left',
-              }
+              },
             },
             interaction: {
               mode: 'nearest',
               axis: 'x',
-              intersect: false
+              intersect: false,
             },
             scales: {
               x: {
                 title: {
                   display: true,
-                  text: 'Time (s)'
+
+                  text: 'Time (seconds)',
+
                 },
                 type: 'linear',
-                beginAtZero: true
+                beginAtZero: true,
               },
               y: {
                 stacked: true,
                 title: {
                   display: true,
-                  text: 'Total Queries'
+                  text: 'Total Queries',
                 },
-                beginAtZero: true
-              }
-            }
+                beginAtZero: true,
+              },
+            },
           }}
         />
       </div>
@@ -104,4 +126,4 @@ function TimeChart({ cacheData }) {
   );
 }
 
-export default TimeChart
+export default TimeChart;
