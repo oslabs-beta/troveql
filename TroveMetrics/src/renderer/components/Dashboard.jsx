@@ -37,8 +37,8 @@ function Dashboard() {
     charts = [
       <CacheChart key="1" data={cacheData.cache} />,
       <QueryDisplay key="2" queries={cacheData.queries} />,
-      <TimeChart key="3" cacheData={cacheData} />,
       <RACChart key="4" data={cacheData.queries.slice(-1)[0].cacheSize} />,
+      <TimeChart key="3" cacheData={cacheData} />,
     ];
   }
 
