@@ -2,11 +2,11 @@ import * as React from 'react';
 import TroveMetricsLogo from './TroveMetricsLogo.jsx';
 import ClearButtons from './ClearButtons.jsx';
 
-function Header() {
+function Header({ setStatus }) {
   return (
     <div id="header">
       <TroveMetricsLogo />
-      <ClearButtons />
+      <ClearButtons setStatus={setStatus} />
     </div>
   );
 }
