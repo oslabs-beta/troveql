@@ -3,31 +3,33 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.TroveQLCache = void 0;
 const arc_1 = require("./arc/arc");
 const graphql_1 = require("graphql");
+//up next: invoke global error handler in the user's Node/Express server if there is an error - but how do we know what shape it will look like?
 class TroveQLCache {
-    constructor(size, graphAPI) {
-        this.graphAPI = graphAPI;
+    constructor(size, graphQLAPI, useTroveMetrics = false) {
+        this.graphQLAPI = graphQLAPI;
+        this.useTroveMetrics = useTroveMetrics;
         this.queryCache = (req, res, next) => {
-            console.log('>>>Cache in the bank (see below)');
-            this.cache.returnAll();
-            // will need to figure out how to use this for subqueries / mutations...
-            const cacheKey = this.stringify(req.body);
+            const operation = this.parseQuery(req.body.query);
             const query = req.body.query;
-            const operation = this.parseQuery(query);
             const variables = req.body.variables;
-            const cacheSize = this.cache.cacheSize();
+            const cacheKey = JSON.stringify(req.body);
             if (operation === 'query') {
-                const money = this.cache.get(cacheKey); //cache get method needs to be updated to receive an object instead of a string
+                const money = this.cache.get(cacheKey);
+                const cacheHit = money.miss ? false : true;
                 console.log('>>>show me the money: ', money);
-                let cacheHit = false;
-                if (!money.miss) {
+                if (cacheHit) {
                     console.log('>>>$$$ cache money $$$');
-                    cacheHit = true;
                     res.locals.value = money.result;
-                    this.sendData(cacheHit, query, variables, cacheSize);
+                    if (this.useTroveMetrics) {
+                        this.sendData(cacheHit, query, variables, this.cache.cacheSize());
+                    }
+                    // prints everything in the cache - delete
+                    console.log('>>>Updated cache in the bank:');
+                    this.cache.returnAll();
                     return next();
                 }
                 else {
-                    fetch(this.graphAPI, {
+                    fetch(this.graphQLAPI, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -38,22 +40,27 @@ class TroveQLCache {
                         .then((data) => {
                         console.log('>>>data from /graphql api: ', data);
                         console.log('>>>about to set the cache key: ', cacheKey);
-                        console.log('>>>about to set the cache value: ', data);
+                        res.locals.value = data;
                         const cacheValue = {
                             query: cacheKey,
                             result: data,
                             miss: money.miss,
                         };
-                        this.cache.set(cacheValue); //set method needs to receive an object & I would've thought data is an object but I think it's a string...
-                        res.locals.value = data;
-                        this.sendData(cacheHit, query, variables, cacheSize);
+                        this.cache.set(cacheValue);
+                        if (this.useTroveMetrics) {
+                            this.sendData(cacheHit, query, variables, this.cache.cacheSize());
+                        }
+                        // prints everything in the cache - delete
+                        console.log('>>>Updated cache in the bank:');
+                        this.cache.returnAll();
                         return next();
-                    });
+                    })
+                        .catch(error => console.log(error));
                 }
             }
-            else if (operation === 'mutation') {
+            if (operation === 'mutation') {
                 console.log('>>>in the mutation if statement of the TroveQL middleware');
-                fetch(this.graphAPI, {
+                fetch(this.graphQLAPI, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -64,10 +71,23 @@ class TroveQLCache {
                     .then((data) => {
                     res.locals.value = data;
                     this.cache.removeAll();
-                    this.sendData();
+                    if (this.useTroveMetrics) {
+                        this.sendData();
+                    }
+                    // prints everything in the cache - delete
+                    console.log('>>>Updated cache in the bank:');
+                    this.cache.returnAll();
                     return next();
-                });
+                })
+                    .catch(error => console.log(error));
             }
+        };
+        this.troveMetrics = (req, res, next) => {
+            if (req.body.clearCache) {
+                this.cache.removeAll();
+                res.locals.message = { cacheEmpty: true };
+            }
+            return next();
         };
         this.sendData = (cacheHit, query, variables, cacheSize) => {
             fetch('http://localhost:3333/api', {
@@ -93,11 +113,9 @@ class TroveQLCache {
             const operation = parsedQuery['definitions'][0].operation;
             return operation;
         };
-        this.stringify = (object) => {
-            return JSON.stringify(object);
-        };
         this.cache = new arc_1.TroveCache(size);
-        this.graphAPI = graphAPI;
+        this.graphQLAPI = graphQLAPI;
+        this.useTroveMetrics = useTroveMetrics;
     }
 }
 exports.TroveQLCache = TroveQLCache;

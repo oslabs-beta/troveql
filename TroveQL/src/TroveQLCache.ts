@@ -4,7 +4,7 @@ import { Request, Response, NextFunction, RequestHandler } from 'express';
 import { Variables } from './types';
 import { ResponseType, CacheSizeType } from './arc/arcTypes';
 
-//up next: implement better error handling since this is Express middleware
+//up next: invoke global error handler in the user's Node/Express server if there is an error - but how do we know what shape it will look like?
 
 class TroveQLCache {
   cache: TroveCache;
