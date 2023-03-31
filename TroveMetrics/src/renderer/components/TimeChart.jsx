@@ -1,37 +1,37 @@
 import * as React from 'react';
-import { Line } from "react-chartjs-2";
-import variables from '../styles/_variables.module.scss'
+import { Line } from 'react-chartjs-2';
+import variables from '../styles/_variables.module.scss';
 
-
-function TimeChart({ cacheData }) {
+function TimeChart({ cacheData, status }) {
   const startingData = {
-    hitData: [{x: 0, y: cacheData.cache.HIT}],
-    missData: [{x: 0, y: cacheData.cache.MISS}],
-    startingTime: new Date()
-  }
-  const [timeChartData, setTimeChartData] = React.useState(startingData)
+    hitData: [{ x: 0, y: cacheData.cache.HIT }],
+    missData: [{ x: 0, y: cacheData.cache.MISS }],
+    startingTime: null,
+  };
+  const [timeChartData, setTimeChartData] = React.useState(startingData);
 
   React.useEffect(() => {
-    const timeChange = (new Date() - timeChartData.startingTime)/1000;
-    const newState = {...timeChartData};
+    const newState = { ...timeChartData };
+    if (!timeChartData.startingTime) {
+      newState.startingTime = new Date();
+    }
+    const timeChange = (new Date() - newState.startingTime) / 1000;
 
-    newState.hitData.push({x: timeChange, y: cacheData.cache.HIT});
-    newState.missData.push({x: timeChange, y: cacheData.cache.MISS});
+    newState.hitData.push({ x: timeChange, y: cacheData.cache.HIT });
+    newState.missData.push({ x: timeChange, y: cacheData.cache.MISS });
 
-    setTimeChartData(newState)
-  }, [cacheData])
+    setTimeChartData(newState);
+  }, [cacheData]);
 
-    const chartData = {
+  const chartData = {
     label: 'test',
     datasets: [
       {
         label: 'Hits',
-        data: timeChartData.hitData,//JANKY SOLUTION
+        data: timeChartData.hitData, //JANKY SOLUTION
         fill: true,
         tension: 0.1,
-        backgroundColor: [
-          variables.orange, 
-        ],
+        backgroundColor: [variables.orange],
         pointRadius: 6,
       },
       {
@@ -39,18 +39,24 @@ function TimeChart({ cacheData }) {
         data: timeChartData.missData, //JANKY SOLUTION
         fill: true,
         tension: 0.1,
-        backgroundColor: [
-          variables.lightGray 
-        ],
+        backgroundColor: [variables.lightGray],
         pointRadius: 6,
-      }
-    ]
-  }
+      },
+    ],
+  };
 
   function handleTimeReset(e) {
-
-    setTimeChartData(startingData)
+    setTimeChartData(startingData);
   }
+
+  React.useEffect(() => {
+    console.log('in TimeCHart', status);
+    if (status === 'clear') {
+      console.log('clearing metrics in timeChart');
+
+      setTimeChartData(startingData);
+    }
+  }, [status]);
 
   return (
     <div className="wide-container">
@@ -58,7 +64,7 @@ function TimeChart({ cacheData }) {
         <h3>Cache Hits</h3>
         <button onClick={handleTimeReset}>RESET TIME</button>
       </div>
-      <div className="time-chart-cont">
+      <div className="chart-cont">
         <Line
           data={chartData}
           options={{
@@ -66,37 +72,39 @@ function TimeChart({ cacheData }) {
             responsive: true,
             plugins: {
               tooltip: {
-                mode: 'index'
+                mode: 'index',
               },
               legend: {
                 display: false,
                 position: 'bottom',
                 align: 'left',
-              }
+              },
             },
             interaction: {
               mode: 'nearest',
               axis: 'x',
-              intersect: false
+              intersect: false,
             },
             scales: {
               x: {
                 title: {
                   display: true,
-                  text: 'Time'
+
+                  text: 'Time (seconds)',
+
                 },
                 type: 'linear',
-                beginAtZero: true
+                beginAtZero: true,
               },
               y: {
                 stacked: true,
                 title: {
                   display: true,
-                  text: 'Total Queries'
+                  text: 'Total Queries',
                 },
-                beginAtZero: true
-              }
-            }
+                beginAtZero: true,
+              },
+            },
           }}
         />
       </div>
@@ -104,4 +112,4 @@ function TimeChart({ cacheData }) {
   );
 }
 
-export default TimeChart
+export default TimeChart;
