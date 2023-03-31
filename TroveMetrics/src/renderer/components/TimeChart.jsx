@@ -64,7 +64,7 @@ function TimeChart({ cacheData, status }) {
         <h3>Cache Hits</h3>
         <button onClick={handleTimeReset}>RESET TIME</button>
       </div>
-      <div className="time-chart-cont">
+      <div className="chart-cont">
         <Line
           data={chartData}
           options={{
@@ -89,7 +89,9 @@ function TimeChart({ cacheData, status }) {
               x: {
                 title: {
                   display: true,
+
                   text: 'Time (seconds)',
+
                 },
                 type: 'linear',
                 beginAtZero: true,

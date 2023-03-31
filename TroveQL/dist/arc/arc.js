@@ -89,6 +89,14 @@ class TroveCache {
             const caches = [this.t1, this.t2, this.b1, this.b2];
             caches.forEach((cache) => cache.clear());
         };
+        this.cacheSize = () => {
+            return {
+                t1: this.t1.size,
+                t2: this.t2.size,
+                b1: this.b1.size,
+                b2: this.b2.size,
+            };
+        };
         //forTesting
         this.returnAll = () => {
             const caches = [this.t1, this.t2, this.b1, this.b2];

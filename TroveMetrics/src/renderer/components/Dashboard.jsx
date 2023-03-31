@@ -3,6 +3,7 @@ import { Chart, CategoryScale } from 'chart.js/auto'; //to pick specific chart f
 import CacheChart from './CacheChart.jsx';
 import QueryDisplay from './QueryDisplay.jsx';
 import TimeChart from './TimeChart.jsx';
+import RACChart from './RACChart.jsx';
 import Header from './Header/Header.jsx';
 
 Chart.register(CategoryScale);
@@ -27,7 +28,9 @@ function Dashboard() {
     });
   }, []);
 
+  
   // Put any components that rely on the intial data pull here
+
   React.useEffect(() => {
     if (status === 'clear') {
       (async function fetchCacheData() {
@@ -58,6 +61,7 @@ function Dashboard() {
       setStatus('ready');
     }
   }, [cacheData, status]);
+
 
   return (
     <div id="window">
