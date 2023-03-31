@@ -1,5 +1,5 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
-import { createServer } from './server/server'
+import { createServer } from './server/server';
 import fs from 'fs/promises';
 import path from 'path';
 import { TroveQLPath, defaultData } from './variables';
@@ -11,7 +11,6 @@ if (require('electron-squirrel-startup')) {
 
 // Security
 app.enableSandbox(); // Limits renderer access; this is also the default setting
-
 
 const createWindow = (): void => {
   // Create the browser window.
@@ -32,8 +31,7 @@ const createWindow = (): void => {
 
   //create the server
   createServer(renderer);
-  
-}
+};
 
 // IPC Handlers
 ipcMain.handle('ping', () => 'pong');
@@ -46,7 +44,6 @@ ipcMain.handle('data:get', async () => {
     await fs.access(filePath);
     const data = await fs.readFile(filePath, 'utf-8');
     return JSON.parse(data);
-
   } catch (error) {
     console.log('metrics.json not found, creating a new file');
 
@@ -57,11 +54,16 @@ ipcMain.handle('data:get', async () => {
   }
 });
 
+ipcMain.handle('data:clear', async () => {
+  const filePath = path.join(TroveQLPath, 'metrics.json');
+  await fs.writeFile(filePath, JSON.stringify(defaultData));
+  return defaultData; 
+});
+
 // When electron is ready to do stuff; Some APIs can only be used after this event occurs.
 app.on('ready', () => {
   //server;
   createWindow();
-
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common
@@ -71,7 +73,7 @@ app.on('ready', () => {
 // HOWEVER, In our case, closing window wouldn't close server, which is BAD, so close everything
 app.on('window-all-closed', () => {
   // if (process.platform !== 'darwin') {
-    app.quit();
+  app.quit();
   // }
 });
 
@@ -82,4 +84,3 @@ app.on('activate', () => {
     createWindow();
   }
 });
-
