@@ -1,11 +1,9 @@
 import { CacheItem } from './cacheItem';
 
 import {
-  RequestBody,
   ItemType,
   CacheType,
-  getResponse,
-  fetchResponse,
+  ResponseType,
   CacheSizeType,
 } from './arcTypes';
 
@@ -26,7 +24,7 @@ export class TroveCache {
     this.b2 = new Map();
   }
 
-  public get = (query: string): getResponse => {
+  public get = (query: string): ResponseType => {
     console.log('---arc get method query input: ', query);
     switch (true) {
       case this.t1.has(query) || this.t2.has(query):
@@ -59,7 +57,7 @@ export class TroveCache {
     }
   };
 
-  public set = (res: fetchResponse) => {
+  public set = (res: ResponseType) => {
     const node = new CacheItem(res.result);
     console.log('newNode in set', node);
     switch (true) {
