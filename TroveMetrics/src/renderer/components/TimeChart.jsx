@@ -3,11 +3,25 @@ import { Line } from 'react-chartjs-2';
 import variables from '../styles/_variables.module.scss';
 
 function TimeChart({ cacheData, status }) {
-  const startingData = {
-    hitData: [{ x: 0, y: cacheData.cache.HIT }],
-    missData: [{ x: 0, y: cacheData.cache.MISS }],
+  let startingData = null;
+
+  const clearData = {
+    hitData: [{x: 0, y: 0}],
+    missData: [{x: 0, y: 0}],
     startingTime: null,
-  };
+  }
+
+  // If no data, display 0, 0 and avoid a crash
+  if (cacheData.cache) {
+    startingData = {
+      hitData: [{ x: 0, y: cacheData.cache.HIT }],
+      missData: [{ x: 0, y: cacheData.cache.MISS }],
+      startingTime: null,
+    };
+  } else {
+    startingData = clearData
+  }
+
   const [timeChartData, setTimeChartData] = React.useState(startingData);
 
   React.useEffect(() => {
@@ -28,7 +42,7 @@ function TimeChart({ cacheData, status }) {
     datasets: [
       {
         label: 'Hits',
-        data: timeChartData.hitData, //JANKY SOLUTION
+        data: timeChartData.hitData, 
         fill: true,
         tension: 0.1,
         backgroundColor: [variables.orange],
@@ -36,7 +50,7 @@ function TimeChart({ cacheData, status }) {
       },
       {
         label: 'Misses',
-        data: timeChartData.missData, //JANKY SOLUTION
+        data: timeChartData.missData, 
         fill: true,
         tension: 0.1,
         backgroundColor: [variables.lightGray],
@@ -50,11 +64,11 @@ function TimeChart({ cacheData, status }) {
   }
 
   React.useEffect(() => {
-    console.log('in TimeCHart', status);
+    console.log('in TimeChart', status);
     if (status === 'clear') {
-      console.log('clearing metrics in timeChart');
+      console.log('clearing metrics in TimeChart');
 
-      setTimeChartData(startingData);
+      setTimeChartData(clearData);
     }
   }, [status]);
 

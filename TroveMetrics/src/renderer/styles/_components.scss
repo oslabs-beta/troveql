@@ -7,15 +7,21 @@
   margin: 0;
 }
 
+#window {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%
+}
+
 #dashboard {
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
   align-items: center;
-  width: 90%;
   background-color: $background;
   gap: 1.5rem;
-  margin: 1rem;
+  margin: 8rem, 1rem;
 }
 
 #header {
