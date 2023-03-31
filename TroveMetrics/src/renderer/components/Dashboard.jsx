@@ -63,7 +63,11 @@ function Dashboard() {
   return (
     <div id="window">
       <Header setStatus={setStatus} />
-      <div id="dashboard">{charts}</div>
+      <div id="dashboard">
+        <div id="charts">
+          {charts}
+        </div>
+      </div>
     </div>
   );
 }
