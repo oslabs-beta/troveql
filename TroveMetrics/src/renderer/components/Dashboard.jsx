@@ -55,7 +55,7 @@ function Dashboard() {
         <RACChart key="4" cacheData={cacheData} />,
       ]);
     }
-    if (cacheData && status === 'clear') {
+    if (cacheData && (status === 'clear')) {
       setStatus('ready');
     }
   }, [status, cacheData]);
@@ -64,9 +64,7 @@ function Dashboard() {
     <div id="window">
       <Header setStatus={setStatus} />
       <div id="dashboard">
-        <div id="charts">
-          {charts}
-        </div>
+        {charts}
       </div>
     </div>
   );

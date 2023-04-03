@@ -16,7 +16,7 @@ function TimeChart({ cacheData, status }) {
     startingData = {
       hitData: [{ x: 0, y: cacheData.cache.HIT }],
       missData: [{ x: 0, y: cacheData.cache.MISS }],
-      startingTime: null,
+      startingTime: new Date(),
     };
   } else {
     startingData = clearData
