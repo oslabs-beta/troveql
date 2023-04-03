@@ -59,5 +59,3 @@ describe('TroveCache', () => {
     expect(troveCache.get('Query4')).toEqual({ result: '', miss: 'b2' });
   });
 });
-
-describe('set method tests', () => {});
