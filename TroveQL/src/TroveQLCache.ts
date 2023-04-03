@@ -4,9 +4,8 @@ import { Request, Response, NextFunction, RequestHandler } from 'express';
 import { Variables } from './types';
 import { ResponseType, CacheSizeType } from './arc/arcTypes';
 
-//up next: invoke global error handler in the user's Node/Express server if there is an error - but how do we know what shape it will look like?
-
 class TroveQLCache {
+  // pass TroveQLCache the size of the cache to use, the graphQL API to query, and if you would like to use TroveMetrics
   cache: TroveCache;
   constructor(size: number, public graphQLAPI: string, public useTroveMetrics: boolean = false) {
     this.cache = new TroveCache(size);
@@ -14,23 +13,29 @@ class TroveQLCache {
     this.useTroveMetrics = useTroveMetrics;
   }
 
+  // queryCache is the Express middleware that parses the incoming GraphQL API query and gets/sets the cache
   queryCache: RequestHandler = (req: Request, res: Response, next: NextFunction): void => {
+    const startTime: number = this.useTroveMetrics ? Date.now() : null;
     const operation: string = this.parseQuery(req.body.query);
     const query: string = req.body.query;
     const variables: Variables = req.body.variables;
     const cacheKey: string = JSON.stringify(req.body);
 
+    // if the query is a 'Query' type
     if (operation === 'query') {
+      // get from the cache
       const money: ResponseType = this.cache.get(cacheKey);
       const cacheHit: boolean = money.miss ? false : true;
       console.log('>>>show me the money: ', money);
 
+      // if the query result is in the cache then return it
       if (cacheHit) {
         console.log('>>>$$$ cache money $$$');
         res.locals.value = money.result;
 
         if (this.useTroveMetrics) {
-          this.sendData(cacheHit, query, variables, this.cache.cacheSize());
+          const finishTime = Date.now();
+          this.sendData(cacheHit, query, variables, this.cache.cacheSize(), finishTime - startTime);
         }
 
         // prints everything in the cache - delete
@@ -38,6 +43,8 @@ class TroveQLCache {
         this.cache.returnAll();
         
         return next();
+
+      // if the query result is NOT in the cache then fetch from the graphQL API and then add the query result to the cache
       } else {
         fetch(this.graphQLAPI, {
           method: 'POST',
@@ -59,7 +66,8 @@ class TroveQLCache {
             this.cache.set(cacheValue);
             
             if (this.useTroveMetrics) {
-              this.sendData(cacheHit, query, variables, this.cache.cacheSize());
+              const finishTime = Date.now();
+              this.sendData(cacheHit, query, variables, this.cache.cacheSize(), finishTime - startTime);
             }
 
             // prints everything in the cache - delete
@@ -72,6 +80,7 @@ class TroveQLCache {
       }
     }
     
+    // if the query is a 'Mutation' type
     if (operation === 'mutation') {
       console.log('>>>in the mutation if statement of the TroveQL middleware');
       fetch(this.graphQLAPI, {
@@ -100,6 +109,7 @@ class TroveQLCache {
     }
   };
 
+  // troveMetrics is another Express middleware that clears the cache on requests from TM
   troveMetrics: RequestHandler = (req: Request, res: Response, next: NextFunction): void => {
     if (req.body.clearCache) {
       this.cache.removeAll();
@@ -108,7 +118,8 @@ class TroveQLCache {
     return next();
   }
 
-  sendData = (cacheHit?: boolean, query?: string, variables?: Variables, cacheSize?: CacheSizeType): void => {
+  // sendData to TroveMetrics
+  sendData = (cacheHit?: boolean, query?: string, variables?: Variables, cacheSize?: CacheSizeType, queryTime?: number): void => {
     fetch('http://localhost:3333/api', {
       method: 'POST',
       headers: {
@@ -118,7 +129,8 @@ class TroveQLCache {
         cacheHit,
         query,
         variables,
-        cacheSize
+        cacheSize,
+        queryTime
       }),
     })
       .then((r) => r.json())
@@ -128,6 +140,7 @@ class TroveQLCache {
       .catch((err) => console.log(err));
   };
 
+  // parseQuery checks if the graphQL API query is a query or a mutation type
   parseQuery = (query: string): string => {
     const parsedQuery: DocumentNode = parse(query);
     const operation: string = parsedQuery['definitions'][0].operation;
