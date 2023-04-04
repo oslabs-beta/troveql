@@ -4,6 +4,7 @@ import CacheChart from './CacheChart.jsx';
 import QueryDisplay from './QueryDisplay.jsx';
 import TimeChart from './TimeChart.jsx';
 import RACChart from './RACChart.jsx';
+import RACData from './RACData.jsx';
 import Header from './Header/Header.jsx';
 
 Chart.register(CategoryScale);
@@ -41,6 +42,7 @@ function Dashboard() {
             <QueryDisplay key="2" queries={cacheData.queries} />,
             <TimeChart key="3" cacheData={cacheData} status={status} />,
             <RACChart key="4" cacheData={cacheData} />,
+            <RACData key='5' cacheData={cacheData} />
           ]);
         });
         setStatus('ready');
@@ -53,6 +55,7 @@ function Dashboard() {
         <QueryDisplay key="2" queries={cacheData.queries} />,
         <TimeChart key="3" cacheData={cacheData} status={status} />,
         <RACChart key="4" cacheData={cacheData} />,
+        <RACData key='5' cacheData={cacheData} />,
       ]);
     }
     if (cacheData && status === 'clear') {

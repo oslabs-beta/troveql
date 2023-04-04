@@ -7,20 +7,31 @@ class TroveCache {
         this.get = (query) => {
             console.log('---arc get method query input: ', query);
             switch (true) {
+                // if graphQL query is in t1 or t2 map obj // if yes 
+                // check if it's in t1 or t2
+                // either way, delete query key from cache and promote it to t2
                 case this.t1.has(query) || this.t2.has(query):
                     console.log('In Get Case I');
+                    // either t1 has query, assign cache as this.t1 
+                    // or t2 has query, assign cache as this.t2
                     const cache = this.t1.has(query) ? this.t1 : this.t2;
+                    // return value from cache key and assign it to result
                     const result = cache.get(query); //this may be an issue
                     console.log('result in Case I - Get', result);
+                    // delete query key from cache to promote it to t2 (frequent cache)
                     cache.delete(query);
                     this.t2.set(query, result);
                     return {
+                        // why result.value? and not just result?
                         result: result.value,
+                        // successfully using cache so miss is false
                         miss: false,
                     };
+                // if query is in b1 map obj
                 case this.b1.has(query):
                     console.log('In Get Case II');
                     return { result: '', miss: 'b1' };
+                // if query is in b2 map obj
                 case this.b2.has(query):
                     console.log('In Get Case III');
                     return { result: '', miss: 'b2' };
@@ -95,6 +106,7 @@ class TroveCache {
                 t2: this.t2.size,
                 b1: this.b1.size,
                 b2: this.b2.size,
+                p: this.p
             };
         };
         //forTesting

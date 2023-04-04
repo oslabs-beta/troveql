@@ -3,6 +3,9 @@ type ItemType = {
   hits: number;
 };
 
+// Map Object with 
+  // key: string 
+  // value: either ItemType or bolean
 type CacheType = Map<string, ItemType | boolean>;
 
 type ResponseType = {
@@ -16,6 +19,7 @@ type CacheSizeType = {
   t2: number;
   b1: number;
   b2: number;
+  p: number;
 };
 
 export {
