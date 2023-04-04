@@ -21,7 +21,6 @@ class TroveQLCache {
     const operation: string = this.parseQuery(req.body.query);
     const query: string = req.body.query;
     const variables: Variables = req.body.variables;
-    // Whole req.body incl query and variables
     const cacheKey: string = JSON.stringify(req.body);
 
     // if the query is a 'Query' type
@@ -29,7 +28,6 @@ class TroveQLCache {
       // get from the cache
       const money: ResponseType = this.cache.get(cacheKey);
 
-      // not necessarily boolean ?
       const cacheHit: boolean = money.miss ? false : true;
       // console.log('>>>show me the money: ', money);
 
@@ -37,8 +35,7 @@ class TroveQLCache {
       if (cacheHit) {
         // console.log('>>>$$$ cache money $$$');
         res.locals.value = money.result;
-
-        // if user wants to use TroveMetrics
+        
         if (this.useTroveMetrics) {
           const finishTime = Date.now();
           this.sendData(cacheHit, query, variables, this.cache.cacheSize(), finishTime - startTime);
