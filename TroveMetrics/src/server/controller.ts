@@ -7,23 +7,28 @@ type controller = {
   post: RequestHandler
 }
 
+// Handle post request from troveQL server with cache data
 const troveController: controller = {
 
   post: function(req: Request, res: Response, next: NextFunction) {
+    console.log('REQbody', req.body);
     // Pull from local data, add new data, and write back
     fs.readFile(path.join(TroveQLPath, 'metrics.json'), "utf-8")
     .then(data => JSON.parse(data))
     .then(parsedData => {
-
+      // console.log('parsedData', parsedData);
       // Translate Hit / Miss into data format ready for Chart.js
+  
       if (req.body.cacheHit === undefined) {
         parsedData.cache['HIT'] = 0;
         parsedData.cache['MISS'] = 0;
         parsedData.queries = [];
+        parsedData.capacity = 0;
       } else {
         let hitOrMiss: string = req.body.cacheHit ? 'HIT' : 'MISS';
         parsedData.cache[hitOrMiss] += 1;
-        parsedData.queries.push(req.body)
+        parsedData.queries.push(req.body);
+        parsedData.capacity = parsedData.queries[0].size;
       }
 
       // Send file data back to server to pass on to Renderer

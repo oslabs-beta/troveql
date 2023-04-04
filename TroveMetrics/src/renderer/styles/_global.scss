@@ -19,3 +19,23 @@ h3 {
 h5 {
   font-size: .8rem;
 }
+
+.small-container {
+  display: flex;
+
+  #idealSize {
+    background-color: gray;
+    padding: 0.5em;
+    border-radius: 0.2rem;
+    align-self:self-start;
+
+    p {
+      font-size: .8rem;
+      color: white;
+    }
+
+  }
+  
+}
+
+
