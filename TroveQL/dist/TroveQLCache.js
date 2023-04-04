@@ -13,23 +13,20 @@ class TroveQLCache {
             const operation = this.parseQuery(req.body.query);
             const query = req.body.query;
             const variables = req.body.variables;
-            // Whole req.body incl query and variables
             const cacheKey = JSON.stringify(req.body);
             // if the query is a 'Query' type
             if (operation === 'query') {
                 // get from the cache
                 const money = this.cache.get(cacheKey);
-                // not necessarily boolean ?
                 const cacheHit = money.miss ? false : true;
-                console.log('>>>show me the money: ', money);
+                // console.log('>>>show me the money: ', money);
                 // if the query result is in the cache then return it
                 if (cacheHit) {
                     // console.log('>>>$$$ cache money $$$');
                     res.locals.value = money.result;
-                    // if user wants to use TroveMetrics
                     if (this.useTroveMetrics) {
                         const finishTime = Date.now();
-                        this.sendData(cacheHit, query, variables, this.cache.cacheSize(), this.size, finishTime - startTime);
+                        this.sendData(cacheHit, query, variables, this.cache.cacheSize(), finishTime - startTime);
                     }
                     // prints everything in the cache - delete
                     console.log('>>>Updated cache in the bank:');
@@ -58,7 +55,7 @@ class TroveQLCache {
                         this.cache.set(cacheValue);
                         if (this.useTroveMetrics) {
                             const finishTime = Date.now();
-                            this.sendData(cacheHit, query, variables, this.cache.cacheSize(), this.size, finishTime - startTime);
+                            this.sendData(cacheHit, query, variables, this.cache.cacheSize(), finishTime - startTime, this.size);
                         }
                         // prints everything in the cache - delete
                         console.log('>>>Updated cache in the bank:');
