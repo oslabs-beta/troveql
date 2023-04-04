@@ -145,6 +145,11 @@ export class TroveCache {
     caches.forEach((cache) => cache.clear());
   };
 
+  public removeOne = (key: string): void => {
+    const caches: CacheType[] = [this.t1, this.t2];
+    caches.forEach((cache) => cache.delete(key));
+  }
+
   public cacheSize = (): CacheSizeType => {
     return {
       t1: this.t1.size,
