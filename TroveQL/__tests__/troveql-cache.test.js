@@ -60,4 +60,48 @@ describe('TroveCache', () => {
   });
 });
 
-describe('set method tests', () => {});
+describe('set method tests', () => {
+  let troveCache;
+
+  beforeEach(() => {
+    troveCache = new TroveCache(4);
+  });
+
+  afterEach(() => {
+    troveCache.removeAll();
+  });
+
+  it('adds a new item to the cache when the cache is not full', () => {
+    const response1 = {
+      query: 'Query1',
+      result: 'Result1',
+      miss: 'miss',
+    };
+    troveCache.set(response1);
+
+    expect(troveCache.t1.get('Query1')).toEqual({
+      hits: 0,
+      value: 'Result1',
+    });
+  });
+
+  it('adds a new item to the cache and replaces the LRU item in t1 when t1 is full and t2 is not', () => {
+    for (let i = 1; i <= 5; i++) {
+      troveCache.set({
+        query: `Query${i}`,
+        result: `Result${i}`,
+        miss: 'miss',
+      });
+    }
+    console.log('_______TESTTSSS________');
+    console.log(troveCache.t1);
+    console.log(troveCache.b1);
+
+    //TODO: YOU NEED TO ADD SOME TO T2 AND THEN ADD SOME MORE TO T1 to get items to evict to B1
+
+    // expect(troveCache.get('Query1')).toEqual({ result: '', miss: 'b1' });
+    // expect(troveCache.get('Query2')).toEqual(result2);
+    // expect(troveCache.get('Query3')).toEqual(result3);
+    // expect(troveCache.get('Query4')).toEqual(result4);
+  });
+});
