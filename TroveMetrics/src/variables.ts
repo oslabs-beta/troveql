@@ -12,8 +12,9 @@ export type localData = {
   cache: {
     HIT: number,
     MISS: number
-  }
-  queries: queryData[]
+  },
+  queries: queryData[],
+  capacity: number,
 }
 
 export type Error = {
@@ -31,5 +32,6 @@ export const defaultData: localData = {
     HIT: 0, 
     MISS: 0 
   }, 
-  queries: []
+  queries: [],
+  capacity: 0,
 }

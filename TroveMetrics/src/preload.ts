@@ -13,7 +13,7 @@ type channelList = {
 // Declare any new channels for IPC here
 const channels: channelList = {
   renderer: {
-    send: [], // From renderer to main.
+    send: ['cache:clear'], // From renderer to main.
     receive: ['data:update'], // From main to renderer.
     sendReceive: ['data:get', 'data:clear'], // From renderer to main and back again.
   },

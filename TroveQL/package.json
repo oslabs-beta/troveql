@@ -9,14 +9,16 @@
     "caching"
   ],
   "scripts": {
-    "build": "tsc --watch"
+    "build": "tsc --watch",
+    "test": "jest"
   },
   "repository": "https://github.com/oslabs-beta/troveql",
   "author": "Erika Jung, Sam Henderson, Tricia Yeh, & Alex Klein",
   "license": "ISC",
   "dependencies": {
     "@types/express": "^4.17.17",
-    "graphql": "^16.6.0"
+    "graphql": "^16.6.0",
+    "troveql": "file:troveql-0.1.0.tgz"
   },
   "devDependencies": {
     "@types/node": "^18.15.5",

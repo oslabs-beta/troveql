@@ -55,9 +55,30 @@ ipcMain.handle('data:get', async () => {
 });
 
 ipcMain.handle('data:clear', async () => {
+  console.log('in data:clear!');
+
   const filePath = path.join(TroveQLPath, 'metrics.json');
   await fs.writeFile(filePath, JSON.stringify(defaultData));
-  return defaultData; 
+  return defaultData;
+});
+
+ipcMain.on('cache:clear', async () => {
+  console.log('in cache:clear');
+  try {
+    // should this be customizable in someway? can we specify what port we are sending data to?
+
+    const response = await fetch('http://localhost:4000/trovemetrics', {
+      method: 'POST',
+      body: JSON.stringify({ clearCache: true }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.log('Error in ipcMain.handle for cache:clear: ', error);
+  }
 });
 
 // When electron is ready to do stuff; Some APIs can only be used after this event occurs.

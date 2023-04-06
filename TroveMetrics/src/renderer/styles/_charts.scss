@@ -1,0 +1,67 @@
+.small-container {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  background-color: white;
+  width: 18rem;
+  height: 20rem;
+  padding: 1rem;
+  box-shadow: 0.1rem 0.1rem 0.3rem rgb(163, 163, 163);
+  border-radius: 0.2rem;
+  gap: 0.8rem;
+}
+
+.wide-container {
+  @extend .small-container;
+  width: 37.5rem;
+}
+
+.query-display {
+  background-color: $light-gray;
+  width: 100%;
+  height: 80%;
+  box-shadow: inset 0.1rem 0.1rem 0.4rem rgb(201, 201, 201);
+  border-radius: 0.2rem;
+  padding: 1rem;
+  overflow: auto;
+}
+
+#arguments {
+  height: 20%;
+}
+
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  width: 100%;
+}
+
+.chart-cont {
+  width: 100%;
+  height: 100%;
+}
+
+#rac-data {
+  width: 95%;
+}
+
+.small-container {
+  #rac-data-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 4em;
+  }
+
+  #ideal-size {
+    background-color: $light-gray;
+    padding: 0.5em;
+    border-radius: 0.2rem;
+    align-self:self-start;
+    font-size: .8rem;
+    box-shadow: inset 0.1rem 0.1rem 0.4rem rgb(201, 201, 201);
+    border-radius: 0.2rem;
+  }
+  
+}

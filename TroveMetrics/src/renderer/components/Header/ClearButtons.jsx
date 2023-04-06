@@ -2,8 +2,11 @@ import * as React from 'react';
 
 function ClearButtons({ setStatus }) {
   const onClearMetrics = () => {
-    console.log('clearing metrics in clearButtons');
     setStatus('clear');
+  };
+  const onClearCache = () => {
+    setStatus('clear');
+    window.ipcRenderer.send('cache:clear');
   };
 
   //import these correctly later :<
@@ -37,7 +40,7 @@ function ClearButtons({ setStatus }) {
         {chartIcon}
         CLEAR METRICS
       </button>
-      <button>
+      <button onClick={onClearCache}>
         {cacheIcon}
         CLEAR CACHE
       </button>

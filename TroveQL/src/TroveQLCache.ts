@@ -34,14 +34,15 @@ class TroveQLCache {
     if (operation === 'query') {
       // get from the cache
       const money: ResponseType = this.cache.get(cacheKey);
+
       const cacheHit: boolean = money.miss ? false : true;
-      console.log('>>>show me the money: ', money);
+      // console.log('>>>show me the money: ', money);
 
       // if the query result is in the cache then return it
       if (cacheHit) {
-        console.log('>>>$$$ cache money $$$');
+        // console.log('>>>$$$ cache money $$$');
         res.locals.value = money.result;
-
+        
         if (this.useTroveMetrics) {
           const finishTime = Date.now();
           this.sendData(cacheHit, query, variables, this.cache.cacheSize(), finishTime - startTime);
@@ -76,7 +77,7 @@ class TroveQLCache {
             
             if (this.useTroveMetrics) {
               const finishTime = Date.now();
-              this.sendData(cacheHit, query, variables, this.cache.cacheSize(), finishTime - startTime);
+              this.sendData(cacheHit, query, variables, this.cache.cacheSize(), finishTime - startTime, this.size);
             }
 
             // prints everything in the cache - delete
@@ -171,6 +172,7 @@ class TroveQLCache {
 
   // troveMetrics is another Express middleware that clears the cache on requests from TM
   troveMetrics: RequestHandler = (req: Request, res: Response, next: NextFunction): void => {
+    // if clearCache (in req.body from troveMetrics) is true 
     if (req.body.clearCache) {
       this.cache.removeAll();
       res.locals.message = { cacheEmpty: true };
@@ -179,7 +181,8 @@ class TroveQLCache {
   }
 
   // sendData to TroveMetrics
-  sendData = (cacheHit?: boolean, query?: string, variables?: Variables, cacheSize?: CacheSizeType, queryTime?: number): void => {
+  // send data to localhost 3333 where troveMetrics server is listening to
+  sendData = (cacheHit?: boolean, query?: string, variables?: Variables, cacheSize?: CacheSizeType, queryTime?: number, size?: number): void => {
     fetch('http://localhost:3333/api', {
       method: 'POST',
       headers: {
@@ -190,7 +193,8 @@ class TroveQLCache {
         query,
         variables,
         cacheSize,
-        queryTime
+        queryTime,
+        size,
       }),
     })
       .then((r) => r.json())
@@ -203,6 +207,7 @@ class TroveQLCache {
   // parseQuery checks if the graphQL API query is a query or a mutation type
   parseQuery = (query: string): QueryInfo => {
     const parsedQuery: DocumentNode = parse(query);
+    // declare variable operations and assign it with 'query' or 'mutation' from parsedQuery
     const operation: string = parsedQuery['definitions'][0].operation;
 
     // let's assume we're only going to query a single object Type from the graphQL API Schema

@@ -4,6 +4,7 @@ import CacheChart from './CacheChart.jsx';
 import QueryDisplay from './QueryDisplay.jsx';
 import TimeChart from './TimeChart.jsx';
 import RACChart from './RACChart.jsx';
+import RACData from './RACData.jsx';
 import Header from './Header/Header.jsx';
 
 Chart.register(CategoryScale);
@@ -27,11 +28,10 @@ function Dashboard() {
       setCacheData(data);
     });
   }, []);
-
   
   // Put any components that rely on the intial data pull here
-
   React.useEffect(() => {
+    
     if (status === 'clear') {
       (async function fetchCacheData() {
         console.log('clearing metrics in dashboard');
@@ -41,6 +41,8 @@ function Dashboard() {
             <CacheChart key="1" data={cacheData.cache} />,
             <QueryDisplay key="2" queries={cacheData.queries} />,
             <TimeChart key="3" cacheData={cacheData} status={status} />,
+            <RACChart key="4" cacheData={cacheData} />,
+            <RACData key='5' cacheData={cacheData} />
           ]);
         });
         setStatus('ready');
@@ -52,21 +54,21 @@ function Dashboard() {
         <CacheChart key="1" data={cacheData.cache} />,
         <QueryDisplay key="2" queries={cacheData.queries} />,
         <TimeChart key="3" cacheData={cacheData} status={status} />,
+        <RACChart key="4" cacheData={cacheData} />,
+        <RACData key='5' cacheData={cacheData} />,
       ]);
     }
-  }, [status, cacheData]);
-
-  React.useEffect(() => {
-    if (cacheData && status === 'clear') {
+    if (cacheData && (status === 'clear')) {
       setStatus('ready');
     }
-  }, [cacheData, status]);
-
+  }, [status, cacheData]);
 
   return (
     <div id="window">
       <Header setStatus={setStatus} />
-      <div id="dashboard">{charts}</div>
+      <div id="dashboard">
+        {charts}
+      </div>
     </div>
   );
 }
