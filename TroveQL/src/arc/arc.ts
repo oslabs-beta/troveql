@@ -1,11 +1,6 @@
 import { CacheItem } from './cacheItem';
 
-import {
-  ItemType,
-  CacheType,
-  ResponseType,
-  CacheSizeType,
-} from './arcTypes';
+import { ItemType, CacheType, ResponseType, CacheSizeType } from './arcTypes';
 
 export class TroveCache {
   capacity: number;
@@ -25,7 +20,6 @@ export class TroveCache {
   }
 
   public get = (query: string): ResponseType => {
-    console.log('---arc get method query input: ', query);
     switch (true) {
       case this.t1.has(query) || this.t2.has(query):
         console.log('In Get Case I');
@@ -122,7 +116,7 @@ export class TroveCache {
   private evictLRU(cache: CacheType) {
     const firstKey = cache.keys().next().value;
     // will the following line pass by ref? Do we need to make a shallow copy?
-    const evicted = [firstKey, cache.get(firstKey)];
+    const evicted = firstKey;
     cache.delete(firstKey);
     return evicted;
   }
@@ -132,11 +126,11 @@ export class TroveCache {
       this.t1.size > 0 &&
       (this.t1.size > this.p || (foundInB2 && this.t1.size === this.p))
     ) {
-      let [key, cacheItem] = this.evictLRU(this.t1);
-      this.b1.set(key, cacheItem);
+      let key = this.evictLRU(this.t1);
+      this.b1.set(key, true);
     } else {
-      let [key, cacheItem] = this.evictLRU(this.t2);
-      this.b2.set(key, cacheItem);
+      let key = this.evictLRU(this.t2);
+      this.b2.set(key, true);
     }
   }
 
