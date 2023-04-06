@@ -3,6 +3,19 @@ import express, { NextFunction, Request, Response, Errback } from 'express';
 import { troveController } from './controller';
 import { Error } from '../variables';
 
+
+// create express server that listens to port 3333
+// when post request is sent to api endpoint 
+// pass req troveController.post middleware
+// send to renderer res.locals.data
+    // default data 
+        // {
+          // cache: {
+            // HIT: 0,
+            // MISS: 0,
+          // }
+          // queries: []
+        // }
 const app = express();
 
 const createServer = function(renderer: BrowserWindow) {
@@ -11,7 +24,7 @@ const createServer = function(renderer: BrowserWindow) {
 
   app.post('/api', troveController.post, (req: Request, res: Response) => {
     renderer.webContents.send('data:update', res.locals.data);
-    res.status(200).send('worked :D');
+    res.status(200).send('worked');
   });
 
   
