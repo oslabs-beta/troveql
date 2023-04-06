@@ -58,6 +58,7 @@ export class TroveCache {
       case res.miss === 'b1':
         console.log('In Set Case II');
         this.adaptation(true);
+        this.b1.delete(res.query);
         this.replace(false);
 
         this.t2.set(res.query, node);
@@ -67,6 +68,7 @@ export class TroveCache {
         console.log('In Set Case III');
         this.adaptation(false);
         this.replace(true);
+        this.b2.delete(res.query);
         this.t2.set(res.query, node);
         break;
 
@@ -92,7 +94,7 @@ export class TroveCache {
               if (totalSize === this.capacity * 2) {
                 this.evictLRU(this.b2);
               }
-              this.replace(false); //check this
+              this.replace(false);
             }
             break;
         }

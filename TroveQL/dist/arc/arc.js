@@ -5,7 +5,6 @@ const cacheItem_1 = require("./cacheItem");
 class TroveCache {
     constructor(size) {
         this.get = (query) => {
-            console.log('---arc get method query input: ', query);
             switch (true) {
                 case this.t1.has(query) || this.t2.has(query):
                     console.log('In Get Case I');
@@ -39,6 +38,7 @@ class TroveCache {
                 case res.miss === 'b1':
                     console.log('In Set Case II');
                     this.adaptation(true);
+                    this.b1.delete(res.query);
                     this.replace(false);
                     this.t2.set(res.query, node);
                     break;
@@ -46,6 +46,7 @@ class TroveCache {
                     console.log('In Set Case III');
                     this.adaptation(false);
                     this.replace(true);
+                    this.b2.delete(res.query);
                     this.t2.set(res.query, node);
                     break;
                 case res.miss === 'miss':
@@ -67,7 +68,7 @@ class TroveCache {
                                 if (totalSize === this.capacity * 2) {
                                     this.evictLRU(this.b2);
                                 }
-                                this.replace(false); //check this
+                                this.replace(false);
                             }
                             break;
                     }
@@ -115,19 +116,19 @@ class TroveCache {
     evictLRU(cache) {
         const firstKey = cache.keys().next().value;
         // will the following line pass by ref? Do we need to make a shallow copy?
-        const evicted = [firstKey, cache.get(firstKey)];
+        const evicted = firstKey;
         cache.delete(firstKey);
         return evicted;
     }
     replace(foundInB2) {
         if (this.t1.size > 0 &&
             (this.t1.size > this.p || (foundInB2 && this.t1.size === this.p))) {
-            let [key, cacheItem] = this.evictLRU(this.t1);
-            this.b1.set(key, cacheItem);
+            let key = this.evictLRU(this.t1);
+            this.b1.set(key, true);
         }
         else {
-            let [key, cacheItem] = this.evictLRU(this.t2);
-            this.b2.set(key, cacheItem);
+            let key = this.evictLRU(this.t2);
+            this.b2.set(key, true);
         }
     }
 }
