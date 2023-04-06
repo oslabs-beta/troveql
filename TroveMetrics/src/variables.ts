@@ -5,7 +5,7 @@ export type queryData = {
   cacheHit?: boolean,
   query: string,
   variables: {},
-  lookupTime?: number
+  queryTime?: number
 }
 
 export type localData = {
