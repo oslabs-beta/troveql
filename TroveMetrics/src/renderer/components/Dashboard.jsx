@@ -6,6 +6,7 @@ import TimeChart from './TimeChart.jsx';
 import RACChart from './RACChart.jsx';
 import RACData from './RACData.jsx';
 import Header from './Header/Header.jsx';
+import QueryTime from './QueryTime.jsx';
 
 Chart.register(CategoryScale);
 
@@ -42,7 +43,8 @@ function Dashboard() {
             <QueryDisplay key="2" queries={cacheData.queries} />,
             <TimeChart key="3" cacheData={cacheData} status={status} />,
             <RACChart key="4" cacheData={cacheData} />,
-            <RACData key='5' cacheData={cacheData} />
+            <RACData key='5' cacheData={cacheData} />,
+            <QueryTime key='6' queries={cacheData.queries} />
           ]);
         });
         setStatus('ready');
@@ -56,6 +58,7 @@ function Dashboard() {
         <TimeChart key="3" cacheData={cacheData} status={status} />,
         <RACChart key="4" cacheData={cacheData} />,
         <RACData key='5' cacheData={cacheData} />,
+        <QueryTime key='6' queries={cacheData.queries} />
       ]);
     }
     if (cacheData && (status === 'clear')) {
