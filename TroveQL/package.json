@@ -9,7 +9,8 @@
     "caching"
   ],
   "scripts": {
-    "build": "tsc --watch"
+    "build": "tsc --watch",
+    "test": "npm run build && npm link"
   },
   "repository": "https://github.com/oslabs-beta/troveql",
   "author": "Erika Jung, Sam Henderson, Tricia Yeh, & Alex Klein",
