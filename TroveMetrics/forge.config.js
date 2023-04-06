@@ -3,17 +3,17 @@ require('dotenv').config()
 module.exports = 
 {
   packagerConfig: {
-    osxSign: {
-      identity: process.env.TEAM_IDENTIY,
-      'hardened-runtime': true,
-      verbose: true
-    },
-    osxNotarize: {
-      tool: 'notarytool',
-      appleId: process.env.APPLE_ID,
-      appleIdPassword: process.env.APP_PASSWORD,
-      teamId: process.env.APPLE_TEAM_ID
-    }
+    // osxSign: {
+    //   identity: process.env.TEAM_IDENTIY,
+    //   'hardened-runtime': true,
+    //   verbose: true
+    // },
+    // osxNotarize: {
+    //   tool: 'notarytool',
+    //   appleId: process.env.APPLE_ID,
+    //   appleIdPassword: process.env.APP_PASSWORD,
+    //   teamId: process.env.APPLE_TEAM_ID
+    // }
   },
   rebuildConfig: {},
   makers: [
@@ -24,13 +24,14 @@ module.exports =
     {
       name: '@electron-forge/maker-squirrel',
       config: {
-        authors: 'oslabs-beta',
-        exe:'TroveMetrics.exe'
+        exe:'TroveMetrics.exe',
+        // certificateFile: './cert.pfx',
+        // certificatePassword: process.env.CERTIFICATE_PASSWORD,
       },
     },
     {
       name: "@electron-forge/maker-zip",
-      platforms: ["darwin"],
+      platforms: ['darwin', 'linux', 'win32'],
     },
     {
       name: "@electron-forge/maker-deb",
