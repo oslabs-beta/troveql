@@ -19,12 +19,16 @@ class TroveQLCache {
     const startTime: number = this.useTroveMetrics ? Date.now() : null;
     const query: string = req.body.query;
     const variables: Variables = req.body.variables;
+    console.log('>>>query: ', query);
+    console.log('>>>variables: ', variables);
 
     const { operation, objectType, objectFields }: QueryInfo = this.parseQuery(req.body.query);
     // normalize the cache key - assumptions: 
     // (1) queries always return the id of the object as a field
     // (2) queries only have 0 or 1 arguments (id) - can iterate on this
     let cacheKey: string = variables ? (objectType + '_' + variables.id) : objectType;
+    console.log('>>>operation: ', operation);
+    console.log('>>>objectType: ', objectType);
 
     // if the query is a 'Query' type
     if (operation === 'query') {
@@ -60,7 +64,7 @@ class TroveQLCache {
         })
           .then((r) => r.json())
           .then((data) => {
-            console.log('>>>data from /graphql api: ', data);
+            console.log('>>>query data from /graphql api: ', data);
             console.log('>>>about to set the cache key: ', cacheKey);
             res.locals.value = data;
             const cacheValue: ResponseType = {
@@ -101,30 +105,53 @@ class TroveQLCache {
       .then(r => r.json())
       .then((data) => {
         res.locals.value = data;
+        console.log('>>>mutation data from /graphql api: ', data);
 
-        const mutationObjType: string = this.mutations[objectType];
-        const mutationCacheKey: string = mutationObjType + '_' + data.id;
+        const mutationObjType: string = this.mutations[objectType]; // assuming mutations only impact one Type
+        console.log('>>>mutationObjType: ', mutationObjType);
+        const mutationCacheKey: string = mutationObjType + '_' + data.data[objectType].id; //this seems pretty hard-coded currently...
+        console.log('>>>mutationCacheKey: ', mutationCacheKey);
         const mutationCacheVal: ResponseType = this.cache.get(mutationCacheKey);
+        console.log('>>>mutationCacheVal: ', mutationCacheKey);
 
         // if the mutation was a delete - the response object from the graphQL API and the cache are equal to each other
-        if (!mutationCacheVal.miss && (mutationCacheVal.result === data)) {
+        // edge case: we update something without actually changing anything, then we would be deleting it from the cache thinking it was a delete
+          // this is ok since we care more about keeping fresh data in the cache than not having something in the cache to serve to the client
+        if (mutationCacheVal.result === data) {
+          // delete it from the cache if it's in there, otherwise we don't need to do anything
           this.cache.removeOne(mutationCacheKey);
         } else {
         // if the mutation was an add or update
-          // check which object types and/or query types are affected using this.mutations - currently with the demo isn't it all of them?
+          // if the mutation was an update then delete the existing item in the cache if it's there
+          if (!mutationCacheVal.miss) {
+            this.cache.removeOne(mutationCacheKey);
+          }
 
-
-          const cacheValue: ResponseType = {
-            query: cacheKey,
-            result: data,
-            miss: mutationCacheVal.miss, // but we're not requesting the data, we're just updating it...
-          };
-          this.cache.set(cacheValue);
+          /*
+            // if the mutation was an add or it was an update but we didn't find it in the cache then we would treat it as an add to the cache
+              // add the fresh data to the cache
+            const cacheValue: ResponseType = {
+              query: cacheKey,
+              result: data,
+              miss: mutationCacheVal.miss, // but we're not requesting the data, we're just updating it...
+            };
+            this.cache.set(cacheValue);
+          */
         }
 
-        ////what data do we want to send to TM?
+        // need to delete any "get all" queries - assuming there are only 2 types of queries: get one or get all
+        const cacheKeys = this.cache.keys();
+        console.log('>>>cacheKeys post-mutation cache invalidation on single object Type: ', cacheKeys);
+        for (const key of cacheKeys) {
+          // this is based on how we store cache keys - if it doesn't include '_' then it's a get all query
+          if (!key.includes('_')) {
+            this.cache.removeOne(key); // if we update the details of a movie, the query to get a single actor who's in that movie (if we had such a query) would not be updated...
+          }
+        }
+
+        // send mutation query + variables + updated cache size to TM - no cacheHit or queryTime to report
         if (this.useTroveMetrics) {
-          this.sendData();
+          this.sendData(null, query, variables, this.cache.cacheSize(), null);
         }
 
         // prints everything in the cache - delete
@@ -180,7 +207,7 @@ class TroveQLCache {
 
     // let's assume we're only going to query a single object Type from the graphQL API Schema
     const objectType: string = parsedQuery['definitions'][0].selectionSet.selections[0].name.value;
-    console.log('>>>parsedQuery Type: ', parsedQuery['definitions'][0].selectionSet.selections.name.value);
+    console.log('>>>parsedQuery Type: ', objectType);
 
     // with nested queries, this gets complicated because theoretically there could be an infinite number of subqueries
     const objectFieldsArray: any = parsedQuery['definitions'][0].selectionSet.selections[0].selectionSet.selections;
