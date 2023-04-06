@@ -101,6 +101,16 @@ class TroveCache {
             const caches = [this.t1, this.t2, this.b1, this.b2];
             caches.forEach((cache) => cache.clear());
         };
+        this.removeOne = (key) => {
+            const caches = [this.t1, this.t2];
+            caches.forEach((cache) => cache.delete(key));
+        };
+        this.keys = () => {
+            const caches = [this.t1, this.t2];
+            const keys = [];
+            caches.forEach((cache) => keys.push(...Array.from(cache.keys())));
+            return keys;
+        };
         this.cacheSize = () => {
             return {
                 t1: this.t1.size,
