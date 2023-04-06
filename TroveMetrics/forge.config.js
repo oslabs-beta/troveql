@@ -1,11 +1,32 @@
+require('dotenv').config()
+
 module.exports = 
 {
-  packagerConfig: {},
+  packagerConfig: {
+    osxSign: {
+      identity: process.env.TEAM_IDENTIY,
+      'hardened-runtime': true,
+      verbose: true
+    },
+    osxNotarize: {
+      tool: 'notarytool',
+      appleId: process.env.APPLE_ID,
+      appleIdPassword: process.env.APP_PASSWORD,
+      teamId: process.env.APPLE_TEAM_ID
+    }
+  },
   rebuildConfig: {},
   makers: [
     {
-      name: "@electron-forge/maker-squirrel",
+      name: '@electron-forge/maker-dmg',
       config: {},
+    },
+    {
+      name: '@electron-forge/maker-squirrel',
+      config: {
+        authors: 'oslabs-beta',
+        exe:'TroveMetrics.exe'
+      },
     },
     {
       name: "@electron-forge/maker-zip",
