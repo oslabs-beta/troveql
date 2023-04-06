@@ -41,3 +41,27 @@
   width: 100%;
   height: 100%;
 }
+
+#rac-data {
+  width: 95%;
+}
+
+.small-container {
+  #rac-data-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 4em;
+  }
+
+  #ideal-size {
+    background-color: $light-gray;
+    padding: 0.5em;
+    border-radius: 0.2rem;
+    align-self:self-start;
+    font-size: .8rem;
+    box-shadow: inset 0.1rem 0.1rem 0.4rem rgb(201, 201, 201);
+    border-radius: 0.2rem;
+  }
+  
+}
