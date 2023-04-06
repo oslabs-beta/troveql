@@ -37,7 +37,7 @@ function RACData({ cacheData }) {
     <div className="small-container">
       <div id="rac-data-wrapper">
         <h3>RAC Size</h3>
-        <p id="ideal-size">Ideal Size: {p} </p>
+        <p id="ideal-size">Ideal T1 Size: {p} </p>
       </div>
       <div id="rac-data">
         <Pie
