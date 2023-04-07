@@ -8,13 +8,13 @@ class TroveQLCache {
   // pass TroveQLCache the size of the cache to use, the graphQL API to query, if you would like to use TroveMetrics, and an object with the names of your graphQL API's Mutation types and the object types they mutate (if applicable)
   cache: TroveCache;
   constructor(
-    size: number,
+    public capacity: number,
     public graphQLAPI: string,
     public useTroveMetrics: boolean = false,
     public mutations?: Variables
   ) {
-    this.cache = new TroveCache(size);
-    this.capacity = size;
+    this.cache = new TroveCache(capacity);
+    this.capacity = capacity;
     this.graphQLAPI = graphQLAPI;
     this.useTroveMetrics = useTroveMetrics;
     this.mutations = mutations;
