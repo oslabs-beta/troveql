@@ -2,12 +2,23 @@
   font-family: 'IBMPlexMono';
   src: url('../assets/IBMPlexMono-Regular.ttf')
 }
+// COLOR PALETTE OLD
+// $background: rgb(220, 220, 220);
+// $orange: rgb(254	169	79);
+// $lightOrange: rgb(252, 199, 142);
+// $light-gray: rgb(243, 243, 243);
+// $font-dark: rgb(74, 74, 74);
+// $dark-gray: #2c2c2c;
 
-$background: rgb(220, 220, 220);
-$orange: rgb(254	169	79);
-$lightOrange: rgb(252, 199, 142);
+// COLOR PALETTE NEW
+$background: #CDCBCD;
+$orange: #FAA916;
+//$secondary-data: #60992D;
+$secondary-data: #8FB7A2;
+$lightOrange: rgb(252, 224, 195);
 $light-gray: rgb(243, 243, 243);
 $font-dark: rgb(74, 74, 74);
+$dark-gray: #1B1B1E;
 $global-font: 'IBM Plex Mono', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
 Arial, sans-serif;
 
@@ -15,6 +26,7 @@ Arial, sans-serif;
   orange: $orange;
   background: $background;
   lightGray: $light-gray;
+  secondaryData: $secondary-data;
   lightOrange: $lightOrange;
   fontDark: $font-dark;
   globalFont: $global-font;

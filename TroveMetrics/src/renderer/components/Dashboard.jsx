@@ -10,10 +10,33 @@ import QueryTime from './QueryTime.jsx';
 
 Chart.register(CategoryScale);
 
+
 function Dashboard() {
   // Main state for cache data
   const [cacheData, setCacheData] = React.useState();
-  const [charts, setCharts] = React.useState([]);
+
+  const [chartState, setChartState] = React.useState({
+    CacheChart: {name: 'Current Hit Rate', display: true},
+    QueryDisplay: {name: 'Last Query', display: true},
+    TimeChart: {name: 'Hit Rate Over Time', display: true},
+    RACChart: {name: 'RAC Info', display: true},
+    RACData: {name: 'RAC Pie', display: true},
+    QueryTime: {name: 'Query Times', display: false},
+  })
+
+  function renderCharts() {
+    const chartDisplay = []
+
+    if (chartState.CacheChart.display) chartDisplay.push(<CacheChart key='1' cacheData={cacheData} />)
+    if (chartState.QueryDisplay.display) chartDisplay.push(<QueryDisplay key='2' cacheData={cacheData} />)
+    if (chartState.RACChart.display) chartDisplay.push(<RACChart key='4' cacheData={cacheData} />)
+    if (chartState.RACData.display) chartDisplay.push(<RACData key='5' cacheData={cacheData} />)
+    if (chartState.QueryTime.display) chartDisplay.push(<QueryTime key='6' cacheData={cacheData} />)
+    if (chartState.TimeChart.display) chartDisplay.push(<TimeChart key='3' cacheData={cacheData} status={status}/>)
+    
+    return chartDisplay
+  }
+
   const [status, setStatus] = React.useState();
 
   // Use effect on mount so that only one listener gets created
@@ -29,6 +52,7 @@ function Dashboard() {
       setCacheData(data);
     });
   }, []);
+
   
   // Put any components that rely on the intial data pull here
   React.useEffect(() => {
@@ -38,29 +62,11 @@ function Dashboard() {
         console.log('clearing metrics in dashboard');
         await window.ipcRenderer.invoke('data:clear').then((data) => {
           setCacheData(data);
-          setCharts([
-            <CacheChart key="1" data={cacheData.cache} />,
-            <QueryDisplay key="2" queries={cacheData.queries} />,
-            <TimeChart key="3" cacheData={cacheData} status={status} />,
-            <RACChart key="4" cacheData={cacheData} />,
-            <RACData key='5' cacheData={cacheData} />,
-            <QueryTime key='6' queries={cacheData.queries} />
-          ]);
         });
         setStatus('ready');
       })();
     }
 
-    if (status === 'ready') {
-      setCharts([
-        <CacheChart key="1" data={cacheData.cache} />,
-        <QueryDisplay key="2" queries={cacheData.queries} />,
-        <TimeChart key="3" cacheData={cacheData} status={status} />,
-        <RACChart key="4" cacheData={cacheData} />,
-        <RACData key='5' cacheData={cacheData} />,
-        <QueryTime key='6' queries={cacheData.queries} />
-      ]);
-    }
     if (cacheData && (status === 'clear')) {
       setStatus('ready');
     }
@@ -68,9 +74,9 @@ function Dashboard() {
 
   return (
     <div id="window">
-      <Header setStatus={setStatus} />
+      <Header setStatus={setStatus} setChartState={setChartState} chartState={chartState}/>
       <div id="dashboard">
-        {charts}
+        {renderCharts()}
       </div>
     </div>
   );

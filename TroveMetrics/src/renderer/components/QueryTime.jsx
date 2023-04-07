@@ -2,7 +2,8 @@ import * as React from 'react';
 import { Bar } from 'react-chartjs-2';
 import variables from '../styles/_variables.module.scss'
 
-function QueryTime ({ queries }) {
+function QueryTime ({ cacheData }) {
+  const { queries } = cacheData;
   // record the indices of Queries in the cacheData.queries array (skipping over Mutations) and their query time
   const queryIndex = [-1];
   const queryTime = [0];

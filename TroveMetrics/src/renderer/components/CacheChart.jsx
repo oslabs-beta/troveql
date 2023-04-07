@@ -2,11 +2,11 @@ import * as React from 'react';
 import { Pie } from "react-chartjs-2";
 import variables from '../styles/_variables.module.scss'
 
-function CacheChart({ data }) {
+function CacheChart({ cacheData }) {
   let dataSet;
 
   // If no data, display 0, 0 and avoid a crash
-  data ? dataSet = Object.values(data) : dataSet = [0, 0]
+  cacheData ? dataSet = Object.values(cacheData.cache) : dataSet = [0, 0]
 
   const chartData = {
     labels: ['HIT', 'MISS'],
@@ -16,7 +16,7 @@ function CacheChart({ data }) {
         data: dataSet,
         backgroundColor: [
           variables.orange, 
-          variables.lightGray 
+          variables.secondaryData
         ],
         //can add more style properties here like borderColor, borderWidth, etc.
       }
@@ -24,7 +24,7 @@ function CacheChart({ data }) {
   }
 
   return (
-    <div className="small-container">
+    <div className="small-container grid-item">
       <h3>Latest Hit Rate</h3>
       <Pie
         data={chartData}

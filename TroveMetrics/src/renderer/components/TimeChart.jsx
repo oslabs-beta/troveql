@@ -12,7 +12,7 @@ function TimeChart({ cacheData, status }) {
   }
 
   // If no data, display 0, 0 and avoid a crash
-  if (cacheData.cache) {
+  if (cacheData && cacheData.cache) {
     startingData = {
       hitData: [{ x: 0, y: cacheData.cache.HIT }],
       missData: [{ x: 0, y: cacheData.cache.MISS }],
@@ -25,16 +25,18 @@ function TimeChart({ cacheData, status }) {
   const [timeChartData, setTimeChartData] = React.useState(startingData);
 
   React.useEffect(() => {
-    const newState = { ...timeChartData };
-    if (!timeChartData.startingTime) {
-      newState.startingTime = new Date();
+    if (cacheData && cacheData.cache) {
+      const newState = { ...timeChartData };
+      if (!timeChartData.startingTime) {
+        newState.startingTime = new Date();
+      }
+      const timeChange = (new Date() - newState.startingTime) / 1000;
+
+      newState.hitData.push({ x: timeChange, y: cacheData.cache.HIT });
+      newState.missData.push({ x: timeChange, y: cacheData.cache.MISS });
+
+      setTimeChartData(newState);
     }
-    const timeChange = (new Date() - newState.startingTime) / 1000;
-
-    newState.hitData.push({ x: timeChange, y: cacheData.cache.HIT });
-    newState.missData.push({ x: timeChange, y: cacheData.cache.MISS });
-
-    setTimeChartData(newState);
   }, [cacheData]);
 
   const chartData = {
@@ -53,7 +55,7 @@ function TimeChart({ cacheData, status }) {
         data: timeChartData.missData, 
         fill: true,
         tension: 0.1,
-        backgroundColor: [variables.lightGray],
+        backgroundColor: [variables.secondaryData],
         pointRadius: 6,
       },
     ],
@@ -64,7 +66,6 @@ function TimeChart({ cacheData, status }) {
   }
 
   React.useEffect(() => {
-    console.log('in TimeChart', status);
     if (status === 'clear') {
       console.log('clearing metrics in TimeChart');
 
