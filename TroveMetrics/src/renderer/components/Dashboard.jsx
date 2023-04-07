@@ -29,10 +29,10 @@ function Dashboard() {
 
     if (chartState.CacheChart.display) chartDisplay.push(<CacheChart key='1' cacheData={cacheData} />)
     if (chartState.QueryDisplay.display) chartDisplay.push(<QueryDisplay key='2' cacheData={cacheData} />)
-    if (chartState.TimeChart.display) chartDisplay.push(<TimeChart key='3' cacheData={cacheData} status={status}/>)
     if (chartState.RACChart.display) chartDisplay.push(<RACChart key='4' cacheData={cacheData} />)
     if (chartState.RACData.display) chartDisplay.push(<RACData key='5' cacheData={cacheData} />)
     if (chartState.QueryTime.display) chartDisplay.push(<QueryTime key='6' cacheData={cacheData} />)
+    if (chartState.TimeChart.display) chartDisplay.push(<TimeChart key='3' cacheData={cacheData} status={status}/>)
     
     return chartDisplay
   }

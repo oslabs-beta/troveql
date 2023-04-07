@@ -20,17 +20,13 @@ const chartData = {
       backgroundColor: [
         variables.orange, 
         variables.orange,
-        variables.lightGray,
-        variables.lightGray,
+        variables.secondaryData,
+        variables.secondaryData,
       ],
       //can add more style properties here like borderColor, borderWidth, etc.
     }
   ]
 }
-
-
-
-
 
   return (
     <div className="small-container">
