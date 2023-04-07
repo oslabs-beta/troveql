@@ -24,7 +24,7 @@ function CacheChart({ cacheData }) {
   }
 
   return (
-    <div className="small-container">
+    <div draggable="true" className="small-container grid-item">
       <h3>Latest Hit Rate</h3>
       <Pie
         data={chartData}

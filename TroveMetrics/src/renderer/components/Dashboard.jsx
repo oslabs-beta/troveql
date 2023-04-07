@@ -72,6 +72,32 @@ function Dashboard() {
     }
   }, [status, cacheData]);
 
+//DRAG AND DROP FUNCTIONS
+  const items = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+  const [dragItem, setDragItem] = React.useState(null);
+  // Handle drag start event
+  const handleDragStart = (event, index) => {
+    setDragItem(index);
+    event.dataTransfer.effectAllowed = 'move';
+    event.dataTransfer.setData('text/html', event.target.parentNode);
+    event.dataTransfer.setDragImage(event.target.parentNode, 20, 20);
+  };
+
+  // Handle drag over event
+  const handleDragOver = (event, index) => {
+    event.preventDefault();
+  };
+
+  // Handle drop event
+  const handleDrop = (event, index) => {
+    event.preventDefault();
+    const gridItems = [...items];
+    const dragItemContent = gridItems[dragItem];
+    gridItems.splice(dragItem, 1);
+    gridItems.splice(index, 0, dragItemContent);
+    setDragItem(null);
+  };
+
   return (
     <div id="window">
       <Header setStatus={setStatus} setChartState={setChartState} chartState={chartState}/>

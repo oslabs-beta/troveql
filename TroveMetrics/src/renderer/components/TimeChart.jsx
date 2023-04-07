@@ -74,7 +74,7 @@ function TimeChart({ cacheData, status }) {
   }, [status]);
 
   return (
-    <div className="wide-container">
+    <div draggable="true" className="small-container">
       <div className="chart-header">
         <h3>Cache Hits</h3>
         <button onClick={handleTimeReset}>RESET TIME</button>
