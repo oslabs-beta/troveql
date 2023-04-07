@@ -15,11 +15,13 @@ class TroveQLCache {
             const variables = req.body.variables;
             console.log('>>>query: ', query);
             console.log('>>>variables: ', variables);
-            const { operation, objectType, objectFields } = this.parseQuery(req.body.query);
-            // normalize the cache key - assumptions: 
+            const { operation, objectType } = this.parseQuery(req.body.query);
+            // normalize the cache key - assumptions:
             // (1) queries always return the id of the object as a field
             // (2) queries only have 0 or 1 arguments (id) - can iterate on this
-            let cacheKey = variables ? (objectType + '_' + variables.id) : objectType;
+            let cacheKey = variables
+                ? objectType + '_' + variables.id
+                : objectType;
             console.log('>>>operation: ', operation);
             console.log('>>>objectType: ', objectType);
             // if the query is a 'Query' type
@@ -70,7 +72,7 @@ class TroveQLCache {
                         this.cache.returnAll();
                         return next();
                     })
-                        .catch(error => console.log(error));
+                        .catch((error) => console.log(error));
                 }
             }
             // if the query is a 'Mutation' type - assumptions:
@@ -86,7 +88,7 @@ class TroveQLCache {
                     },
                     body: JSON.stringify(req.body),
                 })
-                    .then(r => r.json())
+                    .then((r) => r.json())
                     .then((data) => {
                     res.locals.value = data;
                     console.log('>>>mutation data from /graphql api: ', data);
@@ -110,15 +112,15 @@ class TroveQLCache {
                             this.cache.removeOne(mutationCacheKey);
                         }
                         /*
-                          // if the mutation was an add or it was an update but we didn't find it in the cache then we would treat it as an add to the cache
-                            // add the fresh data to the cache
-                          const cacheValue: ResponseType = {
-                            query: cacheKey,
-                            result: data,
-                            miss: mutationCacheVal.miss, // but we're not requesting the data, we're just updating it...
-                          };
-                          this.cache.set(cacheValue);
-                        */
+                        // if the mutation was an add or it was an update but we didn't find it in the cache then we would treat it as an add to the cache
+                          // add the fresh data to the cache
+                        const cacheValue: ResponseType = {
+                          query: cacheKey,
+                          result: data,
+                          miss: mutationCacheVal.miss, // but we're not requesting the data, we're just updating it...
+                        };
+                        this.cache.set(cacheValue);
+                      */
                     }
                     // need to delete any "get all" queries - assuming there are only 2 types of queries: get one or get all
                     const cacheKeys = this.cache.keys();
@@ -138,7 +140,7 @@ class TroveQLCache {
                     this.cache.returnAll();
                     return next();
                 })
-                    .catch(error => console.log(error));
+                    .catch((error) => console.log(error));
             }
             // there is also a "Subscription" type - for future iterations
             if (operation === 'subscription') {
@@ -146,7 +148,7 @@ class TroveQLCache {
         };
         // troveMetrics is another Express middleware that clears the cache on requests from TM
         this.troveMetrics = (req, res, next) => {
-            // if clearCache (in req.body from troveMetrics) is true 
+            // if clearCache (in req.body from troveMetrics) is true
             if (req.body.clearCache) {
                 this.cache.removeAll();
                 res.locals.message = { cacheEmpty: true };
@@ -184,20 +186,14 @@ class TroveQLCache {
             // let's assume we're only going to query a single object Type from the graphQL API Schema
             const objectType = parsedQuery['definitions'][0].selectionSet.selections[0].name.value;
             console.log('>>>parsedQuery Type: ', objectType);
-            // with nested queries, this gets complicated because theoretically there could be an infinite number of subqueries
-            const objectFieldsArray = parsedQuery['definitions'][0].selectionSet.selections[0].selectionSet.selections;
-            const objectFields = [];
-            for (let i = 0; i < objectFieldsArray.length; i++) {
-                objectFields.push(objectFieldsArray[i].name.value);
-                console.log('>>>parsedQuery selectionSet fields: ', objectFieldsArray[i].name.value);
-            }
-            return { operation, objectType, objectFields };
+            return { operation, objectType };
         };
         this.cache = new arc_1.TroveCache(size);
         this.capacity = size;
         this.graphQLAPI = graphQLAPI;
         this.useTroveMetrics = useTroveMetrics;
         this.mutations = mutations;
+        console.log('this.mutations: ', mutations);
     }
 }
 exports.TroveQLCache = TroveQLCache;
