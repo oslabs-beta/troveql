@@ -44,7 +44,7 @@ function Dashboard() {
             <TimeChart key="3" cacheData={cacheData} status={status} />,
             <RACChart key="4" cacheData={cacheData} />,
             <RACData key='5' cacheData={cacheData} />,
-            <QueryTime key='6' queries={cacheData.queries} />
+            // <QueryTime key='6' queries={cacheData.queries} />
           ]);
         });
         setStatus('ready');
@@ -58,7 +58,7 @@ function Dashboard() {
         <TimeChart key="3" cacheData={cacheData} status={status} />,
         <RACChart key="4" cacheData={cacheData} />,
         <RACData key='5' cacheData={cacheData} />,
-        <QueryTime key='6' queries={cacheData.queries} />
+        // <QueryTime key='6' queries={cacheData.queries} />
       ]);
     }
     if (cacheData && (status === 'clear')) {

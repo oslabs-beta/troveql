@@ -28,7 +28,7 @@ const troveController: controller = {
         let hitOrMiss: string = req.body.cacheHit ? 'HIT' : 'MISS';
         parsedData.cache[hitOrMiss] += 1;
         parsedData.queries.push(req.body);
-        parsedData.capacity = parsedData.queries[0].size;
+        parsedData.capacity = req.body.size;
       }
 
       // Send file data back to server to pass on to Renderer

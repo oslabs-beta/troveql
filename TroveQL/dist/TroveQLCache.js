@@ -13,6 +13,9 @@ class TroveQLCache {
             const startTime = this.useTroveMetrics ? Date.now() : null;
             const query = req.body.query;
             const variables = req.body.variables;
+            console.log('this.size', this.size);
+            const size = this.size;
+            console.log('size', size);
             console.log('>>>query: ', query);
             console.log('>>>variables: ', variables);
             const { operation, objectType, objectFields } = this.parseQuery(req.body.query);
@@ -34,7 +37,7 @@ class TroveQLCache {
                     res.locals.value = money.result;
                     if (this.useTroveMetrics) {
                         const finishTime = Date.now();
-                        this.sendData(cacheHit, query, variables, this.cache.cacheSize(), finishTime - startTime);
+                        this.sendData(cacheHit, query, variables, this.cache.cacheSize(), finishTime - startTime, this.size);
                     }
                     // prints everything in the cache - delete
                     console.log('>>>Updated cache in the bank:');
@@ -178,7 +181,6 @@ class TroveQLCache {
         };
         // parseQuery checks if the graphQL API query is a query or a mutation type
         this.parseQuery = (query) => {
-            // parse graphQL string
             const parsedQuery = (0, graphql_1.parse)(query);
             // declare variable operations and assign it with 'query' or 'mutation' from parsedQuery
             const operation = parsedQuery['definitions'][0].operation;
@@ -195,6 +197,7 @@ class TroveQLCache {
             return { operation, objectType, objectFields };
         };
         this.cache = new arc_1.TroveCache(size);
+        this.size = size;
         this.graphQLAPI = graphQLAPI;
         this.useTroveMetrics = useTroveMetrics;
         this.mutations = mutations;
