@@ -2,11 +2,11 @@ import * as React from 'react';
 import { Pie } from "react-chartjs-2";
 import variables from '../styles/_variables.module.scss'
 
-function CacheChart({ data }) {
+function CacheChart({ cacheData }) {
   let dataSet;
 
   // If no data, display 0, 0 and avoid a crash
-  data ? dataSet = Object.values(data) : dataSet = [0, 0]
+  cacheData ? dataSet = Object.values(cacheData.cache) : dataSet = [0, 0]
 
   const chartData = {
     labels: ['HIT', 'MISS'],
