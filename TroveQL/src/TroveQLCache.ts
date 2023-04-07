@@ -7,10 +7,10 @@ import { ResponseType, CacheSizeType } from './arc/arcTypes';
 class TroveQLCache {
   // pass TroveQLCache the size of the cache to use, the graphQL API to query, if you would like to use TroveMetrics, and an object with the names of your graphQL API's Mutation types and the object types they mutate (if applicable)
   cache: TroveCache;
-  size: number;
+  capacity: number;
   constructor(size: number, public graphQLAPI: string, public useTroveMetrics: boolean = false, public mutations?: Variables) {
     this.cache = new TroveCache(size);
-    this.size = size;
+    this.capacity = size;
     this.graphQLAPI = graphQLAPI;
     this.useTroveMetrics = useTroveMetrics;
     this.mutations = mutations;
@@ -21,9 +21,6 @@ class TroveQLCache {
     const startTime: number = this.useTroveMetrics ? Date.now() : null;
     const query: string = req.body.query;
     const variables: Variables = req.body.variables;
-    console.log('this.size', this.size);
-    const size = this.size;
-    console.log('size', size);
     console.log('>>>query: ', query);
     console.log('>>>variables: ', variables);
 
@@ -50,7 +47,7 @@ class TroveQLCache {
         
         if (this.useTroveMetrics) {
           const finishTime = Date.now();
-          this.sendData(cacheHit, query, variables, this.cache.cacheSize(), finishTime - startTime, this.size);
+          this.sendData(cacheHit, query, variables, this.cache.cacheSize(), finishTime - startTime, this.capacity);
         }
 
         // prints everything in the cache - delete
@@ -82,7 +79,7 @@ class TroveQLCache {
             
             if (this.useTroveMetrics) {
               const finishTime = Date.now();
-              this.sendData(cacheHit, query, variables, this.cache.cacheSize(), finishTime - startTime, this.size);
+              this.sendData(cacheHit, query, variables, this.cache.cacheSize(), finishTime - startTime, this.capacity);
             }
 
             // prints everything in the cache - delete
@@ -187,7 +184,7 @@ class TroveQLCache {
 
   // sendData to TroveMetrics
   // send data to localhost 3333 where troveMetrics server is listening to
-  sendData = (cacheHit?: boolean, query?: string, variables?: Variables, cacheSize?: CacheSizeType, queryTime?: number, size?: number): void => {
+  sendData = (cacheHit?: boolean, query?: string, variables?: Variables, cacheSize?: CacheSizeType, queryTime?: number, capacity?: number): void => {
     fetch('http://localhost:3333/api', {
       method: 'POST',
       headers: {
@@ -199,7 +196,7 @@ class TroveQLCache {
         variables,
         cacheSize,
         queryTime,
-        size,
+        capacity,
       }),
     })
       .then((r) => r.json())
