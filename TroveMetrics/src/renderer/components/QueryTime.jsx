@@ -3,24 +3,27 @@ import { Bar } from 'react-chartjs-2';
 import variables from '../styles/_variables.module.scss'
 
 function QueryTime ({ cacheData }) {
-  const { queries } = cacheData;
   // record the indices of Queries in the cacheData.queries array (skipping over Mutations) and their query time
   const queryIndex = [-1];
   const queryTime = [0];
   const barColors = [variables.lightGray];
 
-  // using forEach to create new variables instead of map so that if there is no data then the chart will not break
-  for (let i = 0; i < queries.length; i++) {
-    // only record the data where there was a Query (skip over Mutations)
-    if (queries[i].cacheHit !== null) {
-      queryIndex.push(i);
-      // normalize the data (+1) so that even if the queryTime was 0ms it can display a bar on the graph
-      queryTime.push(queries[i].queryTime + 1);
-      // display HITs in orange & MISSes in gray
-      if (queries[i].cacheHit) {
-        barColors.push(variables.orange)
-      } else {
-        barColors.push(variables.lightGray)
+  let queries = [];
+  if (cacheData && cacheData.queries && cacheData.queries.length > 0) {
+    queries = cacheData.queries;
+    // using forEach to create new variables instead of map so that if there is no data then the chart will not break
+    for (let i = 0; i < queries.length; i++) {
+      // only record the data where there was a Query (skip over Mutations)
+      if (queries[i].cacheHit !== null) {
+        queryIndex.push(i);
+        // normalize the data (+1) so that even if the queryTime was 0ms it can display a bar on the graph
+        queryTime.push(queries[i].queryTime + 1);
+        // display HITs in orange & MISSes in gray
+        if (queries[i].cacheHit) {
+          barColors.push(variables.orange)
+        } else {
+          barColors.push(variables.lightGray)
+        }
       }
     }
   }
@@ -29,10 +32,9 @@ function QueryTime ({ cacheData }) {
   const htmlLegendPlugin = {
     id: 'htmlLegend',
     afterUpdate(chart) {
-      const items = chart.options.plugins.legend.labels.generateLabels(chart);
-      const ul = document.createElement('ul');
-      items.forEach(item => {
-        console.log(item)
+      const chartLegend = document.getElementById('custom-chart-legend');
+      if (!chartLegend.firstChild) {
+        const ul = document.createElement('ul');
         const li = document.createElement('li');
         const boxSpan = document.createElement('span');
         boxSpan.style.display = 'inline-block';
@@ -42,9 +44,9 @@ function QueryTime ({ cacheData }) {
         li.appendChild(boxSpan);
         li.appendChild(document.createTextNode('Cache Hit'));
         ul.appendChild(li);
-      });
-      const chartLegend = document.getElementById('custom-chart-legend');
-      chartLegend.appendChild(ul);
+  
+        chartLegend.appendChild(ul);
+      }
     }
   };
 

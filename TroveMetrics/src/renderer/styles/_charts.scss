@@ -14,6 +14,7 @@
 .wide-container {
   @extend .small-container;
   width: 37.5rem;
+  height: auto;
   grid-column: span 2;
 }
 
