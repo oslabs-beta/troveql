@@ -7,10 +7,4 @@ const div = document.getElementById('App');
 const root = createRoot(div);
 root.render(<Dashboard/>);
 
-// RENDERER TO MAIN PROCESS TEST
-const pingTest = async () => {
-  const response = await window.ipcRenderer.ping();
-  console.log(response); // should print out 'pong'
-};
-pingTest();
 

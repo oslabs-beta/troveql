@@ -29,10 +29,10 @@ function Dashboard() {
 
     if (chartState.CacheChart.display) chartDisplay.push(<CacheChart key='1' cacheData={cacheData} />)
     if (chartState.QueryDisplay.display) chartDisplay.push(<QueryDisplay key='2' cacheData={cacheData} />)
-    if (chartState.TimeChart.display) chartDisplay.push(<TimeChart key='3' cacheData={cacheData} status={status}/>)
     if (chartState.RACChart.display) chartDisplay.push(<RACChart key='4' cacheData={cacheData} />)
     if (chartState.RACData.display) chartDisplay.push(<RACData key='5' cacheData={cacheData} />)
     if (chartState.QueryTime.display) chartDisplay.push(<QueryTime key='6' cacheData={cacheData} />)
+    if (chartState.TimeChart.display) chartDisplay.push(<TimeChart key='3' cacheData={cacheData} status={status}/>)
     
     return chartDisplay
   }
@@ -71,32 +71,6 @@ function Dashboard() {
       setStatus('ready');
     }
   }, [status, cacheData]);
-
-//DRAG AND DROP FUNCTIONS
-  const items = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-  const [dragItem, setDragItem] = React.useState(null);
-  // Handle drag start event
-  const handleDragStart = (event, index) => {
-    setDragItem(index);
-    event.dataTransfer.effectAllowed = 'move';
-    event.dataTransfer.setData('text/html', event.target.parentNode);
-    event.dataTransfer.setDragImage(event.target.parentNode, 20, 20);
-  };
-
-  // Handle drag over event
-  const handleDragOver = (event, index) => {
-    event.preventDefault();
-  };
-
-  // Handle drop event
-  const handleDrop = (event, index) => {
-    event.preventDefault();
-    const gridItems = [...items];
-    const dragItemContent = gridItems[dragItem];
-    gridItems.splice(dragItem, 1);
-    gridItems.splice(index, 0, dragItemContent);
-    setDragItem(null);
-  };
 
   return (
     <div id="window">

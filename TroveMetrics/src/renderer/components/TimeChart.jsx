@@ -55,7 +55,7 @@ function TimeChart({ cacheData, status }) {
         data: timeChartData.missData, 
         fill: true,
         tension: 0.1,
-        backgroundColor: [variables.lightGray],
+        backgroundColor: [variables.secondaryData],
         pointRadius: 6,
       },
     ],
@@ -74,7 +74,7 @@ function TimeChart({ cacheData, status }) {
   }, [status]);
 
   return (
-    <div draggable="true" className="small-container">
+    <div className="wide-container">
       <div className="chart-header">
         <h3>Cache Hits</h3>
         <button onClick={handleTimeReset}>RESET TIME</button>

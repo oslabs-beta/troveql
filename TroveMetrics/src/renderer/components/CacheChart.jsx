@@ -16,7 +16,7 @@ function CacheChart({ cacheData }) {
         data: dataSet,
         backgroundColor: [
           variables.orange, 
-          variables.lightGray 
+          variables.secondaryData
         ],
         //can add more style properties here like borderColor, borderWidth, etc.
       }
@@ -24,7 +24,7 @@ function CacheChart({ cacheData }) {
   }
 
   return (
-    <div draggable="true" className="small-container grid-item">
+    <div className="small-container grid-item">
       <h3>Latest Hit Rate</h3>
       <Pie
         data={chartData}
