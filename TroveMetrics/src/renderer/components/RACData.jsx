@@ -4,9 +4,10 @@ import variables from '../styles/_variables.module.scss'
 
 function RACData({ cacheData }) {
   // Set default values if no data
+  console.log('cachedata in RAC', cacheData);
   let dataSet = null;
   let p = '-';
-  if (cacheData && cacheData.queries.length > 0 && cacheData.capacity !== null) {
+  if (cacheData && cacheData.queries.length > 0) {
     const cacheSize = cacheData.queries.slice(-1)[0].cacheSize;
     const total = cacheData.capacity;
     const { t1, t2, p } = cacheSize;

@@ -154,7 +154,7 @@ class TroveQLCache {
 
         // send mutation query + variables + updated cache size to TM - no cacheHit or queryTime to report
         if (this.useTroveMetrics) {
-          this.sendData(null, query, variables, this.cache.cacheSize(), null);
+          this.sendData(null, query, variables, this.cache.cacheSize(), null, this.capacity);
         }
 
         // prints everything in the cache - delete
