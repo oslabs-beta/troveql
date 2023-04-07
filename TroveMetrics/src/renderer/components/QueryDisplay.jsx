@@ -1,13 +1,13 @@
 import * as React from 'react';
 
-function QueryDisplay({ queries }) {
+function QueryDisplay({ cacheData }) {
   let vars = [];
   let query = '';
 
   // If no data, display nothing and avoid a crash
-  if (queries && queries.length > 0) {
-    let variables = queries[queries.length - 1].variables;
-    query = queries[queries.length - 1].query;
+  if (cacheData && cacheData.queries && cacheData.queries.length > 0) {
+    let variables = cacheData.queries[cacheData.queries.length - 1].variables;
+    query = cacheData.queries[cacheData.queries.length - 1].query;
 
     for (const key in variables) {
       vars.push(

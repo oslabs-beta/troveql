@@ -4,13 +4,13 @@ import variables from '../styles/_variables.module.scss'
 
 function RACData({ cacheData }) {
   // Set default values if no data
+  console.log('cachedata in RAC', cacheData);
   let dataSet = null;
   let p = '-';
   if (cacheData && cacheData.queries.length > 0) {
     const cacheSize = cacheData.queries.slice(-1)[0].cacheSize;
-    p = cacheSize.p;
     const total = cacheData.capacity;
-    const { t1, t2 } = cacheSize;
+    const { t1, t2, p } = cacheSize;
     dataSet = [(total-t1-t2)/total*100, t1/total*100, t2/total*100];
   } else {
     dataSet = [0, 0, 0];

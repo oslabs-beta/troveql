@@ -14,6 +14,7 @@ class TroveQLCache {
     public mutations?: Variables
   ) {
     this.cache = new TroveCache(size);
+    this.capacity = size;
     this.graphQLAPI = graphQLAPI;
     this.useTroveMetrics = useTroveMetrics;
     this.mutations = mutations;
@@ -64,7 +65,8 @@ class TroveQLCache {
             query,
             variables,
             this.cache.cacheSize(),
-            finishTime - startTime
+            finishTime - startTime,
+            this.capacity
           );
         }
 
@@ -103,7 +105,7 @@ class TroveQLCache {
                 variables,
                 this.cache.cacheSize(),
                 finishTime - startTime,
-                this.size
+                this.capacity
               );
             }
 
@@ -184,7 +186,14 @@ class TroveQLCache {
 
           // send mutation query + variables + updated cache size to TM - no cacheHit or queryTime to report
           if (this.useTroveMetrics) {
-            this.sendData(null, query, variables, this.cache.cacheSize(), null);
+            this.sendData(
+              null,
+              query,
+              variables,
+              this.cache.cacheSize(),
+              null,
+              this.capacity
+            );
           }
 
           // prints everything in the cache - delete
@@ -223,7 +232,7 @@ class TroveQLCache {
     variables?: Variables,
     cacheSize?: CacheSizeType,
     queryTime?: number,
-    size?: number
+    capacity?: number
   ): void => {
     fetch('http://localhost:3333/api', {
       method: 'POST',
@@ -236,7 +245,7 @@ class TroveQLCache {
         variables,
         cacheSize,
         queryTime,
-        size,
+        capacity,
       }),
     })
       .then((r) => r.json())

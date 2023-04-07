@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 function ClearButtons({ setStatus }) {
+  
   const onClearMetrics = () => {
     setStatus('clear');
   };
