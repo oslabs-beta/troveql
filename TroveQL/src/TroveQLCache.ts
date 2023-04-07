@@ -7,8 +7,10 @@ import { ResponseType, CacheSizeType } from './arc/arcTypes';
 class TroveQLCache {
   // pass TroveQLCache the size of the cache to use, the graphQL API to query, if you would like to use TroveMetrics, and an object with the names of your graphQL API's Mutation types and the object types they mutate (if applicable)
   cache: TroveCache;
+  size: number;
   constructor(size: number, public graphQLAPI: string, public useTroveMetrics: boolean = false, public mutations?: Variables) {
     this.cache = new TroveCache(size);
+    this.size = size;
     this.graphQLAPI = graphQLAPI;
     this.useTroveMetrics = useTroveMetrics;
     this.mutations = mutations;
@@ -19,6 +21,9 @@ class TroveQLCache {
     const startTime: number = this.useTroveMetrics ? Date.now() : null;
     const query: string = req.body.query;
     const variables: Variables = req.body.variables;
+    console.log('this.size', this.size);
+    const size = this.size;
+    console.log('size', size);
     console.log('>>>query: ', query);
     console.log('>>>variables: ', variables);
 
@@ -45,7 +50,7 @@ class TroveQLCache {
         
         if (this.useTroveMetrics) {
           const finishTime = Date.now();
-          this.sendData(cacheHit, query, variables, this.cache.cacheSize(), finishTime - startTime);
+          this.sendData(cacheHit, query, variables, this.cache.cacheSize(), finishTime - startTime, this.size);
         }
 
         // prints everything in the cache - delete
