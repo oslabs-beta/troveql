@@ -19,6 +19,7 @@ function CustomizeMetrics({setChartState, chartState }) {
           </label>
         )
       }
+      
       setConfigDisplay(
         <div id="config-display">
         {chartCheckBoxes}
@@ -33,15 +34,13 @@ function CustomizeMetrics({setChartState, chartState }) {
 
   function onTick(e) {
 
-    const chartStateCopy = {...chartState}
-    const thisChartStateCopy = {...chartStateCopy[e.target.id]}
-    thisChartStateCopy.display = e.target.checked;
-    chartStateCopy[e.target.id] = thisChartStateCopy;
-
-    // console.log('ALL STATE', chartStateCopy)
-    // console.log('STATE', chartState)
-    // console.log(setChartState)
-    setChartState(chartStateCopy)
+    setChartState((prevState) => {
+      const chartStateCopy = {...prevState}
+      const thisChartStateCopy = {...chartStateCopy[e.target.id]}
+      thisChartStateCopy.display = e.target.checked;
+      chartStateCopy[e.target.id] = thisChartStateCopy;
+      return chartStateCopy
+    })
   }
 
   return (
