@@ -39,8 +39,20 @@
 }
 
 .chart-cont {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 100%;
   height: 100%;
+}
+
+#custom-chart-legend li {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  width: 110px;
+  font-size: 12px;
 }
 
 #rac-data {
