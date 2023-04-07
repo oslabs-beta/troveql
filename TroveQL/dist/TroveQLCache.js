@@ -13,9 +13,6 @@ class TroveQLCache {
             const startTime = this.useTroveMetrics ? Date.now() : null;
             const query = req.body.query;
             const variables = req.body.variables;
-            console.log('this.size', this.size);
-            const size = this.size;
-            console.log('size', size);
             console.log('>>>query: ', query);
             console.log('>>>variables: ', variables);
             const { operation, objectType, objectFields } = this.parseQuery(req.body.query);
@@ -37,7 +34,7 @@ class TroveQLCache {
                     res.locals.value = money.result;
                     if (this.useTroveMetrics) {
                         const finishTime = Date.now();
-                        this.sendData(cacheHit, query, variables, this.cache.cacheSize(), finishTime - startTime, this.size);
+                        this.sendData(cacheHit, query, variables, this.cache.cacheSize(), finishTime - startTime, this.capacity);
                     }
                     // prints everything in the cache - delete
                     console.log('>>>Updated cache in the bank:');
@@ -66,7 +63,7 @@ class TroveQLCache {
                         this.cache.set(cacheValue);
                         if (this.useTroveMetrics) {
                             const finishTime = Date.now();
-                            this.sendData(cacheHit, query, variables, this.cache.cacheSize(), finishTime - startTime, this.size);
+                            this.sendData(cacheHit, query, variables, this.cache.cacheSize(), finishTime - startTime, this.capacity);
                         }
                         // prints everything in the cache - delete
                         console.log('>>>Updated cache in the bank:');
@@ -134,7 +131,7 @@ class TroveQLCache {
                     }
                     // send mutation query + variables + updated cache size to TM - no cacheHit or queryTime to report
                     if (this.useTroveMetrics) {
-                        this.sendData(null, query, variables, this.cache.cacheSize(), null);
+                        this.sendData(null, query, variables, this.cache.cacheSize(), null, this.capacity);
                     }
                     // prints everything in the cache - delete
                     console.log('>>>Updated cache in the bank:');
@@ -158,7 +155,7 @@ class TroveQLCache {
         };
         // sendData to TroveMetrics
         // send data to localhost 3333 where troveMetrics server is listening to
-        this.sendData = (cacheHit, query, variables, cacheSize, queryTime, size) => {
+        this.sendData = (cacheHit, query, variables, cacheSize, queryTime, capacity) => {
             fetch('http://localhost:3333/api', {
                 method: 'POST',
                 headers: {
@@ -170,7 +167,7 @@ class TroveQLCache {
                     variables,
                     cacheSize,
                     queryTime,
-                    size,
+                    capacity,
                 }),
             })
                 .then((r) => r.json())
@@ -197,11 +194,10 @@ class TroveQLCache {
             return { operation, objectType, objectFields };
         };
         this.cache = new arc_1.TroveCache(size);
-        this.size = size;
+        this.capacity = size;
         this.graphQLAPI = graphQLAPI;
         this.useTroveMetrics = useTroveMetrics;
         this.mutations = mutations;
     }
 }
 exports.TroveQLCache = TroveQLCache;
-// test npmignore

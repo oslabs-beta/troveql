@@ -4,6 +4,7 @@ import variables from '../styles/_variables.module.scss'
 
 function RACData({ cacheData }) {
   // Set default values if no data
+  console.log('cachedata in RAC', cacheData);
   let dataSet = null;
   let p = '-';
   if (cacheData && cacheData.queries.length > 0) {
