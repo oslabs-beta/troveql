@@ -24,7 +24,7 @@ function RACData({ cacheData }) {
         label: '%',
         data: dataSet,
         backgroundColor: [
-          variables.lightGray,
+          variables.secondaryData,
           variables.orange, 
           variables.lightOrange,
         ],

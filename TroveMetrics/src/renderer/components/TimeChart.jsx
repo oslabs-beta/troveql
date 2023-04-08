@@ -55,7 +55,7 @@ function TimeChart({ cacheData, status }) {
         data: timeChartData.missData, 
         fill: true,
         tension: 0.1,
-        backgroundColor: [variables.lightGray],
+        backgroundColor: [variables.secondaryData],
         pointRadius: 6,
       },
     ],

@@ -1,46 +1,24 @@
 import * as React from 'react';
 
 function QueryList({ cacheData }) {
-  let vars = [];
-  let query = '';
   let list = [];
 
   // If no data, display nothing and avoid a crash
   if (cacheData && cacheData.queries && cacheData.queries.length > 0) {
-  console.log('cacheData in list', cacheData.queries);
-    let variables = cacheData.queries[cacheData.queries.length - 1].variables;
-    query = cacheData.queries[cacheData.queries.length - 1].query;
-
-    for (const key in variables) {
-      vars.push(
-        <p key={key}>
-          {key} : {variables[key]}
-        </p>
-      );
-    }
 
     // pass required info from cacheData to each row in table
 
-    // slice out last 10 items in array
-    const latestTen = cacheData.queries.slice(-5).reverse();
-    console.log('lastTen',latestTen);
-    // iterate through each item in array
-      // through each iteration, 
-        // create a new row
-        // query Name 
-          // with icon on hover // variables
-        // More Info
-          // in a card upon hovering
-          // cacheHit
-          // in t1 or t2 or b1 or b2
-        // Response Time
-    for (let i = 0; i < latestTen.length; i++) {
+    // slice out last 5 items in array
+    const latestFive = cacheData.queries.slice(-5).reverse();
+
+    // create row for each query cacheData in latestFive
+    for (let i = 0; i < latestFive.length; i++) {
       list.push(
         <tr key={i + 1}>
           <td>{i + 1}</td>
-          <td><p className="ellipsis" data-text={latestTen[i].query}>{latestTen[i].query.slice(0, 60)}</p></td>
+          <td><p className="ellipsis" data-text={latestFive[i].query}>{latestFive[i].query.slice(0, 60)}</p></td>
           <td key={i + 1}>More Info</td>
-          <td>{latestTen[i].queryTime}</td>
+          <td>{latestFive[i].queryTime}</td>
         </tr>
       )
     }
