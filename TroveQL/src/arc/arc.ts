@@ -10,8 +10,8 @@ export class TroveCache {
   b1: CacheType;
   b2: CacheType;
 
-  constructor(size: number) {
-    this.capacity = size;
+  constructor(capacity: number) {
+    this.capacity = capacity;
     this.p = 0.5;
     this.t1 = new Map();
     this.t2 = new Map();

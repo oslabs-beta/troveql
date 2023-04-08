@@ -14,6 +14,7 @@
 .wide-container {
   @extend .small-container;
   width: 37.5rem;
+  height: auto;
   grid-column: span 2;
 }
 
@@ -39,24 +40,108 @@
 }
 
 .chart-cont {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 100%;
   height: 100%;
+}
+
+#custom-chart-legend li {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  width: 110px;
+  font-size: 12px;
 }
 
 #rac-data {
   width: 95%;
 }
 
-.small-container {
-  #rac-data-wrapper {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 4em;
-  }
+#rac-data-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 4em;
+}
 
-  #ideal-size {
-    padding: 0.5em;
-    font-size: 0.8rem;
+#ideal-size {
+  align-self: self-start;
+  font-size: 0.8rem;
+}
+
+.wide-container {
+  .query-list-table {
+    border-collapse: collapse;
+    margin: 0.5em 1.5em;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    min-width: 400px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+
+    thead tr {
+      background-color: $secondary;
+      color: #ffffff;
+      text-align: left;
+    }
+
+    th,
+    td {
+      padding: 12px 15px;
+    }
+
+    td:nth-child(4) {
+      text-align: end;
+    }
+
+    tr {
+      border-bottom: 1px solid #dddddd;
+    }
+
+    tr:nth-of-type(even) {
+      background-color: #f3f3f3;
+    }
+
+    tr:last-of-type {
+      border-bottom: 2px solid $light-gray;
+    }
+
+    .ellipsis {
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transition: all 0.2s linear;
+      white-space: nowrap;
+      // padding:.5rem 1rem;
+    }
+
+    .ellipsis:focus,
+    .ellipsis:hover {
+      color: transparent;
+    }
+
+    .ellipsis:focus:after,
+    .ellipsis:hover:after {
+      content: attr(data-text);
+      overflow: visible;
+      text-overflow: inherit;
+      background: #fff;
+      position: absolute;
+      left: auto;
+      top: auto;
+      width: auto;
+      max-width: 20rem;
+      border: 1px solid #eaebec;
+      padding: 0 0.5rem;
+      box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.28);
+      white-space: normal;
+      word-wrap: break-word;
+      display: block;
+      color: black;
+      margin-top: -1.25rem;
+    }
   }
 }

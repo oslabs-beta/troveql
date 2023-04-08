@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.TroveCache = void 0;
 const cacheItem_1 = require("./cacheItem");
 class TroveCache {
-    constructor(size) {
+    constructor(capacity) {
         this.get = (query) => {
             switch (true) {
                 // if graphQL query is in t1 or t2 map obj // if yes 
@@ -128,7 +128,7 @@ class TroveCache {
                 console.log(cacheNames[i], caches[i]);
             }
         };
-        this.capacity = size;
+        this.capacity = capacity;
         this.p = 0.5;
         this.t1 = new Map();
         this.t2 = new Map();

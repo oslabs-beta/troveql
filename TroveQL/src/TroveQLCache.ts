@@ -5,20 +5,19 @@ import { Variables, QueryInfo } from './types';
 import { ResponseType, CacheSizeType } from './arc/arcTypes';
 
 class TroveQLCache {
-  // pass TroveQLCache the size of the cache to use, the graphQL API to query, if you would like to use TroveMetrics, and an object with the names of your graphQL API's Mutation types and the object types they mutate (if applicable)
+  // pass TroveQLCache the capacity of the cache, the graphQL API to query, if you would like to use TroveMetrics, and an object with the names of your graphQL API's Mutation types and the object type(s) they mutate (if applicable)
   cache: TroveCache;
   constructor(
-    size: number,
+    public capacity: number,
     public graphQLAPI: string,
     public useTroveMetrics: boolean = false,
     public mutations?: Variables
   ) {
-    this.cache = new TroveCache(size);
-    this.capacity = size;
+    this.cache = new TroveCache(capacity);
+    this.capacity = capacity;
     this.graphQLAPI = graphQLAPI;
     this.useTroveMetrics = useTroveMetrics;
     this.mutations = mutations;
-    console.log('this.mutations: ', mutations);
   }
 
   // queryCache is the Express middleware that parses the incoming GraphQL API query and gets/sets the cache
@@ -27,12 +26,14 @@ class TroveQLCache {
     res: Response,
     next: NextFunction
   ): void => {
+    // startTime is for TM, otherwise just grab the query string and its variables (if defined) from the request body
     const startTime: number = this.useTroveMetrics ? Date.now() : null;
     const query: string = req.body.query;
     const variables: Variables = req.body.variables;
     console.log('>>>query: ', query);
     console.log('>>>variables: ', variables);
 
+    // declare variables for the operation type ('query' or 'mutation') and the Type of query (this is based on the graphQL schema)
     const { operation, objectType }: QueryInfo = this.parseQuery(
       req.body.query
     );
@@ -90,6 +91,10 @@ class TroveQLCache {
             console.log('>>>query data from /graphql api: ', data);
             console.log('>>>about to set the cache key: ', cacheKey);
             res.locals.value = data;
+            
+            // the set method will use the value of 'query' (equal to cacheKey - normalized to be the query Type and the id, if applicable) for the cacheKey (what you use to invoke the get method)
+            // & will use the value of 'result' (the data from the graphQL API) for the cache value
+            // the 'miss' value just tells the cache HOW it previously missed to inform how to cache it (based on the ARC algorithm)
             const cacheValue: ResponseType = {
               query: cacheKey,
               result: data,
@@ -125,6 +130,7 @@ class TroveQLCache {
     // (3) mutations always return the object mutated
     if (operation === 'mutation') {
       console.log('>>>in the mutation if statement of the TroveQL middleware');
+      // if it's a mutation, forward this query to the graphQL API to execute the mutation
       fetch(this.graphQLAPI, {
         method: 'POST',
         headers: {
@@ -137,11 +143,14 @@ class TroveQLCache {
           res.locals.value = data;
           console.log('>>>mutation data from /graphql api: ', data);
 
-          const mutationObjType: string = this.mutations[objectType]; // assuming mutations only impact one Type
+          // assumption #1 - get the Type this mutation mutates on the graphQL schema
+          const mutationObjType: string = this.mutations[objectType];
           console.log('>>>mutationObjType: ', mutationObjType);
+          // assumption #2 - build the cacheKey with the query Type for this mutation plus the id
           const mutationCacheKey: string =
-            mutationObjType + '_' + data.data[objectType].id; //this seems pretty hard-coded currently...
+            mutationObjType + '_' + data.data[objectType].id;
           console.log('>>>mutationCacheKey: ', mutationCacheKey);
+          // check if the Type this mutation mutated is stored in the cache
           const mutationCacheVal: ResponseType =
             this.cache.get(mutationCacheKey);
           console.log('>>>mutationCacheVal: ', mutationCacheKey);
@@ -159,16 +168,15 @@ class TroveQLCache {
               this.cache.removeOne(mutationCacheKey);
             }
 
-            /*
+          
             // if the mutation was an add or it was an update but we didn't find it in the cache then we would treat it as an add to the cache
-              // add the fresh data to the cache
-            const cacheValue: ResponseType = {
-              query: cacheKey,
-              result: data,
-              miss: mutationCacheVal.miss, // but we're not requesting the data, we're just updating it...
-            };
-            this.cache.set(cacheValue);
-          */
+              // add the fresh data to the cache - we do not know if the mutation was an add or delete so we can't set the data to the cache at this point...
+            // const cacheValue: ResponseType = {
+            //   query: mutationCacheKey,
+            //   result: data,
+            //   miss: mutationCacheVal.miss,
+            // };
+            // this.cache.set(cacheValue);
           }
 
           // need to delete any "get all" queries - assuming there are only 2 types of queries: get one or get all
@@ -180,7 +188,7 @@ class TroveQLCache {
           for (const key of cacheKeys) {
             // this is based on how we store cache keys - if it doesn't include '_' then it's a get all query
             if (!key.includes('_')) {
-              this.cache.removeOne(key); // if we update the details of a movie, the query to get a single actor who's in that movie (if we had such a query) would not be updated...
+              this.cache.removeOne(key); // NOTE: if we update the details of a movie, the query to get a single actor who's in that movie (if we had such a query) would not be updated...
             }
           }
 
