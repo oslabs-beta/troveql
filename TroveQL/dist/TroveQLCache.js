@@ -181,7 +181,9 @@ class TroveQLCache {
         };
         // parseQuery checks if the graphQL API query is a query or a mutation type
         this.parseQuery = (query) => {
+            console.log('>>>query', query);
             const parsedQuery = (0, graphql_1.parse)(query);
+            console.log('>>>parsedQuery', parsedQuery);
             // declare variable operations and assign it with 'query' or 'mutation' from parsedQuery
             const operation = parsedQuery['definitions'][0].operation;
             // let's assume we're only going to query a single object Type from the graphQL API Schema
