@@ -10,7 +10,9 @@
   ],
   "scripts": {
     "build": "tsc --watch",
-    "test": "jest"
+    "test": "jest",
+    "test-cache": "npm test -- troveql-cache.test.js",
+    "test-middleware": "npm test -- troveqlQLCache.test.js"
   },
   "repository": "https://github.com/oslabs-beta/troveql",
   "author": "Erika Jung, Sam Henderson, Tricia Yeh, & Alex Klein",
@@ -22,6 +24,7 @@
   },
   "devDependencies": {
     "@types/node": "^18.15.5",
+    "jest": "^29.5.0",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.2"
   }

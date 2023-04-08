@@ -175,7 +175,7 @@ class TroveQLCache {
             })
                 .then((r) => r.json())
                 .then((data) => {
-                console.log(data);
+                console.log('>>>sendData successful: ', data);
             })
                 .catch((err) => console.log(err));
         };

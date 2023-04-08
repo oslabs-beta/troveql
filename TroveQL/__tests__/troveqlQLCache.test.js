@@ -1,104 +1,96 @@
 // TESTS FOR TROVEQL SERVER MIDDLEWARE 
+const { beforeEach, before } = require('node:test');
 const { TroveQLCache } = require('../dist/TroveQLCache');
+const { clear } = require('console');
 
-describe('TroveQL Middleware', () => {
-  let troveQL;
+// queryCache method
 
-  beforeEach(() => {
-    troveQL = new TroveQLCache(5, 'http://localhost:4000/graphql', true);
+//troveMetrics method
+describe('troveMetrics method', () => {
+  const troveQL = new TroveQLCache(5, '', true);
+  let clearCache;
+
+  // beforeEach(() => {
+  // })
+
+  it('clears the cache', () => {
+    clearCache = true;
+    troveQL.cache.set({
+      query: 'query', 
+      result: 'result',
+      miss: 'miss'
+    })
+    troveQL.troveMetrics({ body: { clearCache } }, { locals: {} }, () => {});
+
+    expect(troveQL.cache.cacheSize().t1).toBe(0);
+    expect(troveQL.cache.cacheSize().t2).toBe(0);
+    expect(troveQL.cache.cacheSize().b1).toBe(0);
+    expect(troveQL.cache.cacheSize().t2).toBe(0);
   })
 
-
-  // Test suite for queryCache 
-  describe('queryCache', () => {
-
-  });
-
-
-  // Test suite for troveMetrics
-    // if req.body.clearCache is true
-    // expect res.locals.message to be {cacheEmpty: true}
-  describe('troveMetrics', () => {
-
-  });
-
-
-  // Test suite for sendData
-    // Mock api calls
-    // check if data passed in is valid
-    // check if response comes back is success
-    // check if error is handled correctly if respone failed to come back
-  describe('sendData', () => {
-    // Mock api call
-    beforeEach(() => {
-      global.fetch = jest.fn().mockResolvedValue({
-        json: () => Promise.resolve({status: 'success'}),
-      })
-    });
-
-    // Reset mock API call after each test case
-    afterEach(() => {
-      jest.restoreAllMocks();
+  it('does not clear the cache', () => {
+    clearCache = false;
+    troveQL.cache.set({
+      query: 'query', 
+      result: 'result',
+      miss: 'miss'
     })
+    troveQL.troveMetrics({ body: { clearCache } }, { locals: {} }, () => {});
 
-    it ('sends the expected data to the server', async () => {
-      // Check example body
-      const cacheHit = true;
-      const query = 'query { movies { id title } }';
-      const variables = { id: 10 };
-      const cacheSize = { t1: 4, t2: 1, b1: 0, b2: 0, p: 0.5 };
-      const queryTime = 2;
-      const size = 5;
+    expect(troveQL.cache.cacheSize().t1).toBe(1);
+    expect(troveQL.cache.cacheSize().t2).toBe(0);
+    expect(troveQL.cache.cacheSize().b1).toBe(0);
+    expect(troveQL.cache.cacheSize().t2).toBe(0);
+  })
 
-      await troveQL.sendData(cacheHit, query, variables, cacheSize, queryTime, size);
+  // describe('clearCache is truthy on the request body', () => {
+  //   it('clears the cache', () => {
+  //     expect(troveQL.cache.cacheSize().t1).toBe(0);
+  //     expect(troveQL.cache.cacheSize().t2).toBe(0);
+  //     expect(troveQL.cache.cacheSize().b1).toBe(0);
+  //     expect(troveQL.cache.cacheSize().t2).toBe(0);
+  //   })
+  // })
 
-      expect(fetch).toHaveBeenCalledWith('http://localhost:3333/api', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          cacheHit,
-          query,
-          variables,
-          cacheSize,
-          queryTime,
-          size,
-        }),
-      });
-    })
-  });
+  // describe('clearCache is falsy on the request body', () => {
+  //   it('does not clear the cache', () => {
+  //     expect(troveQL.cache.cacheSize().t1).toBe(1);
+  //     expect(troveQL.cache.cacheSize().t2).toBe(0);
+  //     expect(troveQL.cache.cacheSize().b1).toBe(0);
+  //     expect(troveQL.cache.cacheSize().t2).toBe(0);
+  //   })
+  // })
+})
 
+// sendData method - the function simply invokes a fetch call to the TM API without any additional logic so there's nothing to test
 
-  // Test suite for parseQuery
-  describe('parseQuery', () => {
-    it('returns query if the query is a query string', () => {
+// parseQuery method
+describe('parseQuery method', () => {
+  const troveQL = new TroveQLCache(5, '', true);
+
+  describe('Query type', () => {
+    it ('returns an object with the query operation and its object type', () => {
       const query = `query {
-          movies {
-            id
-            title
-          }
-        }`;
-      expect(troveQL.parseQuery(query)).toEqual('query');
-    }); 
+        movies {
+          id
+          title
+        }
+      }`;
+      expect(troveQL.parseQuery(query).operation).toBe('query');
+      expect(troveQL.parseQuery(query).objectType).toBe('movies');
+    })
+  })
 
-    it('returns mutation if the query is a mutation string', () => {
+  describe('Mutation type', () => {
+    it ('returns an object with the mutation operation and its object type', () => {
       const query = `mutation CreateMovie($title: String) {
         createMovie(title: $title) {
           id
           title
         }
       }`;
-      expect(troveQL.parseQuery(query)).toEqual('mutation');
-    }); 
-    
-    // it('throws an error if the query is not a query or mutation string', () => {
-    //   const invalidQuery = `subscription {
-    //     movieAdded {
-    //       id
-    //       title
-    //     }
-    //   }`;
-    //   expect(() => troveQL.parseQuery(invalidQuery)).toThrow('Invalid query type');
-    // });
-  });
-
+      expect(troveQL.parseQuery(query).operation).toBe('mutation');
+      expect(troveQL.parseQuery(query).objectType).toBe('createMovie');
+    })
+  })
 });
