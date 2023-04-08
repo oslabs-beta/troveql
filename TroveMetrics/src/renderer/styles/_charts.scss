@@ -46,22 +46,93 @@
   width: 95%;
 }
 
-.small-container {
-  #rac-data-wrapper {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 4em;
-  }
 
-  #ideal-size {
-    background-color: $light-gray;
-    padding: 0.5em;
-    border-radius: 0.2rem;
-    align-self:self-start;
-    font-size: .8rem;
-    box-shadow: inset 0.1rem 0.1rem 0.4rem rgb(201, 201, 201);
-    border-radius: 0.2rem;
-  }
-  
+#rac-data-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 4em;
 }
+
+#ideal-size {
+  background-color: $light-gray;
+  padding: 0.5em;
+  border-radius: 0.2rem;
+  align-self:self-start;
+  font-size: .8rem;
+  box-shadow: inset 0.1rem 0.1rem 0.4rem rgb(201, 201, 201);
+  border-radius: 0.2rem;
+}  
+
+
+.wide-container {
+  .query-list-table {
+    border-collapse: collapse;
+    margin: 0.5em 1.5em;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    min-width: 400px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+
+    thead tr {
+      background-color: #009879;
+      color: #ffffff;
+      text-align: left;
+    }
+
+    th, td {
+    padding: 12px 15px;
+    }
+
+    td:nth-child(4) {text-align: end;}
+
+    tr {
+      border-bottom: 1px solid #dddddd;
+    }
+  
+    tr:nth-of-type(even) {
+      background-color: #f3f3f3;
+    }
+  
+    tr:last-of-type {
+      border-bottom: 2px solid #009879;
+    }
+
+    .ellipsis {
+        display: block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        transition: all .2s linear;
+        white-space: nowrap;
+        // padding:.5rem 1rem;
+    }
+
+    .ellipsis:focus, .ellipsis:hover {
+      color:transparent;
+    }
+
+    .ellipsis:focus:after,.ellipsis:hover:after{
+        content:attr(data-text);
+        overflow: visible;
+        text-overflow: inherit;
+        background: #fff;
+        position: absolute;
+        left:auto;
+        top:auto;
+        width: auto;
+        max-width: 20rem;
+        border: 1px solid #eaebec;
+        padding: 0 .5rem;
+        box-shadow: 0 2px 4px 0 rgba(0,0,0,.28);
+        white-space: normal;
+        word-wrap: break-word;
+        display:block;
+        color:black;
+        margin-top:-1.25rem;
+      }
+  }
+}
+
+
+

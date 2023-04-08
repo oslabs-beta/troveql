@@ -5,6 +5,8 @@ import QueryDisplay from './QueryDisplay.jsx';
 import TimeChart from './TimeChart.jsx';
 import RACChart from './RACChart.jsx';
 import RACData from './RACData.jsx';
+import QueryList from './QueryList.jsx'
+
 import Header from './Header/Header.jsx';
 import QueryTime from './QueryTime.jsx';
 
@@ -22,6 +24,7 @@ function Dashboard() {
     RACChart: {name: 'RAC Info', display: true},
     RACData: {name: 'RAC Pie', display: true},
     QueryTime: {name: 'Query Times', display: false},
+    QueryList: {name: 'Query List', display: true},
   })
 
   function renderCharts() {
@@ -33,6 +36,7 @@ function Dashboard() {
     if (chartState.RACChart.display) chartDisplay.push(<RACChart key='4' cacheData={cacheData} />)
     if (chartState.RACData.display) chartDisplay.push(<RACData key='5' cacheData={cacheData} />)
     if (chartState.QueryTime.display) chartDisplay.push(<QueryTime key='6' cacheData={cacheData} />)
+    if (chartState.QueryList.display) chartDisplay.push(<QueryList key='7' cacheData={cacheData} />)
     
     return chartDisplay
   }
