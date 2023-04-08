@@ -4,7 +4,8 @@ exports.TroveQLCache = void 0;
 const arc_1 = require("./arc/arc");
 const graphql_1 = require("graphql");
 class TroveQLCache {
-    constructor(size, graphQLAPI, useTroveMetrics = false, mutations) {
+    constructor(capacity, graphQLAPI, useTroveMetrics = false, mutations) {
+        this.capacity = capacity;
         this.graphQLAPI = graphQLAPI;
         this.useTroveMetrics = useTroveMetrics;
         this.mutations = mutations;
@@ -188,8 +189,8 @@ class TroveQLCache {
             console.log('>>>parsedQuery Type: ', objectType);
             return { operation, objectType };
         };
-        this.cache = new arc_1.TroveCache(size);
-        this.capacity = size;
+        this.cache = new arc_1.TroveCache(capacity);
+        this.capacity = capacity;
         this.graphQLAPI = graphQLAPI;
         this.useTroveMetrics = useTroveMetrics;
         this.mutations = mutations;
