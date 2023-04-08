@@ -13,11 +13,13 @@ function QueryList({ cacheData }) {
 
     // create row for each query cacheData in latestFive
     for (let i = 0; i < latestFive.length; i++) {
+      const hitMiss = latestFive[i].cacheHit ? "Hit" : "Miss"
+
       list.push(
         <tr key={i + 1}>
           <td>{i + 1}</td>
           <td><p className="ellipsis" data-text={latestFive[i].query}>{latestFive[i].query.slice(0, 60)}</p></td>
-          <td key={i + 1}>More Info</td>
+          <td key={i + 1}>{hitMiss}</td>
           <td>{latestFive[i].queryTime}</td>
         </tr>
       )
@@ -34,7 +36,7 @@ function QueryList({ cacheData }) {
             <tr>
               <th key="ID">#</th>
               <th key="queryName">Query</th>
-              <th key="queryDetails">Details</th>
+              <th key="queryHit">Hit/Miss</th>
               <th key="queryResTime">Resp. Time (ms)</th>
             </tr>
           </thead>

@@ -76,7 +76,7 @@
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 
     thead tr {
-      background-color: #009879;
+      background-color: $secondary-data;
       color: #ffffff;
       text-align: left;
     }
@@ -96,7 +96,7 @@
     }
   
     tr:last-of-type {
-      border-bottom: 2px solid #009879;
+      border-bottom: 2px solid $light-gray;
     }
 
     .ellipsis {
