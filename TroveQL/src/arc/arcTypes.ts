@@ -1,25 +1,30 @@
-type Variables = {
-  [key: string]: string;
-};
-type RequestBody = {
-  query: string;
-  variables: Variables;
-};
 type ItemType = {
   value: string;
   hits: number;
 };
+
+// Map Object with 
+  // key: string 
+  // value: either ItemType or bolean
 type CacheType = Map<string, ItemType | boolean>;
 
-type getResponse = {
+type ResponseType = {
+  query?: string;
   result: string;
   miss: string | boolean;
 };
 
-type fetchResponse = {
-  query: string;
-  result: string;
-  miss: string;
+type CacheSizeType = {
+  t1: number;
+  t2: number;
+  b1: number;
+  b2: number;
+  p: number;
 };
 
-export { RequestBody, ItemType, CacheType, getResponse, fetchResponse };
+export {
+  ItemType,
+  CacheType,
+  ResponseType,
+  CacheSizeType,
+};

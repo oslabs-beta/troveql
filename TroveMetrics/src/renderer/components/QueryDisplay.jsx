@@ -1,29 +1,34 @@
 import * as React from 'react';
-import { Data } from '../../server/database/test';
 
-function QueryDisplay({ query, variables }) {
-  // return <p>QueryDisplay</p>
+function QueryDisplay({ cacheData }) {
+  let vars = [];
+  let query = '';
 
-  const vars = [];
-  for (const key in variables) {
-    vars.push(
-      <p key={key}>{key} : {variables[key]}</p>
-    );
-  };
+  // If no data, display nothing and avoid a crash
+  if (cacheData && cacheData.queries && cacheData.queries.length > 0) {
+    let variables = cacheData.queries[cacheData.queries.length - 1].variables;
+    query = cacheData.queries[cacheData.queries.length - 1].query;
+
+    for (const key in variables) {
+      vars.push(
+        <p key={key}>
+          {key} : {variables[key]}
+        </p>
+      );
+    }
+  }
 
   return (
     <div className="small-container">
-      <h3>Most Recent</h3>
-      <h5>Query</h5>
-      <div className="query-display">
-        {query}
-      </div>
+      <h3>Last Query</h3>
+      <h5>Query String</h5>
+      <div className="query-display">{query}</div>
       <h5>Arguments</h5>
-      <div className="query-display">
+      <div id="arguments" className="query-display">
         {vars}
       </div>
     </div>
-  )
+  );
 }
 
 export default QueryDisplay;

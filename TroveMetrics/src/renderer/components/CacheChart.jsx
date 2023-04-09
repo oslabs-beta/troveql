@@ -1,43 +1,42 @@
 import * as React from 'react';
-import { Pie } from "react-chartjs-2";
-import { Data } from '../../server/database/test';
-import variables from '../styles/_variables.module.scss'
+import { Pie } from 'react-chartjs-2';
+import variables from '../styles/_variables.module.scss';
 
-function CacheChart({ data }) {
-  // return <p>CacheChart</p>
+function CacheChart({ cacheData }) {
+  let dataSet;
+
+  // If no data, display 0, 0 and avoid a crash
+  cacheData ? (dataSet = Object.values(cacheData.cache)) : (dataSet = [0, 0]);
 
   const chartData = {
-    labels: Object.keys(data),
+    labels: ['HIT', 'MISS'],
     datasets: [
       {
         label: 'Count',
-        data: Object.values(data),
-        backgroundColor: [
-          variables.orange, //green for HIT
-          variables.lightGray //red for MISS
-        ],
+        data: dataSet,
+        backgroundColor: [variables.tertiary, variables.lightGray],
         //can add more style properties here like borderColor, borderWidth, etc.
-      }
-    ]
-  }
+      },
+    ],
+  };
 
   return (
-    <div className="small-container">
-      <h3>CacheChart</h3>
+    <div className="small-container grid-item">
+      <h3>Latest Hit Rate</h3>
       <Pie
         data={chartData}
         options={{
           plugins: {
             title: {
               display: false,
-              text: "Cache Usage"
+              text: 'Cache Usage',
             },
             legend: {
               display: true,
               position: 'bottom',
               align: 'left',
-            }
-          }
+            },
+          },
         }}
       />
     </div>

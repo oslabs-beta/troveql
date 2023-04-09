@@ -1,6 +1,7 @@
 TroveMetrics/node_modules/
 TroveMetrics/package-lock.json
 TroveMetrics/out/
+TroveMetrics/.env
 
 TroveQL/node_modules/
 TroveQL/package-lock.json

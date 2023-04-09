@@ -1,44 +1,132 @@
-
-#dashboard {
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: center;
-  align-items: center;
-  width: 90%;
-  background-color: $background;
-  gap: 1.5rem;
-  margin: 1rem;
+#window {
+  width: 100vw;
+  height: 100vh;
 }
 
-.small-container {
+#dashboard {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 18rem);
+  justify-content: center;
+  background-color: $background;
+  gap: 1.5rem;
+  padding: 4rem 1rem 1rem 1rem;
+}
+
+#header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  max-height: 3rem;
+  padding: 0.5rem;
+  background-color: $dark-gray;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+  display: flex;
+  align-items: start;
+  .icon {
+    margin: 0.5rem 1rem;
+  }
+
+  #troveql-logo {
+    margin: 0rem 2rem 0rem 2rem;
+    height: 2rem;
+  }
+}
+
+#config-cont {
   display: flex;
   flex-direction: column;
   align-items: start;
-  background-color: white;
-  width: 18rem;
-  height: 20rem;
-  padding: 1rem;
-  box-shadow: .2rem .2rem .4rem gray;
-  border-radius: .2rem;
-  gap: .8rem;
 }
-
-.query-display {
-  background-color: $light-gray;
-  width: 100%;
-  height: 100%;
-  box-shadow: inset .2rem .2rem .4rem gray;
-  border-radius: .2rem;
-  padding: 1rem;
-  overflow:auto;
-}
-
-#App {
+#config-display {
+  margin-top: 0.2rem;
+  color: white;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  background-color: $dark-gray;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+  padding: 0.5rem;
+  border-radius: 0.2rem;
+  gap: 0.2rem;
+  width: 100%;
+  label {
+    cursor: pointer;
+    padding: 0.5rem;
+    display: flex;
+    gap: 0.73rem;
+    &:hover {
+      background-color: rgb(65, 65, 65);
+    }
+  }
+}
+
+#clear-buttons-container {
+  display: flex;
   align-items: center;
-  width: 100vw;
-  height: 100vh;
+}
+
+#header-button-container {
+  align-items: flex-start;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.button-header {
+  background-color: #222222;
+  border: 1px solid #4b4b4b;
+}
+
+.button-metric {
+  color: #4b4b4b;
+  background-color: #ffffff;
+  padding: 0.5rem 1rem;
+  border: 1px solid #4b4b4b;
+
+  &:hover {
+    background-color: $light-gray;
+    border-color: $dark-gray;
+  }
+  &:focus-visible {
+    box-shadow: #222222 0 0 0 2px, rgba(255, 255, 255, 0.8) 0 0 0 4px;
+    transition: box-shadow 0.2s;
+  }
+
+  &:active {
+    transform: scale(0.96);
+    border-color: #222222;
+  }
+}
+
+button {
+  height: inherit;
+  text-align: center;
+  display: flex;
+  padding-right: 1rem;
+  align-items: center;
+  border-radius: 4px;
+  box-sizing: border-box;
+  color: #d7d7d7;
+  cursor: pointer;
   margin: 0;
 
+  position: relative;
+  touch-action: manipulation;
+  transition: box-shadow 0.2s, -ms-transform 0.1s, -webkit-transform 0.1s,
+    transform 0.1s;
+  width: auto;
+}
+button:hover {
+  border-color: $tertiary;
+}
+button:focus-visible {
+  box-shadow: #222222 0 0 0 2px, rgba(255, 255, 255, 0.8) 0 0 0 4px;
+  transition: box-shadow 0.2s;
+}
+
+button:active {
+  transform: scale(0.96);
+  border-color: #222222;
 }

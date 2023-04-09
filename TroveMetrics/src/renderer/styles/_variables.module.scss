@@ -1,9 +1,45 @@
-$background: rgb(220, 220, 220);
-$orange: rgb(254	169	79);
-$light-gray: rgb(243, 243, 243);
+@font-face {
+  font-family: 'IBMPlexMono';
+  src: url('../assets/IBMPlexMono-Regular.ttf');
+}
+// COLOR PALETTE OLD
+// $background: rgb(220, 220, 220);
+// $orange: rgb(254	169	79);
+// $lightOrange: rgb(252, 199, 142);
+// $light-gray: rgb(243, 243, 243);
+// $font-dark: rgb(74, 74, 74);
+// $dark-gray: #2c2c2c;
+
+// COLOR PALETTE NEW
+$background: #cdcbcd;
+// $orange: #faa916;
+
+//$secondary-data: #60992D;
+$primary: #faa916;
+$primary-light: #fce0c3;
+$secondary: #76b8e5;
+$secondary-light: #ddedf8;
+$tertiary: #63cfb6;
+$light-orange: #fce0c3;
+$light-gray: rgb(220, 220, 220);
+$light-red: #f5555b;
+$font-dark: rgb(74, 74, 74);
+$dark-gray: #1b1b1e;
+$global-font: 'IBM Plex Mono', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+  Roboto, Helvetica, Arial, sans-serif;
 
 :export {
-  orange: $orange;
+  primary: $primary;
+  primaryLight: $primary-light;
+  secondary: $secondary;
+  secondaryLight: $secondary-light;
+  tertiary: $tertiary;
+
   background: $background;
-  lightGray: $light-gray
+
+  lightOrange: $primary-light;
+  lightGray: $light-gray;
+  lightRed: $light-red;
+  fontDark: $font-dark;
+  globalFont: $global-font;
 }

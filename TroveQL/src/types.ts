@@ -1,8 +1,12 @@
 export type Variables = {
-  [ key : string ] : string
+  [key: string]: string;
 };
 
-export type RequestBody = {
-  query: string,
-  variables: Variables
-}
+export type QueryInfo = {
+  operation: string;
+  objectType: string;
+};
+
+// export type Mutations = {
+//   [ key: string ]: string[]
+// }
