@@ -6,10 +6,10 @@ function TimeChart({ cacheData, status }) {
   let startingData = null;
 
   const clearData = {
-    hitData: [{x: 0, y: 0}],
-    missData: [{x: 0, y: 0}],
+    hitData: [{ x: 0, y: 0 }],
+    missData: [{ x: 0, y: 0 }],
     startingTime: null,
-  }
+  };
 
   // If no data, display 0, 0 and avoid a crash
   if (cacheData && cacheData.cache) {
@@ -19,7 +19,7 @@ function TimeChart({ cacheData, status }) {
       startingTime: new Date(),
     };
   } else {
-    startingData = clearData
+    startingData = clearData;
   }
 
   const [timeChartData, setTimeChartData] = React.useState(startingData);
@@ -44,18 +44,18 @@ function TimeChart({ cacheData, status }) {
     datasets: [
       {
         label: 'Hits',
-        data: timeChartData.hitData, 
+        data: timeChartData.hitData,
         fill: true,
         tension: 0.1,
-        backgroundColor: [variables.orange],
+        backgroundColor: [variables.tertiary],
         pointRadius: 6,
       },
       {
         label: 'Misses',
-        data: timeChartData.missData, 
+        data: timeChartData.missData,
         fill: true,
         tension: 0.1,
-        backgroundColor: [variables.secondaryData],
+        backgroundColor: [variables.lightGray],
         pointRadius: 6,
       },
     ],
@@ -77,7 +77,9 @@ function TimeChart({ cacheData, status }) {
     <div className="wide-container">
       <div className="chart-header">
         <h3>Cache Hits</h3>
-        <button onClick={handleTimeReset}>RESET TIME</button>
+        <button className="button-metric" onClick={handleTimeReset}>
+          RESET TIME
+        </button>
       </div>
       <div className="chart-cont">
         <Line
@@ -106,7 +108,6 @@ function TimeChart({ cacheData, status }) {
                   display: true,
 
                   text: 'Time (seconds)',
-
                 },
                 type: 'linear',
                 beginAtZero: true,

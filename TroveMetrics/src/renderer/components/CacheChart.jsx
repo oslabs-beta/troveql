@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { Pie } from "react-chartjs-2";
-import variables from '../styles/_variables.module.scss'
+import { Pie } from 'react-chartjs-2';
+import variables from '../styles/_variables.module.scss';
 
 function CacheChart({ cacheData }) {
   let dataSet;
 
   // If no data, display 0, 0 and avoid a crash
-  cacheData ? dataSet = Object.values(cacheData.cache) : dataSet = [0, 0]
+  cacheData ? (dataSet = Object.values(cacheData.cache)) : (dataSet = [0, 0]);
 
   const chartData = {
     labels: ['HIT', 'MISS'],
@@ -14,14 +14,11 @@ function CacheChart({ cacheData }) {
       {
         label: 'Count',
         data: dataSet,
-        backgroundColor: [
-          variables.orange, 
-          variables.secondaryData
-        ],
+        backgroundColor: [variables.tertiary, variables.lightGray],
         //can add more style properties here like borderColor, borderWidth, etc.
-      }
-    ]
-  }
+      },
+    ],
+  };
 
   return (
     <div className="small-container grid-item">
@@ -32,14 +29,14 @@ function CacheChart({ cacheData }) {
           plugins: {
             title: {
               display: false,
-              text: "Cache Usage"
+              text: 'Cache Usage',
             },
             legend: {
               display: true,
               position: 'bottom',
               align: 'left',
-            }
-          }
+            },
+          },
         }}
       />
     </div>

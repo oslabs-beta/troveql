@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { Bar } from 'react-chartjs-2';
-import variables from '../styles/_variables.module.scss'
+import variables from '../styles/_variables.module.scss';
 
-function QueryTime ({ cacheData }) {
+function QueryTime({ cacheData }) {
   // record the indices of Queries in the cacheData.queries array (skipping over Mutations) and their query time
   const queryIndex = [-1];
   const queryTime = [0];
@@ -20,9 +20,9 @@ function QueryTime ({ cacheData }) {
         queryTime.push(queries[i].queryTime + 1);
         // display HITs in orange & MISSes in gray
         if (queries[i].cacheHit) {
-          barColors.push(variables.orange)
+          barColors.push(variables.tertiary);
         } else {
-          barColors.push(variables.lightGray)
+          barColors.push(variables.lightGray);
         }
       }
     }
@@ -44,10 +44,10 @@ function QueryTime ({ cacheData }) {
         li.appendChild(boxSpan);
         li.appendChild(document.createTextNode('Cache Hit'));
         ul.appendChild(li);
-  
+
         chartLegend.appendChild(ul);
       }
-    }
+    },
   };
 
   const options = {
@@ -59,21 +59,25 @@ function QueryTime ({ cacheData }) {
       tooltip: {
         callbacks: {
           title: (context) => '',
-          footer: (context) => 'Query String: ' + queries[queryIndex[context[0].dataIndex]].query,
+          footer: (context) =>
+            'Query String: ' + queries[queryIndex[context[0].dataIndex]].query,
           afterFooter: (context) => {
-            return queries[queryIndex[context[0].dataIndex]].variables 
-              ? 'Query Variables: ' + JSON.stringify(queries[queryIndex[context[0].dataIndex]].variables) 
+            return queries[queryIndex[context[0].dataIndex]].variables
+              ? 'Query Variables: ' +
+                  JSON.stringify(
+                    queries[queryIndex[context[0].dataIndex]].variables
+                  )
               : '';
-          }
-        }
-      }
+          },
+        },
+      },
     },
     scales: {
       x: {
         title: {
           display: true,
-          text: 'Query'
-        }
+          text: 'Query',
+        },
       },
       y: {
         title: {
@@ -82,7 +86,7 @@ function QueryTime ({ cacheData }) {
         },
         type: 'logarithmic',
       },
-    }
+    },
   };
 
   const data = {
@@ -91,22 +95,27 @@ function QueryTime ({ cacheData }) {
       {
         label: 'Response Time (ms)',
         data: queryTime,
-        backgroundColor: barColors
-      }
-    ]
-  }
+        backgroundColor: barColors,
+      },
+    ],
+  };
 
   return (
-    <div className='wide-container'>
-      <div className='chart-header'>
+    <div className="wide-container">
+      <div className="chart-header">
         <h3>Query Response Times (+ 1 ms)</h3>
       </div>
-      <div className='chart-cont'>
-        <div id='custom-chart-legend'></div>
-        <Bar data={data} options={options} redraw={true} plugins={[htmlLegendPlugin]}/>
+      <div className="chart-cont">
+        <div id="custom-chart-legend"></div>
+        <Bar
+          data={data}
+          options={options}
+          redraw={true}
+          plugins={[htmlLegendPlugin]}
+        />
       </div>
     </div>
-  )
+  );
 }
 
 export default QueryTime;

@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Pie } from "react-chartjs-2";
-import variables from '../styles/_variables.module.scss'
+import { Pie } from 'react-chartjs-2';
+import variables from '../styles/_variables.module.scss';
 
 function RACData({ cacheData }) {
   // Set default values if no data
@@ -10,54 +10,55 @@ function RACData({ cacheData }) {
     const cacheSize = cacheData.queries.slice(-1)[0].cacheSize;
     const total = cacheData.capacity;
     const { t1, t2, p } = cacheSize;
-    dataSet = [(total-t1-t2)/total*100, t1/total*100, t2/total*100];
+    dataSet = [
+      ((total - t1 - t2) / total) * 100,
+      (t1 / total) * 100,
+      (t2 / total) * 100,
+    ];
     idealSize = p;
   } else {
     dataSet = [0, 0, 0];
   }
 
-
   const chartData = {
-    labels: ['Remaining Size', 'T1', 'T2'],
+    labels: ['Remaining', 'T1', 'T2'],
     datasets: [
       {
         label: '%',
         data: dataSet,
         backgroundColor: [
-          variables.secondaryData,
-          variables.orange, 
-          variables.lightOrange,
+          variables.lightGray,
+          variables.primary,
+          variables.secondary,
         ],
         //can add more style properties here like borderColor, borderWidth, etc.
-      }
-    ]
-  }
+      },
+    ],
+  };
 
   return (
-    <div className="small-container">
+    <div className="small-container grid-item">
       <div id="rac-data-wrapper">
         <h3>RAC Size</h3>
         <p id="ideal-size">Ideal T1 Size: {idealSize} </p>
       </div>
-      <div id="rac-data">
-        <Pie
-          data={chartData}
-          options={{
-            responsive: true,
-            plugins: {
-              title: {
-                display: false,
-                text: "Cache Usage"
-              },
-              legend: {
-                display: true,
-                position: 'bottom',
-                align: 'left',
-              },
-            }
-          }}
-        />
-      </div>
+      <Pie
+        data={chartData}
+        options={{
+          plugins: {
+            title: {
+              display: false,
+              text: 'Cache Usage',
+            },
+            legend: {
+              display: true,
+              position: 'bottom',
+              align: 'left',
+              reverse: true,
+            },
+          },
+        }}
+      />
     </div>
   );
 }

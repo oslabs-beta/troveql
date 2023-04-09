@@ -12,10 +12,10 @@ import QueryTime from './QueryTime.jsx';
 
 Chart.register(CategoryScale);
 
-
 function Dashboard() {
   // Main state for cache data
   const [cacheData, setCacheData] = React.useState();
+  const [configDisplay, setConfigDisplay] = React.useState(null);
 
   const [chartState, setChartState] = React.useState({
     CacheChart: {name: 'Current Hit Rate', display: true},
@@ -28,7 +28,7 @@ function Dashboard() {
   })
 
   function renderCharts() {
-    const chartDisplay = []
+    const chartDisplay = [];
 
     if (chartState.CacheChart.display) chartDisplay.push(<CacheChart key='1' cacheData={cacheData} />)
     if (chartState.QueryDisplay.display) chartDisplay.push(<QueryDisplay key='2' cacheData={cacheData} />)
@@ -57,10 +57,26 @@ function Dashboard() {
     });
   }, []);
 
-  
+  React.useEffect(() => {
+    const handleClickOutside = (event) => {
+      const configDisplayElement = document.getElementById('config-display');
+      if (
+        configDisplayElement &&
+        !configDisplayElement.contains(event.target)
+      ) {
+        setConfigDisplay(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [setConfigDisplay]);
+
   // Put any components that rely on the intial data pull here
   React.useEffect(() => {
-    
     if (status === 'clear') {
       (async function fetchCacheData() {
         console.log('clearing metrics in dashboard');
@@ -71,17 +87,21 @@ function Dashboard() {
       })();
     }
 
-    if (cacheData && (status === 'clear')) {
+    if (cacheData && status === 'clear') {
       setStatus('ready');
     }
   }, [status, cacheData]);
 
   return (
     <div id="window">
-      <Header setStatus={setStatus} setChartState={setChartState} chartState={chartState}/>
-      <div id="dashboard">
-        {renderCharts()}
-      </div>
+      <Header
+        setStatus={setStatus}
+        setChartState={setChartState}
+        chartState={chartState}
+        configDisplay={configDisplay}
+        setConfigDisplay={setConfigDisplay}
+      />
+      <div id="dashboard">{renderCharts()}</div>
     </div>
   );
 }
