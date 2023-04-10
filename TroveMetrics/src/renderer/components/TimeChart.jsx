@@ -30,7 +30,10 @@ function TimeChart({ cacheData, status }) {
       const prevHit = hitData[hitData.length - 1].y;
       const prevMiss = missData[missData.length - 1].y;
 
+      const start = prevHit !== 0 && prevMiss !== 0;
+
       if (
+        !start &&
         prevHit === cacheData.cache.HIT &&
         prevMiss === cacheData.cache.MISS
       ) {
@@ -39,14 +42,14 @@ function TimeChart({ cacheData, status }) {
 
       const timeChange = (new Date() - (startingTime || new Date())) / 1000;
 
-      setTimeChartData({
-        ...timeChartData,
+      setTimeChartData((prevData) => ({
+        ...prevData,
         startingTime: startingTime || new Date(),
         hitData: [...hitData, { x: timeChange, y: cacheData.cache.HIT }],
         missData: [...missData, { x: timeChange, y: cacheData.cache.MISS }],
-      });
+      }));
     }
-  }, [cacheData, timeChartData]);
+  }, [cacheData, setTimeChartData]);
 
   const chartData = {
     label: 'test',

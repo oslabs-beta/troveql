@@ -14,7 +14,7 @@ function RACChart({ cacheData }) {
       : [0, 0, 0, 0];
 
   const chartData = {
-    labels: ['recency', 'frequency', 'rec.(ghost)', 'freq.(ghost)'],
+    labels: ['recency', 'frequency', 'rec. (ghost)', 'freq. (ghost)'],
     datasets: [
       {
         label: 'Count',
