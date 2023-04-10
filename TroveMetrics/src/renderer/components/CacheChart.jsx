@@ -8,6 +8,9 @@ function CacheChart({ cacheData }) {
   // If no data, display 0, 0 and avoid a crash
   cacheData ? (dataSet = Object.values(cacheData.cache)) : (dataSet = [0, 0]);
 
+  if (cacheData === undefined) {
+  }
+
   const chartData = {
     labels: ['HIT', 'MISS'],
     datasets: [
@@ -43,4 +46,4 @@ function CacheChart({ cacheData }) {
   );
 }
 
-export default CacheChart;
+export default React.memo(CacheChart);

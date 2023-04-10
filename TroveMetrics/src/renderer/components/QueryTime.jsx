@@ -118,4 +118,4 @@ function QueryTime({ cacheData }) {
   );
 }
 
-export default QueryTime;
+export default React.memo(QueryTime);

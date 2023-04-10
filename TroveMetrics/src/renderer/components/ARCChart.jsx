@@ -6,11 +6,12 @@ function RACChart({ cacheData }) {
   let dataSet = null;
 
   // If no data, display 0, 0 and avoid a crash
-  cacheData && cacheData.queries.length > 0
-    ? (dataSet = Object.values(
-        cacheData.queries[cacheData.queries.length - 1].cacheSize
-      ))
-    : (dataSet = [0, 0, 0, 0]);
+  dataSet =
+    cacheData && cacheData.queries.length > 0
+      ? Object.values(
+          cacheData.queries[cacheData.queries.length - 1].cacheSize
+        ).map((value) => Math.abs(value))
+      : [0, 0, 0, 0];
 
   const chartData = {
     labels: ['recency', 'frequency', 'rec.(ghost)', 'freq.(ghost)'],

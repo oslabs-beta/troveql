@@ -6,7 +6,6 @@ import TimeChart from './TimeChart.jsx';
 import RACChart from './ARCChart.jsx';
 import RACData from './ARCData.jsx';
 import QueryList from './QueryList.jsx';
-
 import Header from './Header/Header.jsx';
 import QueryTime from './QueryTime.jsx';
 

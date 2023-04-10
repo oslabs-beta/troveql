@@ -37,18 +37,10 @@ function QueryList({ cacheData }) {
       <table className="query-list-table">
         <thead>
           <tr>
-            <th key="ID" style={{ width: '3%' }}>
-              #
-            </th>
-            <th key="queryName" style={{ width: '20%' }}>
-              Query
-            </th>
-            <th key="queryHit" style={{ width: '3%' }}>
-              Hit/Miss
-            </th>
-            <th key="queryResTime" style={{ width: '25%' }}>
-              Resp. Time (ms)
-            </th>
+            <th key="ID">#</th>
+            <th key="queryName">Query</th>
+            <th key="queryHit">Hit/Miss</th>
+            <th key="queryResTime">Resp. Time (ms)</th>
           </tr>
         </thead>
         <tbody>{list}</tbody>
