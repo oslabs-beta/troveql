@@ -4,7 +4,7 @@ import variables from '../styles/_variables.module.scss';
 
 function CacheChart({ cacheData }) {
   let dataSet;
-
+  console.log(cacheData)
   // If no data, display 0, 0 and avoid a crash
   cacheData ? (dataSet = Object.values(cacheData.cache)) : (dataSet = [0, 0]);
 
