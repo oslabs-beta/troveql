@@ -1,4 +1,4 @@
-<img src='/assets/TroveQL-black.svg'>
+<img align="center" style="max-width:100%" src='/assets/TroveQL-black.svg'>
 <h1 align="center">Welcome to TroveQL!</h1>
 <p>TroveQL is a cache library for GraphQL APIs on Express.js servers with additional support for TroveMetrics, a cache performance monitoring application.</p>
 <p align="center">
@@ -83,7 +83,7 @@ app.use('/graphql',
 5. To use TroveMetrics, run `npm start` on the command line from the `TroveMetrics/` folder to spin up the desktop application and monitor the performance of your cache and GraphQL API on your application's server.
 
 ## Query or Mutate your GraphQL API
-1. Simply send a request to your GraphQL API for queries and mutations as you normally would. For example, a query with variables using the `fetch` syntax could look like:
+Simply send a request to your GraphQL API for queries and mutations as you normally would. For example, a query with variables using the `fetch` syntax could look like:
 ```
 fetch('/troveql', {
   method: 'POST',
