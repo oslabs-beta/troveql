@@ -1,8 +1,8 @@
 <div align="center">
-  <img style="max-width:100%" src='/assets/TroveQL-black.svg'>
+  <img src='/assets/TroveQL-black.svg'>
 </div>
 <h1 align="center">Welcome to TroveQL!</h1>
-<p>TroveQL is a cache library for GraphQL APIs on Express.js servers with additional support for TroveMetrics, a cache performance monitoring application.</p>
+<p align="center">TroveQL is a cache library for GraphQL APIs on Express.js servers with additional support for TroveMetrics, a cache performance monitoring application.</p>
 <p align="center">
   <img alt="GitHub" src="https://img.shields.io/github/license/oslabs-beta/troveql">
 </p>
@@ -14,15 +14,15 @@
 - Support for Node.js/Express.js servers
 - Cache performance monitoring with key metrics such as Hit/Miss Rate and Query Response Time
 
-## Overview
-- Visit our website (insert website link HERE) to get more information and watch a demo of TroveQL and its performance monitoring application TroveMetrics.
+## Documentation
+- Visit our website (insert website link) to get more information and watch a demo of TroveQL and its performance monitoring application TroveMetrics.
 
 ## Table of Contents
 - [Install](#install-troveql)
 - [Set Up](#set-up-troveql-in-express.js)
 - [Queries and Mutations](#query-or-mutate-your-graphQL-API)
 - [Roadmap](#iteration-roadmap)
-- [Stack] (#stack) 
+- [Stack] (#tech-stack)
 - [Authors](#authors)
 - [License](#license)
 
@@ -115,8 +115,9 @@ fetch('/troveql', {
 ```
 
 ## Iteration Roadmap
+(insert opportunities HERE)
 
-## Stack
+## Tech Stack
 - React.js
 - Chart.js
 - Electron
