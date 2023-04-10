@@ -1,27 +1,25 @@
-# TroveQL
-(insert logo HERE)
-
-<h1>Welcome to TroveQL!</h1>
+<img src='/assets/TroveQL-black.svg'>
+<h1 align="center">Welcome to TroveQL!</h1>
+<p>TroveQL is a cache library for GraphQL APIs on Express.js servers with additional support for TroveMetrics, a cache performance monitoring application.</p>
 <p align="center">
   <img alt="GitHub" src="https://img.shields.io/github/license/oslabs-beta/troveql">
 </p>
-<p>TroveQL is a cache library for GraphQL APIs on Express.js servers with the optional use of TroveMetrics, a cache performance monitoring application.</p>
 
 ## Features
-- Cache GraphQL queries on your server with an implementation of the Advanced Replacement Cache (ARC) algorithm.
-- Configure your cache with options such as the total capacity.
-- Cache invalidation on GraphQL mutations.
-- Compatible with Node.js/Express.js servers.
-- View the performance of your cache and GraphQL API with key metrics such as Hit/Miss Rate and Query Response Time.
+- Server-side cache for GraphQL queries using the Advanced Replacement Cache (ARC) algorithm
+- Custom cache configurations with options such as the total capacity
+- Cache invalidation logic on GraphQL mutations
+- Support for Node.js/Express.js servers
+- Cache performance monitoring with key metrics such as Hit/Miss Rate and Query Response Time
 
 ## Overview
-- Visit our website (insert website link HERE) to get more information on TroveQL and its performance monitoring application TroveMetrics (and to see a demo?).
+- Visit our website (insert website link HERE) to get more information and watch a demo of TroveQL and its performance monitoring application TroveMetrics.
 
 ## Table of Contents
 - [Install](#install-troveql)
 - [Set Up](#set-up-troveql-in-express.js)
 - [Queries and Mutations](#query-or-mutate-your-graphQL-API)
-- [Roadmap ?](#iteration-roadmap)
+- [Roadmap](#iteration-roadmap)
 - [Stack] (#stack)
 - [Authors](#authors)
 - [License](#license)
@@ -35,15 +33,17 @@ npm install troveql
 
 ## Set up TroveQL in Express.js
 1. Import TroveQLCache.
-`const { TroveQLCache } = require('troveql');`
+```
+const { TroveQLCache } = require('troveql');
+```
 
 2. Set up your TroveQL cache.
 ```
-const capacity = '//number: size limit of your cache';
-const graphQLAPI = '//string: your graphQL URL endpoint';
-const useTroveMetrics = '//(optional) boolean: if you would like to use TroveMetrics - default is false';
-const mutations = {}; //(optional) object: keys are mutation types and values are strings of query types mutated (ex. { addMovie: 'movie', editMovie: 'movie', deleteMovie: 'movie' })
-const cache = new TroveQLCache(capacity, graphQLAPI, true, mutations);
+const capacity = 5; // size limit of your cache
+const graphQLAPI = 'http://localhost:4000/graphql'; // your graphQL URL endpoint
+const useTroveMetrics = true; // (optional) if you would like to use TroveMetrics - default is false
+const mutations = {}; // (optional) object where key/value pairs are mutation types/object types mutated (ex. { addMovie: 'movie', editMovie: 'movie', deleteMovie: 'movie' })
+const cache = new TroveQLCache(capacity, graphQLAPI, useTroveMetrics, mutations);
 ```
 
 3. Add the /troveql and, if applicable, /trovemetrics endpoints.
@@ -80,10 +80,10 @@ app.use('/graphql',
 );
 ```
 
-5. To use TroveMetrics, run `npm start` on the command line from the `TroveMetrics/` folder to spin up the desktop application and monitor the performance of your cache in your application's server.
+5. To use TroveMetrics, run `npm start` on the command line from the `TroveMetrics/` folder to spin up the desktop application and monitor the performance of your cache and GraphQL API on your application's server.
 
 ## Query or Mutate your GraphQL API
-1. Simply send a request to your GraphQL API for queries and mutations as you normally would. For example, using `fetch` syntax:
+1. Simply send a request to your GraphQL API for queries and mutations as you normally would. For example, a query with variables using the `fetch` syntax could look like:
 ```
 fetch('/troveql', {
   method: 'POST',
@@ -91,8 +91,19 @@ fetch('/troveql', {
     'Content-Type': 'application/json' 
   },
   body: JSON.stringify({
-    query: '//string: your query or mutation string',
-    variables: {} //(optional) object: keys/values are variable names/values (ex. { id: 10 })
+    query: `query ($id: ID) {
+      movie(id: $id) {
+          id
+          title
+          genre
+          year
+          actors 
+            {
+              name
+            }
+      }
+    }`,
+    variables: { id: 10 }
   })
 })
 .then(response => response.json())
@@ -118,10 +129,14 @@ fetch('/troveql', {
 - Jest
 
 ## Authors
-Alex Klein - [GitHub](https://github.com/a-t-klein) | [LinkedIn](https://www.linkedin.com/in/alex-t-klein-183aa758/)
-Erika Jung - [GitHub](https://github.com/erikahjung) | [LinkedIn](https://www.linkedin.com/in/erikahjung)
-Sam Henderson - [GitHub](https://github.com/samhhenderson) | [LinkedIn](https://www.linkedin.com/in/samuel-h-henderson/)
-Tricia Yeh - [GitHub](https://github.com/triciacorwin) | [LinkedIn](https://www.linkedin.com/in/tricia-yeh/)
+<div>
+  <p>
+    Alex Klein - [GitHub](https://github.com/a-t-klein) | [LinkedIn](https://www.linkedin.com/in/alex-t-klein-183aa758/)
+  </p>
+  Erika Jung - [GitHub](https://github.com/erikahjung) | [LinkedIn](https://www.linkedin.com/in/erikahjung)
+  Sam Henderson - [GitHub](https://github.com/samhhenderson) | [LinkedIn](https://www.linkedin.com/in/samuel-h-henderson/)
+  Tricia Yeh - [GitHub](https://github.com/triciacorwin) | [LinkedIn](https://www.linkedin.com/in/tricia-yeh/)
+</div>
 
 ## License
 This project is licensed under the MIT License.
