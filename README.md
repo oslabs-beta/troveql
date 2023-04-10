@@ -1,4 +1,6 @@
-<img align="center" style="max-width:100%" src='/assets/TroveQL-black.svg'>
+<div align="center">
+  <img style="max-width:100%" src='/assets/TroveQL-black.svg'>
+</div>
 <h1 align="center">Welcome to TroveQL!</h1>
 <p>TroveQL is a cache library for GraphQL APIs on Express.js servers with additional support for TroveMetrics, a cache performance monitoring application.</p>
 <p align="center">
@@ -20,7 +22,7 @@
 - [Set Up](#set-up-troveql-in-express.js)
 - [Queries and Mutations](#query-or-mutate-your-graphQL-API)
 - [Roadmap](#iteration-roadmap)
-- [Stack] (#stack)
+- [Stack] (#stack) 
 - [Authors](#authors)
 - [License](#license)
 
