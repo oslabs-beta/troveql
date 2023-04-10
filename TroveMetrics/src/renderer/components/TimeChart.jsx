@@ -76,54 +76,50 @@ function TimeChart({ cacheData, status }) {
   return (
     <div className="wide-container">
       <div className="chart-header">
-        <h3>Cache Hits</h3>
+        <h3>Hits vs. Misses Over Time</h3>
         <button className="button-metric" onClick={handleTimeReset}>
           RESET TIME
         </button>
       </div>
-      <div className="chart-cont">
-        <Line
-          data={chartData}
-          options={{
-            maintainAspectRatio: false,
-            responsive: true,
-            plugins: {
-              tooltip: {
-                mode: 'index',
-              },
-              legend: {
-                display: false,
-                position: 'bottom',
-                align: 'left',
-              },
+      <Line
+        data={chartData}
+        options={{
+          plugins: {
+            tooltip: {
+              mode: 'index',
             },
-            interaction: {
-              mode: 'nearest',
-              axis: 'x',
-              intersect: false,
+            legend: {
+              display: false,
+              position: 'bottom',
+              align: 'left',
             },
-            scales: {
-              x: {
-                title: {
-                  display: true,
+          },
+          interaction: {
+            mode: 'nearest',
+            axis: 'x',
+            intersect: false,
+          },
+          scales: {
+            x: {
+              title: {
+                display: true,
 
-                  text: 'Time (seconds)',
-                },
-                type: 'linear',
-                beginAtZero: true,
+                text: 'Time (seconds)',
               },
-              y: {
-                stacked: true,
-                title: {
-                  display: true,
-                  text: 'Total Queries',
-                },
-                beginAtZero: true,
-              },
+              type: 'linear',
+              beginAtZero: true,
             },
-          }}
-        />
-      </div>
+            y: {
+              stacked: true,
+              title: {
+                display: true,
+                text: 'Total Queries',
+              },
+              beginAtZero: true,
+            },
+          },
+        }}
+      />
     </div>
   );
 }

@@ -22,7 +22,7 @@ function CacheChart({ cacheData }) {
 
   return (
     <div className="small-container grid-item">
-      <h3>Latest Hit Rate</h3>
+      <h3>Cache Hits vs. Misses</h3>
       <Pie
         data={chartData}
         options={{

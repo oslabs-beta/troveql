@@ -13,7 +13,7 @@ function RACChart({ cacheData }) {
     : (dataSet = [0, 0, 0, 0]);
 
   const chartData = {
-    labels: ['T1', 'T2', 'B1', 'B2'],
+    labels: ['recency', 'frequency', 'rec.(ghost)', 'freq.(ghost)'],
     datasets: [
       {
         label: 'Count',
@@ -32,7 +32,7 @@ function RACChart({ cacheData }) {
 
   return (
     <div className="small-container">
-      <h3>RAC Counts</h3>
+      <h3>ARC Cache Sizes</h3>
       <div className="chart-cont">
         <Bar
           data={chartData}
@@ -40,6 +40,12 @@ function RACChart({ cacheData }) {
             maintainAspectRatio: false,
             responsive: true,
             scales: {
+              x: {
+                ticks: {
+                  maxRotation: 45,
+                  minRotation: 45,
+                },
+              },
               y: {
                 ticks: {
                   stepSize: 1,
