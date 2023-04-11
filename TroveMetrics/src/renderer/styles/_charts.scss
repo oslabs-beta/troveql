@@ -79,8 +79,9 @@
     margin: 0.5em 1.5em;
     font-size: 0.9em;
     font-family: sans-serif;
-    min-width: 400px;
+    min-width: 530px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    table-layout: auto;
 
     thead tr {
       background-color: $secondary;
