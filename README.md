@@ -27,7 +27,7 @@
 - Cache performance monitoring with key metrics such as Hit/Miss Rate and Query Response Time
 
 ## Documentation
-Visit <a href="https://www.troveql.io/" target="_blank" rel="noopener noreferrer">our website</a> to get more information and watch a demo of TroveQL and its performance monitoring application TroveMetrics.
+Visit <a target="_blank" rel="noopener noreferrer" href="https://www.troveql.io/">our website</a> to get more information and watch a demo of TroveQL and its performance monitoring application TroveMetrics.
 
 ## Table of Contents
 - [Install](#install-troveql)
