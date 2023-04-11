@@ -3,6 +3,20 @@
   <h1>Welcome to TroveQL!</h1>
   <p>TroveQL is a cache library for GraphQL APIs on Express.js servers with additional support for TroveMetrics, a cache performance monitoring application.</p>
   <img alt="GitHub" src="https://img.shields.io/github/license/oslabs-beta/troveql">
+  <img src="https://img.shields.io/badge/Medium-12100E?style=for-the-badge&logo=medium&logoColor=white">
+
+  <img src="https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white">
+  <img src="https://img.shields.io/badge/GraphQl-E10098?style=for-the-badge&logo=graphql&logoColor=white">
+  <img src="https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white">
+  <img src="https://img.shields.io/badge/Electron-2B2E3A?style=for-the-badge&logo=electron&logoColor=9FEAF9">
+  <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB">
+  <img src="https://img.shields.io/badge/Chart.js-FF6384?style=for-the-badge&logo=chartdotjs&logoColor=white">
+  <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white">
+  <img src="https://img.shields.io/badge/JavaScript-323330?style=for-the-badge&logo=javascript&logoColor=F7DF1E">
+  <img src="https://img.shields.io/badge/Sass-CC6699?style=for-the-badge&logo=sass&logoColor=white">
+  <img src="https://img.shields.io/badge/Jest-C21325?style=for-the-badge&logo=jest&logoColor=white">
+  <img src="https://img.shields.io/badge/eslint-3A33D1?style=for-the-badge&logo=eslint&logoColor=white">
+  <img src="https://img.shields.io/badge/Webpack-8DD6F9?style=for-the-badge&logo=Webpack&logoColor=white">
 </div>
 
 ## Features
@@ -81,7 +95,7 @@ app.use('/graphql',
 );
 ```
 
-5. To use TroveMetrics, run `npm start` on the command line from the `TroveMetrics/` folder to spin up the desktop application and monitor the performance of your cache and GraphQL API on your application's server.
+5. To use TroveMetrics to monitor the performance of your cache and GraphQL API on your application's server, you can go to our website (link HERE) and download the desktop application for your OS (macOS, Windows, Linux).
 
 ## Query or Mutate your GraphQL API
 Simply send a request to your GraphQL API for queries and mutations as you normally would. For example, a query with variables using the `fetch` syntax could look like:
@@ -132,18 +146,17 @@ If you would like to contribute to this open-source project, please follow the s
 Thank you so much!
 
 ## Stack
+- GraphQL
+- Node.js / Express.js
+- Electron
 - React.js
 - Chart.js
-- Electron
-- Node.js
-- Express.js
-- GraphQL
 - TypeScript
 - JavaScript
 - HTML
 - CSS / SASS
-- Webpack
 - Jest
+- Webpack
 
 ## Authors
 Alex Klein - [GitHub](https://github.com/a-t-klein) | [LinkedIn](https://www.linkedin.com/in/alex-t-klein-183aa758/)
