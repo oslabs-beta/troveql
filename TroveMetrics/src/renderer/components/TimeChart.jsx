@@ -6,8 +6,8 @@ function TimeChart({ cacheData, status }) {
   let startingData = null;
 
   const clearData = {
-    hitData: [{ x: 0, y: 0 }],
-    missData: [{ x: 0, y: 0 }],
+    hitData: [{ x: null, y: null }],
+    missData: [{ x: null, y: null }],
     startingTime: null,
   };
 
@@ -24,32 +24,53 @@ function TimeChart({ cacheData, status }) {
 
   const [timeChartData, setTimeChartData] = React.useState(startingData);
 
+  // React.useEffect(() => {
+  //   if (cacheData && cacheData.cache) {
+  //     const newState = { ...timeChartData };
+  //     if (!timeChartData.startingTime) {
+  //       newState.startingTime = new Date();
+  //     }
+  //     const timeChange = (new Date() - newState.startingTime) / 1000;
+
+  //     const { hitData, missData } = timeChartData;
+  //     const prevHit = hitData[hitData.length - 1].y;
+  //     const prevMiss = missData[missData.length - 1].y;
+
+  //     if (
+  //       prevHit !== cacheData.cache.HIT ||
+  //       prevMiss !== cacheData.cache.MISS
+  //     ) {
+  //       newState.hitData.push({ x: timeChange, y: cacheData.cache.HIT });
+  //       newState.missData.push({ x: timeChange, y: cacheData.cache.MISS });
+  //       setTimeChartData(() => newState);
+  //     }
+  //   }
+  // }, [cacheData, timeChartData]);
+
   React.useEffect(() => {
     if (cacheData && cacheData.cache) {
-      const { startingTime, hitData, missData } = timeChartData;
+      const newState = { ...timeChartData };
+      if (!timeChartData.startingTime) {
+        newState.startingTime = new Date();
+      }
+      const timeChange = (new Date() - newState.startingTime) / 1000;
+      const { hitData, missData } = timeChartData;
       const prevHit = hitData[hitData.length - 1].y;
       const prevMiss = missData[missData.length - 1].y;
 
-      const start = prevHit !== 0 && prevMiss !== 0;
-
       if (
-        !start &&
         prevHit === cacheData.cache.HIT &&
         prevMiss === cacheData.cache.MISS
       ) {
         return;
       }
 
-      const timeChange = (new Date() - (startingTime || new Date())) / 1000;
+      newState.hitData.push({ x: timeChange, y: cacheData.cache.HIT });
+      newState.missData.push({ x: timeChange, y: cacheData.cache.MISS });
 
-      setTimeChartData((prevData) => ({
-        ...prevData,
-        startingTime: startingTime || new Date(),
-        hitData: [...hitData, { x: timeChange, y: cacheData.cache.HIT }],
-        missData: [...missData, { x: timeChange, y: cacheData.cache.MISS }],
-      }));
+      setTimeChartData(newState);
     }
-  }, [cacheData, setTimeChartData]);
+  }, [cacheData]);
 
   const chartData = {
     label: 'test',

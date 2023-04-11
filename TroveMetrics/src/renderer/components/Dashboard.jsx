@@ -55,6 +55,7 @@ function Dashboard() {
   React.useEffect(() => {
     // Ask for the data from local storage
     window.ipcRenderer.invoke('data:get').then((data) => {
+      console.log('<<<<<DATA IN DASHBOARD>>>>>>>', data);
       setCacheData(data);
       setStatus('ready');
     });
