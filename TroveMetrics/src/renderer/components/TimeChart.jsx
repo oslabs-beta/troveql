@@ -6,8 +6,8 @@ function TimeChart({ cacheData, status }) {
   let startingData = null;
 
   const clearData = {
-    hitData: [{ x: 0, y: 0 }],
-    missData: [{ x: 0, y: 0 }],
+    hitData: [{ x: null, y: null }],
+    missData: [{ x: null, y: null }],
     startingTime: null,
   };
 
@@ -24,6 +24,29 @@ function TimeChart({ cacheData, status }) {
 
   const [timeChartData, setTimeChartData] = React.useState(startingData);
 
+  // React.useEffect(() => {
+  //   if (cacheData && cacheData.cache) {
+  //     const newState = { ...timeChartData };
+  //     if (!timeChartData.startingTime) {
+  //       newState.startingTime = new Date();
+  //     }
+  //     const timeChange = (new Date() - newState.startingTime) / 1000;
+
+  //     const { hitData, missData } = timeChartData;
+  //     const prevHit = hitData[hitData.length - 1].y;
+  //     const prevMiss = missData[missData.length - 1].y;
+
+  //     if (
+  //       prevHit !== cacheData.cache.HIT ||
+  //       prevMiss !== cacheData.cache.MISS
+  //     ) {
+  //       newState.hitData.push({ x: timeChange, y: cacheData.cache.HIT });
+  //       newState.missData.push({ x: timeChange, y: cacheData.cache.MISS });
+  //       setTimeChartData(() => newState);
+  //     }
+  //   }
+  // }, [cacheData, timeChartData]);
+
   React.useEffect(() => {
     if (cacheData && cacheData.cache) {
       const newState = { ...timeChartData };
@@ -31,6 +54,16 @@ function TimeChart({ cacheData, status }) {
         newState.startingTime = new Date();
       }
       const timeChange = (new Date() - newState.startingTime) / 1000;
+      const { hitData, missData } = timeChartData;
+      const prevHit = hitData[hitData.length - 1].y;
+      const prevMiss = missData[missData.length - 1].y;
+
+      if (
+        prevHit === cacheData.cache.HIT &&
+        prevMiss === cacheData.cache.MISS
+      ) {
+        return;
+      }
 
       newState.hitData.push({ x: timeChange, y: cacheData.cache.HIT });
       newState.missData.push({ x: timeChange, y: cacheData.cache.MISS });
@@ -76,54 +109,50 @@ function TimeChart({ cacheData, status }) {
   return (
     <div className="wide-container">
       <div className="chart-header">
-        <h3>Cache Hits</h3>
+        <h3>Hits vs. Misses Over Time</h3>
         <button className="button-metric" onClick={handleTimeReset}>
           RESET TIME
         </button>
       </div>
-      <div className="chart-cont">
-        <Line
-          data={chartData}
-          options={{
-            maintainAspectRatio: false,
-            responsive: true,
-            plugins: {
-              tooltip: {
-                mode: 'index',
-              },
-              legend: {
-                display: false,
-                position: 'bottom',
-                align: 'left',
-              },
+      <Line
+        data={chartData}
+        options={{
+          plugins: {
+            tooltip: {
+              mode: 'index',
             },
-            interaction: {
-              mode: 'nearest',
-              axis: 'x',
-              intersect: false,
+            legend: {
+              display: false,
+              position: 'bottom',
+              align: 'left',
             },
-            scales: {
-              x: {
-                title: {
-                  display: true,
+          },
+          interaction: {
+            mode: 'nearest',
+            axis: 'x',
+            intersect: false,
+          },
+          scales: {
+            x: {
+              title: {
+                display: true,
 
-                  text: 'Time (seconds)',
-                },
-                type: 'linear',
-                beginAtZero: true,
+                text: 'Time (seconds)',
               },
-              y: {
-                stacked: true,
-                title: {
-                  display: true,
-                  text: 'Total Queries',
-                },
-                beginAtZero: true,
-              },
+              type: 'linear',
+              beginAtZero: true,
             },
-          }}
-        />
-      </div>
+            y: {
+              stacked: true,
+              title: {
+                display: true,
+                text: 'Total Queries',
+              },
+              beginAtZero: true,
+            },
+          },
+        }}
+      />
     </div>
   );
 }

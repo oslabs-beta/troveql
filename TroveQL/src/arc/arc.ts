@@ -12,7 +12,7 @@ export class TroveCache {
 
   constructor(capacity: number) {
     this.capacity = capacity;
-    this.p = 0.5;
+    this.p = 0;
     this.t1 = new Map();
     this.t2 = new Map();
     this.b1 = new Map();
