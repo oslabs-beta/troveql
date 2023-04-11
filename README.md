@@ -2,7 +2,7 @@
   <img src='/assets/TroveQL-black.svg'>
   <h1>Welcome to TroveQL!</h1>
   <p>TroveQL is a cache library for GraphQL APIs on Express.js servers with additional support for TroveMetrics, a cache performance monitoring application.</p>
-  <img alt="GitHub" src="https://img.shields.io/github/license/oslabs-beta/troveql" style="max-width:100%;">
+  <img alt="GitHub" src="https://img.shields.io/github/license/oslabs-beta/troveql" style="width:100%;">
 </div>
 
 ## Features
