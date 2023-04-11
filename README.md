@@ -17,7 +17,7 @@ Visit our website (insert website link) to get more information and watch a demo
 
 ## Table of Contents
 - [Install](#install-troveql)
-- [Set Up](#set-up-troveql-in-express.js)
+- [Set Up](#set-up-troveql-in-express)
 - [Queries and Mutations](#query-or-mutate-your-graphQL-API)
 - [Roadmap](#iteration-roadmap)
 - [Stack] (#stack)
@@ -25,13 +25,13 @@ Visit our website (insert website link) to get more information and watch a demo
 - [License](#license)
 
 ## Install TroveQL
-Install the Express.js library via npm.
+Install the Express library via npm.
 
 ```bash
 npm install troveql
 ```
 
-## Set up TroveQL in Express.js
+## Set up TroveQL in Express
 1. Import TroveQLCache.
 ```javascript
 const { TroveQLCache } = require('troveql');
@@ -119,7 +119,7 @@ fetch('/troveql', {
 - Update cache capacity to reflect memory size (bytes) instead of number of items
 - User authentication for TroveMetrics
 
-## <a name="stack" /> Stack
+## <a name="stack" >Stack</a>
 - React.js
 - Chart.js
 - Electron
