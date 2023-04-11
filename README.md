@@ -20,7 +20,7 @@ Visit our website (insert website link) to get more information and watch a demo
 - [Set Up](#set-up-troveql-in-express)
 - [Queries and Mutations](#query-or-mutate-your-graphQL-API)
 - [Roadmap](#iteration-roadmap)
-- [Stack] (#stack)
+- [Stack](#stack)
 - [Authors](#authors)
 - [License](#license)
 
@@ -119,7 +119,6 @@ fetch('/troveql', {
 - Update cache capacity to reflect memory size (bytes) instead of number of items
 - User authentication for TroveMetrics
 
-<a name="stack"></a>
 ## Stack
 - React.js
 - Chart.js
