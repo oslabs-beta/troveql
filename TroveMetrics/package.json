@@ -18,7 +18,7 @@
     "make-mac": "electron-forge make --platform=darwin",
     "make-linux": "electron-forge make --platform=linux",
     "publish": "electron-forge publish",
-    "lint": "echo \"No linting configured\"",
+    "lint": "eslint .",
     "test": "jest"
   },
   "keywords": [],
