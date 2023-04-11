@@ -27,7 +27,7 @@
 - Cache performance monitoring with key metrics such as Hit/Miss Rate and Query Response Time
 
 ## Documentation
-Visit our website (insert website link) to get more information and watch a demo of TroveQL and its performance monitoring application TroveMetrics.
+Visit <a href="https://www.troveql.io/">our website</a> to get more information and watch a demo of TroveQL and its performance monitoring application TroveMetrics.
 
 ## Table of Contents
 - [Install](#install-troveql)
@@ -95,7 +95,7 @@ app.use('/graphql',
 );
 ```
 
-5. To use TroveMetrics to monitor the performance of your cache and GraphQL API on your application's server, you can go to our website (link HERE) and download the desktop application for your OS (macOS, Windows, Linux).
+5. To use TroveMetrics to monitor the performance of your cache and GraphQL API on your application's server, you can go to <a href="https://www.troveql.io/">our website</a> and download the desktop application for your OS (macOS, Windows, Linux).
 
 ## Query or Mutate your GraphQL API
 Simply send a request to your GraphQL API for queries and mutations as you normally would. For example, a query with variables using the `fetch` syntax could look like:
