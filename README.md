@@ -119,7 +119,8 @@ fetch('/troveql', {
 - Update cache capacity to reflect memory size (bytes) instead of number of items
 - User authentication for TroveMetrics
 
-## <a name="stack" >Stack</a>
+<a name="stack"></a>
+## Stack
 - React.js
 - Chart.js
 - Electron
