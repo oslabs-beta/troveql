@@ -20,24 +20,25 @@ Visit our website (insert website link) to get more information and watch a demo
 - [Set Up](#set-up-troveql-in-express)
 - [Queries and Mutations](#query-or-mutate-your-graphQL-API)
 - [Roadmap](#iteration-roadmap)
+- [Contribute](#contribution-guidelines)
 - [Stack](#stack)
 - [Authors](#authors)
 - [License](#license)
 
 ## Install TroveQL
-Install the Express library via npm.
+Install the Express library via npm
 
 ```bash
 npm install troveql
 ```
 
 ## Set up TroveQL in Express
-1. Import TroveQLCache.
+1. Import TroveQLCache
 ```javascript
 const { TroveQLCache } = require('troveql');
 ```
 
-2. Set up your TroveQL cache.
+2. Set up your TroveQL cache
 ```javascript
 const capacity = 5; // size limit of your cache
 const graphQLAPI = 'http://localhost:4000/graphql'; // your graphQL URL endpoint
@@ -46,7 +47,7 @@ const mutations = {}; // (optional) object where key/value pairs are mutation ty
 const cache = new TroveQLCache(capacity, graphQLAPI, useTroveMetrics, mutations);
 ```
 
-3. Add the /troveql and, if applicable, /trovemetrics endpoints.
+3. Add the /troveql and, if applicable, /trovemetrics endpoints
 ```javascript
 // REQUIRED
 app.use(express.json())
@@ -118,6 +119,17 @@ fetch('/troveql', {
 - Additional cache invalidation logic on mutations
 - Update cache capacity to reflect memory size (bytes) instead of number of items
 - User authentication for TroveMetrics
+
+## Contribution Guidelines
+If you would like to contribute to this open-source project, please follow the steps below:
+1. Fork the repository from the `dev` branch
+2. Create a new feature branch (`git checkout -b feature/newFeature`)
+3. Commit your changes with a descriptive comment (`git commit -m 'Added a new feature that ...'`)
+4. Push your changes to the new feature branch (`git push origin feature/newFeature`)
+5. Open a Pull Request on the `dev` branch
+6. We will review your PR and merge the new feature into the `main` branch as soon as possible!
+
+Thank you so much!
 
 ## Stack
 - React.js
