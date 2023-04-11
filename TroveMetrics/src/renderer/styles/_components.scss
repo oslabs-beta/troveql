@@ -29,73 +29,104 @@
   }
 
   #troveql-logo {
-    margin: 0rem 4rem 0rem 2rem;
+    margin: 0rem 2rem 0rem 2rem;
     height: 2rem;
-  }
-
-  button {
-    color: white;
-    text-align: center;
-    width: 10rem;
-    display: flex;
-    align-items: center;
   }
 }
 
-#button-container {
+#config-cont {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+#config-display {
+  margin-top: 0.2rem;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  background-color: $dark-gray;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+  padding: 0.5rem;
+  border-radius: 0.2rem;
+  gap: 0.2rem;
+  width: 100%;
+  label {
+    cursor: pointer;
+    padding: 0.5rem;
+    display: flex;
+    gap: 0.73rem;
+    &:hover {
+      background-color: rgb(65, 65, 65);
+    }
+  }
+}
+
+#clear-buttons-container {
   display: flex;
   align-items: center;
 }
 
-button {
-  --c: rgb(254 169 79); /* the color*/
-  font-size: 0.8rem;
-  color: $font-dark;
-  border-radius: 0.2rem;
-  width: 8rem;
-  height: 2rem;
-  margin-left: 1rem;
-  border-right: 1px solid gray;
-  border-left: 1px solid gray;
+#header-button-container {
+  align-items: flex-start;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
 
-  --_g: linear-gradient(var(--c) 0 0) no-repeat;
-  background: var(--_g) calc(var(--_p, 0%) - 100%) 0%,
-    var(--_g) calc(200% - var(--_p, 0%)) 0%,
-    var(--_g) calc(var(--_p, 0%) - 100%) 100%,
-    var(--_g) calc(200% - var(--_p, 0%)) 100%;
-  background-size: 50.5% calc(var(--_p, 0%) / 2 + 0.5%);
-  outline-offset: 0.1em;
-  transition: background-size 0.4s, background-position 0s 0.4s;
+.button-header {
+  background-color: #222222;
+  border: 1px solid #4b4b4b;
+}
+
+.button-metric {
+  color: #4b4b4b;
+  background-color: #ffffff;
+  padding: 0.5rem 1rem;
+  border: 1px solid #4b4b4b;
+
+  &:hover {
+    background-color: $light-gray;
+    border-color: $dark-gray;
+  }
+  &:focus-visible {
+    box-shadow: #222222 0 0 0 2px, rgba(255, 255, 255, 0.8) 0 0 0 4px;
+    transition: box-shadow 0.2s;
+  }
+
+  &:active {
+    transform: scale(0.96);
+    border-color: #222222;
+  }
+}
+
+button {
+  height: inherit;
+  text-align: center;
+  display: flex;
+  padding-right: 1rem;
+  align-items: center;
+  border-radius: 4px;
+  box-sizing: border-box;
+  color: #d7d7d7;
+  cursor: pointer;
+  margin: 0;
+
+  position: relative;
+  touch-action: manipulation;
+  transition: box-shadow 0.2s, -ms-transform 0.1s, -webkit-transform 0.1s,
+    transform 0.1s;
+  width: auto;
 }
 button:hover {
-  --_p: 100%;
-  transition: background-position 0.4s, background-size 0s;
+  border-color: $tertiary;
 }
+button:focus-visible {
+  box-shadow: #222222 0 0 0 2px, rgba(255, 255, 255, 0.8) 0 0 0 4px;
+  transition: box-shadow 0.2s;
+}
+
 button:active {
-  box-shadow: 0 0.1rem 0.1rem rgba(0, 0, 0, 0.3);
-  transform: translateX(2px);
-  background-color: var(--c);
-}
-#config-cont {
-  display: flex;
-  flex-direction: column;
-  align-items: end;
-
-}
-#config-display {
-  color: white;
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  background-color: $dark-gray;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
-  z-index: 9999;
-  padding: .5rem;
-  border-radius: .2rem;
-  gap: .2rem;
-}
-
-label {
-  display: flex;
-  gap: .5rem;
+  transform: scale(0.96);
+  border-color: #222222;
 }
