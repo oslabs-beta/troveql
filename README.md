@@ -1,46 +1,44 @@
 <div align="center">
   <img src='/assets/TroveQL-black.svg'>
-</div>
-<h1 align="center">Welcome to TroveQL!</h1>
-<p align="center">TroveQL is a cache library for GraphQL APIs on Express.js servers with additional support for TroveMetrics, a cache performance monitoring application.</p>
-<p align="center">
+  <h1>Welcome to TroveQL!</h1>
+  <p>TroveQL is a cache library for GraphQL APIs on Express.js servers with additional support for TroveMetrics, a cache performance monitoring application.</p>
   <img alt="GitHub" src="https://img.shields.io/github/license/oslabs-beta/troveql">
-</p>
+</div>
 
 ## Features
 - Server-side cache for GraphQL queries using the Advanced Replacement Cache (ARC) algorithm
-- Custom cache configurations with options such as the total capacity
+- Custom cache configurations with options such as total capacity
 - Cache invalidation logic on GraphQL mutations
 - Support for Node.js/Express.js servers
 - Cache performance monitoring with key metrics such as Hit/Miss Rate and Query Response Time
 
 ## Documentation
-- Visit our website (insert website link) to get more information and watch a demo of TroveQL and its performance monitoring application TroveMetrics.
+Visit our website (insert website link) to get more information and watch a demo of TroveQL and its performance monitoring application TroveMetrics.
 
 ## Table of Contents
 - [Install](#install-troveql)
 - [Set Up](#set-up-troveql-in-express.js)
 - [Queries and Mutations](#query-or-mutate-your-graphQL-API)
 - [Roadmap](#iteration-roadmap)
-- [Stack] (#tech-stack)
+- [Stack] (#stack)
 - [Authors](#authors)
 - [License](#license)
 
 ## Install TroveQL
 Install the Express.js library via npm.
 
-```
+```bash
 npm install troveql
 ```
 
 ## Set up TroveQL in Express.js
 1. Import TroveQLCache.
-```
+```javascript
 const { TroveQLCache } = require('troveql');
 ```
 
 2. Set up your TroveQL cache.
-```
+```javascript
 const capacity = 5; // size limit of your cache
 const graphQLAPI = 'http://localhost:4000/graphql'; // your graphQL URL endpoint
 const useTroveMetrics = true; // (optional) if you would like to use TroveMetrics - default is false
@@ -49,7 +47,7 @@ const cache = new TroveQLCache(capacity, graphQLAPI, useTroveMetrics, mutations)
 ```
 
 3. Add the /troveql and, if applicable, /trovemetrics endpoints.
-```
+```javascript
 // REQUIRED
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
@@ -68,7 +66,7 @@ app.use('/trovemetrics',
 ```
 
 4. Add your GraphQL endpoint. For example:
-```
+```javascript
 const { graphqlHTTP } = require("express-graphql");
 const { schema } = require('./schema');
 const { resolvers } = require('./resolvers');
@@ -86,7 +84,7 @@ app.use('/graphql',
 
 ## Query or Mutate your GraphQL API
 Simply send a request to your GraphQL API for queries and mutations as you normally would. For example, a query with variables using the `fetch` syntax could look like:
-```
+```javascript
 fetch('/troveql', {
   method: 'POST',
   headers: { 
@@ -110,14 +108,18 @@ fetch('/troveql', {
 })
 .then(response => response.json())
 .then(response => {
-  // access the data on the response object using response.data
+  // access the data on the response object with response.data
 })
 ```
 
 ## Iteration Roadmap
-(insert opportunities HERE)
+- Client-side caching
+- Persistent queries to improve the performance and security of client queries to the server
+- Additional cache invalidation logic on mutations
+- Update cache capacity to reflect memory size (bytes) instead of number of items
+- User authentication for TroveMetrics
 
-## Tech Stack
+## <a name="stack" /> Stack
 - React.js
 - Chart.js
 - Electron
