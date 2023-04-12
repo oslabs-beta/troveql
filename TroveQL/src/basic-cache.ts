@@ -1,5 +1,5 @@
 class Cache {
-  constructor (public persistance: number) {
+  constructor(public persistance: number) {
     this.persistance = persistance;
   }
 
@@ -11,7 +11,7 @@ class Cache {
       return Number.MAX_SAFE_INTEGER;
     }
     return this.persistance;
-  }
+  };
   /* PUBLIC methods & data*/
 
   //set:
@@ -21,7 +21,7 @@ class Cache {
 
     let newVal = { value: value, expireAt: valPersistance };
     this.cache.set(key, newVal);
-  }
+  };
 
   //get
   public get = (key: string): string | undefined => {
@@ -34,12 +34,12 @@ class Cache {
       return item.value;
     }
     return undefined;
-  }
+  };
 
   //delete
   public delete = (key: string): void => {
     this.cache.delete(key);
-  }
+  };
 
   //TODO:
   //--create method that iterates through the cache and deletes anything less than the persistance

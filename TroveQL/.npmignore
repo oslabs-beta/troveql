@@ -3,3 +3,5 @@ src/*
 package-lock.json
 tsconfig.json
 __tests__/*
+.eslintignore
+.eslintrc.json
