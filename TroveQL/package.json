@@ -11,6 +11,8 @@
   "scripts": {
     "build": "tsc --watch",
     "test": "jest",
+    "test-cache": "npm test -- troveql-cache.test.js",
+    "test-middleware": "npm test -- troveqlQLCache.test.js",
     "lint": "eslint ."
   },
   "repository": "https://github.com/oslabs-beta/troveql",
@@ -23,6 +25,7 @@
   },
   "devDependencies": {
     "@types/node": "^18.15.5",
+    "jest": "^29.5.0",
     "@typescript-eslint/eslint-plugin": "^5.58.0",
     "@typescript-eslint/parser": "^5.58.0",
     "eslint": "^8.38.0",
