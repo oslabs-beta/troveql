@@ -2,10 +2,22 @@ require('dotenv').config()
 
 module.exports = 
 {
-  rebuildConfig: {},
+
   packagerConfig: {
-    icon: './src/assets/troveql-icon'
+    icon: './src/assets/troveql-icon',
+    osxSign: {
+      identity: process.env.TEAM_IDENTIY,
+      'hardened-runtime': true,
+      verbose: true
+    },
+    osxNotarize: {
+      tool: 'notarytool',
+      appleId: process.env.APPLE_ID,
+      appleIdPassword: process.env.APP_PASSWORD,
+      teamId: process.env.APPLE_TEAM_ID
+    }
   },
+  rebuildConfig: {},
   makers: [
     {
       name: '@electron-forge/maker-dmg',
@@ -14,7 +26,8 @@ module.exports =
     {
       name: '@electron-forge/maker-squirrel',
       config: {
-        exe:'TroveMetrics.exe'
+        exe:'TroveMetrics.exe',
+        setupIcon: './src/assets/troveql-icon.ico'
       },
     },
     {
@@ -25,7 +38,7 @@ module.exports =
       name: "@electron-forge/maker-deb",
       config: {
         options: {
-          icon: './src/assets/troveql-icon'
+          icon: './src/assets/troveql-icon.png'
         }
       },
     }
