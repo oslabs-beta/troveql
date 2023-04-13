@@ -4,7 +4,7 @@ rules.push(
   {
     test: /\.s[ac]ss$/i,
     use: [
-      // Creates `style` nodes from JS strings
+      // Creates 'style' nodes from JS strings
       "style-loader",
       // Translates CSS into CommonJS
       "css-loader",
@@ -14,10 +14,8 @@ rules.push(
   },
 );
 
-// possibly add rules for ts compiler here
-
 module.exports = {
-  // Put your normal webpack config below here
+  // add webpack config file
   module: {
     rules,
   },

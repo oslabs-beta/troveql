@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import CacheChart from "../src/renderer/components/CacheChart";
 import QueryDisplay from "../src/renderer/components/QueryDisplay";
 import ARCChart from '../src/renderer/components/ARCChart';
@@ -59,10 +59,8 @@ describe('Unit testing charts', () => {
     })
   })  
   
-  // The rest of these tests are only going to check if the image is created by
-  // chart.js, not whether the chart is displayed correctly. To perform that test
-  // we'll need a functional test suite like Cypress with a regression testing
-  // plugin. Don't have time for that now...
+  // The tests below are only going to check if the image is created by
+  // chart.js, not whether the chart is displayed correctly.
   
   describe('CacheChart displays', () => {
     

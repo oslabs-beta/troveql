@@ -24,29 +24,6 @@ function TimeChart({ cacheData, status }) {
 
   const [timeChartData, setTimeChartData] = React.useState(startingData);
 
-  // React.useEffect(() => {
-  //   if (cacheData && cacheData.cache) {
-  //     const newState = { ...timeChartData };
-  //     if (!timeChartData.startingTime) {
-  //       newState.startingTime = new Date();
-  //     }
-  //     const timeChange = (new Date() - newState.startingTime) / 1000;
-
-  //     const { hitData, missData } = timeChartData;
-  //     const prevHit = hitData[hitData.length - 1].y;
-  //     const prevMiss = missData[missData.length - 1].y;
-
-  //     if (
-  //       prevHit !== cacheData.cache.HIT ||
-  //       prevMiss !== cacheData.cache.MISS
-  //     ) {
-  //       newState.hitData.push({ x: timeChange, y: cacheData.cache.HIT });
-  //       newState.missData.push({ x: timeChange, y: cacheData.cache.MISS });
-  //       setTimeChartData(() => newState);
-  //     }
-  //   }
-  // }, [cacheData, timeChartData]);
-
   React.useEffect(() => {
     if (cacheData && cacheData.cache) {
       const newState = { ...timeChartData };
@@ -100,8 +77,6 @@ function TimeChart({ cacheData, status }) {
 
   React.useEffect(() => {
     if (status === 'clear') {
-      console.log('clearing metrics in TimeChart');
-
       setTimeChartData(clearData);
     }
   }, [status]);

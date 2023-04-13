@@ -10,7 +10,6 @@ type controller = {
 // Handle post request from troveQL server with cache data
 const troveController: controller = {
   post: function (req: Request, res: Response, next: NextFunction) {
-    console.log('REQbody', req.body);
     // Pull from local data, add new data, and write back
     fs.readFile(path.join(TroveQLPath, 'metrics.json'), 'utf-8')
       .then((data) => JSON.parse(data))
@@ -34,11 +33,11 @@ const troveController: controller = {
         // Send file data back to server to pass on to Renderer
         res.locals.data = parsedData;
 
-        //Write file to local machine
+        // Write file to local machine
         fs.writeFile(
           path.join(TroveQLPath, 'metrics.json'),
           JSON.stringify(parsedData)
-        ).catch((error) => console.log(error));
+        ).catch((error) => console.log('Error in controller.ts writing file to the user\'s file system', error));
         return next();
       })
       .catch((error) => {
