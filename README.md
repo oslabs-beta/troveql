@@ -80,7 +80,7 @@ app.use('/trovemetrics',
 );
 ```
 
-4. Add your GraphQL endpoint after /troveql endpoint. For example:
+4. Add your GraphQL endpoint. For example:
 ```javascript
 const { graphqlHTTP } = require("express-graphql");
 const { schema } = require('./schema');
