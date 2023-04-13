@@ -6,5 +6,3 @@ import styles from './styles/main.scss';
 const div = document.getElementById('App');
 const root = createRoot(div);
 root.render(<Dashboard/>);
-
-

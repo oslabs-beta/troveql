@@ -25,8 +25,7 @@ function RACChart({ cacheData }) {
           variables.secondary,
           variables.primaryLight,
           variables.secondaryLight,
-        ],
-        //can add more style properties here like borderColor, borderWidth, etc.
+        ]
       },
     ],
   };

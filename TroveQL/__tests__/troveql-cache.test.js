@@ -1,4 +1,4 @@
-//TESTS FOR CACHE
+// TESTS FOR CACHE
 const exp = require('constants');
 const { afterEach } = require('node:test');
 const { TroveCache } = require('../dist/arc/arc.js');

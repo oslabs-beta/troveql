@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import icons from './icons.jsx';
 
 function CustomizeMetrics({
@@ -46,8 +45,6 @@ function CustomizeMetrics({
       return chartStateCopy;
     });
   }
-
-  // Add onClickOutside event listener to hide the config panel when mouse moves outside of it
 
   return (
     <div id="config-cont">

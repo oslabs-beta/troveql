@@ -55,7 +55,6 @@ function Dashboard() {
   React.useEffect(() => {
     // Ask for the data from local storage
     window.ipcRenderer.invoke('data:get').then((data) => {
-      console.log('<<<<<DATA IN DASHBOARD>>>>>>>', data);
       setCacheData(data);
       setStatus('ready');
     });
@@ -88,7 +87,6 @@ function Dashboard() {
   React.useEffect(() => {
     if (status === 'clear') {
       (async function fetchCacheData() {
-        console.log('clearing metrics in dashboard');
         await window.ipcRenderer.invoke('data:clear').then((data) => {
           setCacheData(data);
         });
