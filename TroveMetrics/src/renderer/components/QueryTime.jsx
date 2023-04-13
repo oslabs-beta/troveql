@@ -51,7 +51,6 @@ function QueryTime({ cacheData }) {
   };
 
   const options = {
-
     maintainAspectRatio: false,
     plugins: {
       legend: {
