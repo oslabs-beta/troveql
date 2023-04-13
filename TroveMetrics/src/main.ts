@@ -14,7 +14,8 @@ app.enableSandbox(); // Limits renderer access; this is also the default setting
 
 const createWindow = (): void => {
   // Create the browser window
-  let renderer = new BrowserWindow({
+  // The two lint errors below are not meaningful - electron-forge handles it
+  const renderer = new BrowserWindow({
     width: 1000,
     height: 800,
     webPreferences: {
@@ -22,12 +23,13 @@ const createWindow = (): void => {
       nodeIntegration: false,
       contextIsolation: true,
     },
+    icon: './assets/troveql-icon.png'
   });
 
   renderer.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
   // Open the DevTools
-  renderer.webContents.openDevTools();
+  //renderer.webContents.openDevTools();
 
   // Create the server
   createServer(renderer);
@@ -55,12 +57,14 @@ ipcMain.handle('data:get', async () => {
   }
 });
 
+// Listen for request to clear local data from renderer
 ipcMain.handle('data:clear', async () => {
   const filePath = path.join(TroveQLPath, 'metrics.json');
   await fs.writeFile(filePath, JSON.stringify(defaultData));
   return defaultData;
 });
 
+// Listen for request to clear cache on user's server and also clear local data
 ipcMain.on('cache:clear', async () => {
   try {
     const response = await fetch('http://localhost:4000/trovemetrics', {

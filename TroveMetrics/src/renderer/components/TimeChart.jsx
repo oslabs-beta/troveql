@@ -24,6 +24,8 @@ function TimeChart({ cacheData, status }) {
 
   const [timeChartData, setTimeChartData] = React.useState(startingData);
 
+  // Whenever cache data gets updated (from a push from middleware)
+  // add the newest data piece to the graph
   React.useEffect(() => {
     if (cacheData && cacheData.cache) {
       const newState = { ...timeChartData };

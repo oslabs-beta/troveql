@@ -36,6 +36,7 @@ function CustomizeMetrics({
     }
   };
 
+  // Modifies the chartState at each change of the tick, which re-renders all
   function onTick(e) {
     setChartState((prevState) => {
       const chartStateCopy = { ...prevState };

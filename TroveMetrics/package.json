@@ -1,7 +1,7 @@
 {
   "name": "TroveMetrics",
   "productName": "TroveMetrics",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "author": "oslabs-beta",
   "description": "Cache data monitor for TroveQL caching solution",
   "main": "./.webpack/main",

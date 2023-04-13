@@ -26,6 +26,7 @@ function Dashboard() {
     QueryTime: { name: 'Query Response Times', display: true },
   });
 
+  // Choose which charts to render based on chartState 
   function renderCharts() {
     const chartDisplay = [];
 
@@ -65,6 +66,7 @@ function Dashboard() {
     });
   }, []);
 
+  // This allows the clicks off of the config display panel to close the panel
   React.useEffect(() => {
     const handleClickOutside = (event) => {
       const configDisplayElement = document.getElementById('config-display');
