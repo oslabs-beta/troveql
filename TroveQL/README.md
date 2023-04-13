@@ -126,15 +126,11 @@ fetch('/troveql', {
   // access the data on the response object with response.data
 })
 ```
-## TroveQL Demo
-Download our TroveQL demo to see how TroveQL is run:
-[troveql-demo](https://github.com/oslabs-beta/troveql-demo/)
 
-## Feature Roadmap
+## Iteration Roadmap
 - Client-side caching
 - Persistent queries to improve the performance and security of client queries to the server
 - Additional cache invalidation logic on mutations
-- Additional cache logic on subscriptions
 - Update cache capacity to reflect memory size (bytes) instead of number of items
 - User authentication for TroveMetrics
 
