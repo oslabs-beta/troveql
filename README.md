@@ -80,7 +80,7 @@ app.use('/trovemetrics',
 );
 ```
 
-4. Add your GraphQL endpoint. For example:
+4. Add your GraphQL endpoint after /troveql endpoint. For example:
 ```javascript
 const { graphqlHTTP } = require("express-graphql");
 const { schema } = require('./schema');
@@ -131,6 +131,7 @@ fetch('/troveql', {
 - Client-side caching
 - Persistent queries to improve the performance and security of client queries to the server
 - Additional cache invalidation logic on mutations
+- Adding cache logic on subscriptions
 - Update cache capacity to reflect memory size (bytes) instead of number of items
 - User authentication for TroveMetrics
 
