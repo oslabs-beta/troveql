@@ -20,6 +20,7 @@ function ARCData({ cacheData }) {
     dataSet = [0, 0, 0];
   }
 
+  // Setup chart data for Chart.js
   const chartData = {
     labels: ['Remaining', 'Recency', 'Frequency'],
     datasets: [

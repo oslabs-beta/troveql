@@ -3,6 +3,9 @@ require('dotenv').config()
 module.exports = 
 {
   rebuildConfig: {},
+  packagerConfig: {
+    icon: './src/assets/troveql-icon'
+  },
   makers: [
     {
       name: '@electron-forge/maker-dmg',
@@ -20,7 +23,11 @@ module.exports =
     },
     {
       name: "@electron-forge/maker-deb",
-      config: {},
+      config: {
+        options: {
+          icon: './src/assets/troveql-icon'
+        }
+      },
     }
   ],
   plugins: [
