@@ -83,7 +83,7 @@ function Dashboard() {
     };
   }, [setConfigDisplay]);
 
-  // Put any components that rely on the intial data pull here
+  // Put any components that rely on the initial data pull here
   React.useEffect(() => {
     if (status === 'clear') {
       (async function fetchCacheData() {

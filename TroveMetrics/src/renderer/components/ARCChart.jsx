@@ -5,7 +5,7 @@ import variables from '../styles/_variables.module.scss';
 function RACChart({ cacheData }) {
   let dataSet = null;
 
-  // If no data, display 0, 0 and avoid a crash
+  // If no data, display 0, 0, 0, 0 and avoid a crash
   dataSet =
     cacheData && cacheData.queries.length > 0
       ? Object.values(
@@ -18,7 +18,6 @@ function RACChart({ cacheData }) {
     datasets: [
       {
         label: 'Count',
-        // pass in props of cachesize
         data: dataSet,
         backgroundColor: [
           variables.primary,
