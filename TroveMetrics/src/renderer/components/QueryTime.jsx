@@ -51,7 +51,7 @@ function QueryTime({ cacheData }) {
   };
 
   const options = {
-    responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         display: false,
@@ -107,12 +107,14 @@ function QueryTime({ cacheData }) {
       </div>
       <div className="chart-cont">
         <div id="custom-chart-legend"></div>
-        <Bar
-          data={data}
-          options={options}
-          redraw={true}
-          plugins={[htmlLegendPlugin]}
-        />
+        <div className="chart-cont">
+          <Bar
+            data={data}
+            options={options}
+            redraw={true}
+            plugins={[htmlLegendPlugin]}
+          />
+        </div>
       </div>
     </div>
   );

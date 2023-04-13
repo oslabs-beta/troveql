@@ -30,8 +30,7 @@ function ARCData({ cacheData }) {
           variables.lightGray,
           variables.primary,
           variables.secondary,
-        ],
-        //can add more style properties here like borderColor, borderWidth, etc.
+        ]
       },
     ],
   };

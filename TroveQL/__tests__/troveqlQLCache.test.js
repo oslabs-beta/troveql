@@ -28,12 +28,6 @@ describe('queryCache method', () => {
     })
   })
 
-  //error says that mockClear() is not a function...
-  // afterEach(() => {
-  //   global.fetch.mockClear();
-  //   delete global.fetch;
-  // })
-
   it('returns the query result from the cache on a cache HIT', async () => {
     global.fetch = jest.fn(() => Promise.resolve({
       json: () => Promise.resolve('')
@@ -54,7 +48,6 @@ describe('queryCache method', () => {
     expect(mockedNext).toBeCalledTimes(1);
   })
 
-  //buggy but looking at the console.logs in the method(s) the cache is functioning correctly... (see note below)
   it('returns the query result from the GraphQL API on a cache MISS', async () => {
     global.fetch = jest.fn(() => Promise.resolve({
       json: () => Promise.resolve('newMovie')
@@ -71,10 +64,8 @@ describe('queryCache method', () => {
     const mockedNext = mockNext();
 
     await troveQL.queryCache(mockedReq, mockedRes, mockedNext);
+    // we can only check if the fetch is called (and not the logic within the fetch) because we are using the mock function that simply resolves a Promise to 'newMovie'
     expect(fetch).toBeCalledTimes(1);
-    //the following tests fail because of how the global.fetch function is defined - it simply resolves to "newMovie" without running through any of the logic in queryCache's Promise chain
-    // expect(mockedResponse.locals.value).toEqual('newMovie');
-    // expect(mockedNextFunc).toBeCalledTimes(1);
   })
 
   it('sends data to TroveMetrics if useTroveMetrics is TRUE', async () => {

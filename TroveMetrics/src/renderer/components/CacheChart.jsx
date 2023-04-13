@@ -4,12 +4,8 @@ import variables from '../styles/_variables.module.scss';
 
 function CacheChart({ cacheData }) {
   let dataSet;
-  console.log(cacheData)
   // If no data, display 0, 0 and avoid a crash
   cacheData ? (dataSet = Object.values(cacheData.cache)) : (dataSet = [0, 0]);
-
-  if (cacheData === undefined) {
-  }
 
   const chartData = {
     labels: ['HIT', 'MISS'],
@@ -17,8 +13,7 @@ function CacheChart({ cacheData }) {
       {
         label: 'Count',
         data: dataSet,
-        backgroundColor: [variables.tertiary, variables.lightGray],
-        //can add more style properties here like borderColor, borderWidth, etc.
+        backgroundColor: [variables.tertiary, variables.lightGray]
       },
     ],
   };

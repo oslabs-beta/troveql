@@ -24,29 +24,6 @@ function TimeChart({ cacheData, status }) {
 
   const [timeChartData, setTimeChartData] = React.useState(startingData);
 
-  // React.useEffect(() => {
-  //   if (cacheData && cacheData.cache) {
-  //     const newState = { ...timeChartData };
-  //     if (!timeChartData.startingTime) {
-  //       newState.startingTime = new Date();
-  //     }
-  //     const timeChange = (new Date() - newState.startingTime) / 1000;
-
-  //     const { hitData, missData } = timeChartData;
-  //     const prevHit = hitData[hitData.length - 1].y;
-  //     const prevMiss = missData[missData.length - 1].y;
-
-  //     if (
-  //       prevHit !== cacheData.cache.HIT ||
-  //       prevMiss !== cacheData.cache.MISS
-  //     ) {
-  //       newState.hitData.push({ x: timeChange, y: cacheData.cache.HIT });
-  //       newState.missData.push({ x: timeChange, y: cacheData.cache.MISS });
-  //       setTimeChartData(() => newState);
-  //     }
-  //   }
-  // }, [cacheData, timeChartData]);
-
   React.useEffect(() => {
     if (cacheData && cacheData.cache) {
       const newState = { ...timeChartData };
@@ -100,8 +77,6 @@ function TimeChart({ cacheData, status }) {
 
   React.useEffect(() => {
     if (status === 'clear') {
-      console.log('clearing metrics in TimeChart');
-
       setTimeChartData(clearData);
     }
   }, [status]);
@@ -114,45 +89,47 @@ function TimeChart({ cacheData, status }) {
           RESET TIME
         </button>
       </div>
-      <Line
-        data={chartData}
-        options={{
-          plugins: {
-            tooltip: {
-              mode: 'index',
-            },
-            legend: {
-              display: false,
-              position: 'bottom',
-              align: 'left',
-            },
-          },
-          interaction: {
-            mode: 'nearest',
-            axis: 'x',
-            intersect: false,
-          },
-          scales: {
-            x: {
-              title: {
-                display: true,
-
-                text: 'Time (seconds)',
+      <div className='chart-cont'>
+        <Line
+          data={chartData}
+          options={{
+            maintainAspectRatio: false,
+            plugins: {
+              tooltip: {
+                mode: 'index',
               },
-              type: 'linear',
-              beginAtZero: true,
-            },
-            y: {
-              stacked: true,
-              title: {
-                display: true,
-                text: 'Total Queries',
+              legend: {
+                display: false,
+                position: 'bottom',
+                align: 'left',
               },
-              beginAtZero: true,
             },
-          },
-        }}
-      />
+            interaction: {
+              mode: 'nearest',
+              axis: 'x',
+              intersect: false,
+            },
+            scales: {
+              x: {
+                title: {
+                  display: true,
+                  text: 'Time (seconds)',
+                },
+                type: 'linear',
+                beginAtZero: true,
+              },
+              y: {
+                stacked: true,
+                title: {
+                  display: true,
+                  text: 'Total Queries',
+                },
+                beginAtZero: true,
+              },
+            },
+          }}
+        />
+      </div>
     </div>
   );
 }
