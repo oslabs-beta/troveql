@@ -126,6 +126,9 @@ fetch('/troveql', {
   // access the data on the response object with response.data
 })
 ```
+## TroveQL Demo
+Download our TroveQL demo to see how TroveQL is run:
+[troveql-demo](https://github.com/oslabs-beta/troveql-demo/)
 
 ## Iteration Roadmap
 - Client-side caching
