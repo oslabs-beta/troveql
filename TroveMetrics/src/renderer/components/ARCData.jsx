@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Pie } from 'react-chartjs-2';
 import variables from '../styles/_variables.module.scss';
 
-function RACData({ cacheData }) {
+function ARCData({ cacheData }) {
   // Set default values if no data
   let dataSet = null;
   let idealSize = '-';
@@ -20,8 +20,9 @@ function RACData({ cacheData }) {
     dataSet = [0, 0, 0];
   }
 
+  // Setup chart data for Chart.js
   const chartData = {
-    labels: ['Remaining', 'T1', 'T2'],
+    labels: ['Remaining', 'Recency', 'Frequency'],
     datasets: [
       {
         label: '%',
@@ -30,8 +31,7 @@ function RACData({ cacheData }) {
           variables.lightGray,
           variables.primary,
           variables.secondary,
-        ],
-        //can add more style properties here like borderColor, borderWidth, etc.
+        ]
       },
     ],
   };
@@ -39,8 +39,8 @@ function RACData({ cacheData }) {
   return (
     <div className="small-container grid-item">
       <div id="rac-data-wrapper">
-        <h3>RAC Size</h3>
-        <p id="ideal-size">Ideal T1 Size: {idealSize} </p>
+        <h3>Recency vs. Frequency</h3>
+        <p id="ideal-size">Ideal Recency Cache Size: {idealSize} </p>
       </div>
       <Pie
         data={chartData}
@@ -63,4 +63,4 @@ function RACData({ cacheData }) {
   );
 }
 
-export default RACData;
+export default ARCData;

@@ -1,5 +1,5 @@
 import { BrowserWindow } from 'electron'
-import express, { NextFunction, Request, Response, Errback } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import { troveController } from './controller';
 import { Error } from '../variables';
 
@@ -8,14 +8,6 @@ import { Error } from '../variables';
 // when post request is sent to api endpoint 
 // pass req troveController.post middleware
 // send to renderer res.locals.data
-    // default data 
-        // {
-          // cache: {
-            // HIT: 0,
-            // MISS: 0,
-          // }
-          // queries: []
-        // }
 const app = express();
 
 const createServer = function(renderer: BrowserWindow) {

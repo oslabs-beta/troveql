@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import icons from './icons.jsx';
 
 function CustomizeMetrics({
@@ -37,6 +36,7 @@ function CustomizeMetrics({
     }
   };
 
+  // Modifies the chartState at each change of the tick, which re-renders all
   function onTick(e) {
     setChartState((prevState) => {
       const chartStateCopy = { ...prevState };
@@ -46,8 +46,6 @@ function CustomizeMetrics({
       return chartStateCopy;
     });
   }
-
-  // Add onClickOutside event listener to hide the config panel when mouse moves outside of it
 
   return (
     <div id="config-cont">

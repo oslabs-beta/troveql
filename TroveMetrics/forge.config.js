@@ -2,18 +2,20 @@ require('dotenv').config()
 
 module.exports = 
 {
+
   packagerConfig: {
-    // osxSign: {
-    //   identity: process.env.TEAM_IDENTIY,
-    //   'hardened-runtime': true,
-    //   verbose: true
-    // },
-    // osxNotarize: {
-    //   tool: 'notarytool',
-    //   appleId: process.env.APPLE_ID,
-    //   appleIdPassword: process.env.APP_PASSWORD,
-    //   teamId: process.env.APPLE_TEAM_ID
-    // }
+    icon: './src/assets/troveql-icon',
+    osxSign: {
+      identity: process.env.TEAM_IDENTIY,
+      'hardened-runtime': true,
+      verbose: true
+    },
+    osxNotarize: {
+      tool: 'notarytool',
+      appleId: process.env.APPLE_ID,
+      appleIdPassword: process.env.APP_PASSWORD,
+      teamId: process.env.APPLE_TEAM_ID
+    }
   },
   rebuildConfig: {},
   makers: [
@@ -25,8 +27,7 @@ module.exports =
       name: '@electron-forge/maker-squirrel',
       config: {
         exe:'TroveMetrics.exe',
-        // certificateFile: './cert.pfx',
-        // certificatePassword: process.env.CERTIFICATE_PASSWORD,
+        setupIcon: './src/assets/troveql-icon.ico'
       },
     },
     {
@@ -35,12 +36,12 @@ module.exports =
     },
     {
       name: "@electron-forge/maker-deb",
-      config: {},
-    },
-    // {
-    //   name: "@electron-forge/maker-rpm",
-    //   config: {},
-    // },
+      config: {
+        options: {
+          icon: './src/assets/troveql-icon.png'
+        }
+      },
+    }
   ],
   plugins: [
     {

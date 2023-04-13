@@ -6,8 +6,8 @@ function TimeChart({ cacheData, status }) {
   let startingData = null;
 
   const clearData = {
-    hitData: [{ x: 0, y: 0 }],
-    missData: [{ x: 0, y: 0 }],
+    hitData: [{ x: null, y: null }],
+    missData: [{ x: null, y: null }],
     startingTime: null,
   };
 
@@ -24,6 +24,8 @@ function TimeChart({ cacheData, status }) {
 
   const [timeChartData, setTimeChartData] = React.useState(startingData);
 
+  // Whenever cache data gets updated (from a push from middleware)
+  // add the newest data piece to the graph
   React.useEffect(() => {
     if (cacheData && cacheData.cache) {
       const newState = { ...timeChartData };
@@ -31,6 +33,16 @@ function TimeChart({ cacheData, status }) {
         newState.startingTime = new Date();
       }
       const timeChange = (new Date() - newState.startingTime) / 1000;
+      const { hitData, missData } = timeChartData;
+      const prevHit = hitData[hitData.length - 1].y;
+      const prevMiss = missData[missData.length - 1].y;
+
+      if (
+        prevHit === cacheData.cache.HIT &&
+        prevMiss === cacheData.cache.MISS
+      ) {
+        return;
+      }
 
       newState.hitData.push({ x: timeChange, y: cacheData.cache.HIT });
       newState.missData.push({ x: timeChange, y: cacheData.cache.MISS });
@@ -67,8 +79,6 @@ function TimeChart({ cacheData, status }) {
 
   React.useEffect(() => {
     if (status === 'clear') {
-      console.log('clearing metrics in TimeChart');
-
       setTimeChartData(clearData);
     }
   }, [status]);
@@ -76,17 +86,16 @@ function TimeChart({ cacheData, status }) {
   return (
     <div className="wide-container">
       <div className="chart-header">
-        <h3>Cache Hits</h3>
+        <h3>Hits vs. Misses Over Time</h3>
         <button className="button-metric" onClick={handleTimeReset}>
           RESET TIME
         </button>
       </div>
-      <div className="chart-cont">
+      <div className='chart-cont'>
         <Line
           data={chartData}
           options={{
             maintainAspectRatio: false,
-            responsive: true,
             plugins: {
               tooltip: {
                 mode: 'index',
@@ -106,7 +115,6 @@ function TimeChart({ cacheData, status }) {
               x: {
                 title: {
                   display: true,
-
                   text: 'Time (seconds)',
                 },
                 type: 'linear',

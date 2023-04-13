@@ -20,7 +20,7 @@ function QueryDisplay({ cacheData }) {
 
   return (
     <div className="small-container">
-      <h3>Last Query</h3>
+      <h3>Previous Query</h3>
       <h5>Query String</h5>
       <div className="query-display">{query}</div>
       <h5>Arguments</h5>

@@ -1,104 +1,180 @@
 // TESTS FOR TROVEQL SERVER MIDDLEWARE 
 const { TroveQLCache } = require('../dist/TroveQLCache');
 
-describe('TroveQL Middleware', () => {
+// queryCache method
+describe('queryCache method', () => {
   let troveQL;
+  const mockReq = (query, variables) => ({
+    body: {
+      query,
+      variables
+    }
+  });
+  const mockRes = () => ({
+    locals: {},
+    json: jest.fn()
+  })
+  const mockNext = () => {
+    const next = jest.fn();
+    return next;
+  }
 
   beforeEach(() => {
-    troveQL = new TroveQLCache(5, 'http://localhost:4000/graphql', true);
+    troveQL = new TroveQLCache(5, '');
+    troveQL.cache.set({
+      query: 'movies', 
+      result: 'allMovies',
+      miss: 'miss'
+    })
   })
 
+  it('returns the query result from the cache on a cache HIT', async () => {
+    global.fetch = jest.fn(() => Promise.resolve({
+      json: () => Promise.resolve('')
+    }));
+    const query = `query {
+      movies {
+        id
+        title
+      }
+    }`;
+    const mockedReq = mockReq(query);
+    const mockedRes = mockRes();
+    const mockedNext = mockNext();
 
-  // Test suite for queryCache 
-  describe('queryCache', () => {
+    await troveQL.queryCache(mockedReq, mockedRes, mockedNext);
+    expect(fetch).toBeCalledTimes(0);
+    expect(mockedRes.locals.value).toEqual('allMovies');
+    expect(mockedNext).toBeCalledTimes(1);
+  })
 
-  });
-
-
-  // Test suite for troveMetrics
-    // if req.body.clearCache is true
-    // expect res.locals.message to be {cacheEmpty: true}
-  describe('troveMetrics', () => {
-
-  });
-
-
-  // Test suite for sendData
-    // Mock api calls
-    // check if data passed in is valid
-    // check if response comes back is success
-    // check if error is handled correctly if respone failed to come back
-  describe('sendData', () => {
-    // Mock api call
-    beforeEach(() => {
-      global.fetch = jest.fn().mockResolvedValue({
-        json: () => Promise.resolve({status: 'success'}),
-      })
-    });
-
-    // Reset mock API call after each test case
-    afterEach(() => {
-      jest.restoreAllMocks();
-    })
-
-    it ('sends the expected data to the server', async () => {
-      // Check example body
-      const cacheHit = true;
-      const query = 'query { movies { id title } }';
-      const variables = { id: 10 };
-      const cacheSize = { t1: 4, t2: 1, b1: 0, b2: 0, p: 0.5 };
-      const queryTime = 2;
-      const size = 5;
-
-      await troveQL.sendData(cacheHit, query, variables, cacheSize, queryTime, size);
-
-      expect(fetch).toHaveBeenCalledWith('http://localhost:3333/api', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          cacheHit,
-          query,
-          variables,
-          cacheSize,
-          queryTime,
-          size,
-        }),
-      });
-    })
-  });
-
-
-  // Test suite for parseQuery
-  describe('parseQuery', () => {
-    it('returns query if the query is a query string', () => {
-      const query = `query {
-          movies {
-            id
-            title
-          }
-        }`;
-      expect(troveQL.parseQuery(query)).toEqual('query');
-    }); 
-
-    it('returns mutation if the query is a mutation string', () => {
-      const query = `mutation CreateMovie($title: String) {
-        createMovie(title: $title) {
+  it('returns the query result from the GraphQL API on a cache MISS', async () => {
+    global.fetch = jest.fn(() => Promise.resolve({
+      json: () => Promise.resolve('newMovie')
+    }));
+   const query = `query ($id: ID) {
+      movie(id: $id) {
           id
           title
-        }
-      }`;
-      expect(troveQL.parseQuery(query)).toEqual('mutation');
-    }); 
-    
-    // it('throws an error if the query is not a query or mutation string', () => {
-    //   const invalidQuery = `subscription {
-    //     movieAdded {
-    //       id
-    //       title
-    //     }
-    //   }`;
-    //   expect(() => troveQL.parseQuery(invalidQuery)).toThrow('Invalid query type');
-    // });
-  });
+      }
+    }`;
+    const variables = { id: 10 };
+    const mockedReq = mockReq(query, variables);
+    const mockedRes = mockRes();
+    const mockedNext = mockNext();
 
+    await troveQL.queryCache(mockedReq, mockedRes, mockedNext);
+    // we can only check if the fetch is called (and not the logic within the fetch) because we are using the mock function that simply resolves a Promise to 'newMovie'
+    expect(fetch).toBeCalledTimes(1);
+  })
+
+  it('sends data to TroveMetrics if useTroveMetrics is TRUE', async () => {
+    global.fetch = jest.fn(() => Promise.resolve({
+      json: () => Promise.resolve('dataReceived')
+    }));
+    const troveQL = new TroveQLCache(5, '', true);
+    troveQL.cache.set({
+      query: 'movies', 
+      result: 'allMovies',
+      miss: 'miss'
+    })
+    const query = `query {
+      movies {
+        id
+        title
+      }
+    }`;
+    const mockedReq = mockReq(query);
+    const mockedRes = mockRes();
+    const mockedNext = mockNext();
+
+    await troveQL.queryCache(mockedReq, mockedRes, mockedNext);
+    expect(fetch).toBeCalledTimes(1);
+  });
+});
+
+// parseQuery method
+describe('parseQuery method', () => {
+  let troveQL;
+
+  beforeAll(() => {
+    troveQL = new TroveQLCache(5, '');
+  })
+
+  it ('returns an object with the query operation and its object type', () => {
+    const query = `query {
+      movies {
+        id
+        title
+      }
+    }`;
+    expect(troveQL.parseQuery(query).operation).toEqual('query');
+    expect(troveQL.parseQuery(query).objectType).toEqual('movies');
+  })
+
+  it ('returns an object with the mutation operation and its object type', () => {
+    const query = `mutation CreateMovie($title: String) {
+      createMovie(title: $title) {
+        id
+        title
+      }
+    }`;
+    expect(troveQL.parseQuery(query).operation).toEqual('mutation');
+    expect(troveQL.parseQuery(query).objectType).toEqual('createMovie');
+  })
+});
+
+// troveMetrics method
+describe('troveMetrics method', () => {
+  let troveQL;
+  const mockReq = (clearCache) => ({
+    body: {
+      clearCache
+    }
+  });
+  const mockRes = () => ({
+    locals: {},
+    json: jest.fn()
+  })
+  const mockNext = () => {
+    const next = jest.fn();
+    return next;
+  }
+
+  beforeEach(() => {
+    troveQL = new TroveQLCache(5, '');
+    troveQL.cache.set({
+      query: 'movies', 
+      result: 'allMovies',
+      miss: 'miss'
+    })
+  })
+
+  it('does not clear the cache if clearCache is falsy on the request body', () => {
+    const mockedReq = mockReq(false);
+    const mockedRes = mockRes();
+    const mockedNext = mockNext();
+    troveQL.troveMetrics(mockedReq, mockedRes, mockedNext);
+
+    expect(troveQL.cache.cacheSize().t1).toEqual(1);
+    expect(troveQL.cache.cacheSize().t2).toEqual(0);
+    expect(troveQL.cache.cacheSize().b1).toEqual(0);
+    expect(troveQL.cache.cacheSize().t2).toEqual(0);
+    expect(mockedRes.locals.message).toEqual(undefined);
+    expect(mockedNext).toBeCalledTimes(1);
+  })
+
+  it('clears the cache if clearCache is truthy on the request body', () => {
+    const mockedReq = mockReq(true);
+    const mockedRes = mockRes();
+    const mockedNext = mockNext();
+    troveQL.troveMetrics(mockedReq, mockedRes, mockedNext);
+
+    expect(troveQL.cache.cacheSize().t1).toEqual(0);
+    expect(troveQL.cache.cacheSize().t2).toEqual(0);
+    expect(troveQL.cache.cacheSize().b1).toEqual(0);
+    expect(troveQL.cache.cacheSize().t2).toEqual(0);
+    expect(mockedRes.locals.message).toEqual({ cacheEmpty: true });
+    expect(mockedNext).toBeCalledTimes(1);
+  })
 });

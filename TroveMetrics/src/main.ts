@@ -4,7 +4,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import { TroveQLPath, defaultData } from './variables';
 
-// Handle creating/removing shortcuts on Windows when installing/uninstalling.
+// Handle creating/removing shortcuts on Windows when installing/uninstalling
 if (require('electron-squirrel-startup')) {
   app.quit();
 }
@@ -13,8 +13,9 @@ if (require('electron-squirrel-startup')) {
 app.enableSandbox(); // Limits renderer access; this is also the default setting
 
 const createWindow = (): void => {
-  // Create the browser window.
-  let renderer = new BrowserWindow({
+  // Create the browser window
+  // The two lint errors below are not meaningful - electron-forge handles it
+  const renderer = new BrowserWindow({
     width: 1000,
     height: 800,
     webPreferences: {
@@ -22,14 +23,15 @@ const createWindow = (): void => {
       nodeIntegration: false,
       contextIsolation: true,
     },
+    icon: './assets/troveql-icon.png'
   });
 
   renderer.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
-  // Open the DevTools.
-  renderer.webContents.openDevTools();
+  // Open the DevTools
+  //renderer.webContents.openDevTools();
 
-  //create the server
+  // Create the server
   createServer(renderer);
 };
 
@@ -45,7 +47,8 @@ ipcMain.handle('data:get', async () => {
     const data = await fs.readFile(filePath, 'utf-8');
     return JSON.parse(data);
   } catch (error) {
-    console.log('metrics.json not found, creating a new file');
+    console.log('Unable to find metrics.json file: ', error);
+    console.log('Creating new metrics.json file...');
 
     await fs.mkdir(TroveQLPath, { recursive: true });
     await fs.writeFile(filePath, JSON.stringify(defaultData));
@@ -54,19 +57,16 @@ ipcMain.handle('data:get', async () => {
   }
 });
 
+// Listen for request to clear local data from renderer
 ipcMain.handle('data:clear', async () => {
-  console.log('in data:clear!');
-
   const filePath = path.join(TroveQLPath, 'metrics.json');
   await fs.writeFile(filePath, JSON.stringify(defaultData));
   return defaultData;
 });
 
+// Listen for request to clear cache on user's server and also clear local data
 ipcMain.on('cache:clear', async () => {
-  console.log('in cache:clear');
   try {
-    // should this be customizable in someway? can we specify what port we are sending data to?
-
     const response = await fetch('http://localhost:4000/trovemetrics', {
       method: 'POST',
       body: JSON.stringify({ clearCache: true }),
@@ -75,7 +75,6 @@ ipcMain.on('cache:clear', async () => {
       },
     });
     const data = await response.json();
-    console.log(data);
   } catch (error) {
     console.log('Error in ipcMain.handle for cache:clear: ', error);
   }
@@ -83,7 +82,6 @@ ipcMain.on('cache:clear', async () => {
 
 // When electron is ready to do stuff; Some APIs can only be used after this event occurs.
 app.on('ready', () => {
-  //server;
   createWindow();
 });
 
@@ -93,9 +91,7 @@ app.on('ready', () => {
 
 // HOWEVER, In our case, closing window wouldn't close server, which is BAD, so close everything
 app.on('window-all-closed', () => {
-  // if (process.platform !== 'darwin') {
   app.quit();
-  // }
 });
 
 app.on('activate', () => {

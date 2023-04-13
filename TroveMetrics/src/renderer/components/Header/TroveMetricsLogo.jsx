@@ -5,7 +5,7 @@ function TroveMetricsLogo() {
     <>
       <svg
         id="troveql-logo"
-        width="3rem"
+        width="5rem"
         viewBox="0 0 61 27"
         fill="white"
         xmlns="http://www.w3.org/2000/svg"
