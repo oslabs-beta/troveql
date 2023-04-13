@@ -1,5 +1,5 @@
 import { BrowserWindow } from 'electron'
-import express, { NextFunction, Request, Response, Errback } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import { troveController } from './controller';
 import { Error } from '../variables';
 
