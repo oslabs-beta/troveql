@@ -40,6 +40,10 @@ class TroveCache {
             const node = new cacheItem_1.CacheItem(res.result);
             switch (true) {
                 // If item was found b1 ghost cache
+                  // reduce the size of the p-value (ideal size of T1 cache)
+                  // remove item from the b1 ghost cache
+                  // evict LRU if cache's are full
+                  // then add the item to the t2 cache
                 case res.miss === 'b1':
                     this.adaptation(true);
                     this.b1.delete(res.query);
@@ -47,6 +51,7 @@ class TroveCache {
                     this.t2.set(res.query, node);
                     break;
                 // If item was found b2 ghost cache
+                    //
                 case res.miss === 'b2':
                     this.adaptation(false);
                     this.replace(true);
