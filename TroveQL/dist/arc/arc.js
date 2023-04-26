@@ -39,12 +39,14 @@ class TroveCache {
         this.set = (res) => {
             const node = new cacheItem_1.CacheItem(res.result);
             switch (true) {
+                // If item was found b1 ghost cache
                 case res.miss === 'b1':
                     this.adaptation(true);
                     this.b1.delete(res.query);
                     this.replace(false);
                     this.t2.set(res.query, node);
                     break;
+                // If item was found b2 ghost cache
                 case res.miss === 'b2':
                     this.adaptation(false);
                     this.replace(true);
