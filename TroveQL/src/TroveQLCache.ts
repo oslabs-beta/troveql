@@ -192,6 +192,16 @@ class TroveQLCache {
     return next();
   };
 
+    // resetCache clears all cache when user is at demo homepage
+  resetCache: RequestHandler = (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): void => {
+      this.cache.removeAll();
+      return next();
+  };
+
   // sendData to TroveMetrics
   // send data to localhost 3333 where troveMetrics server is listening to
   sendData = (
